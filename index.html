@@ -141,7 +141,7 @@
       sessionStorage.setItem("crm_logado", "true");
       sessionStorage.setItem("crm_usuario", usuario);
       document.getElementById("loginScreen").style.display = "none";
-      verificarLogin();
+      carregarDashboard();
     }else{
       document.getElementById("erroLogin").style.display = "block";
     }
@@ -150,7 +150,7 @@
   function verificarLogin(){
     if(sessionStorage.getItem("crm_logado") === "true"){
       document.getElementById("loginScreen").style.display = "none";
-      verificarLogin();
+      carregarDashboard();
     }
   }
 
