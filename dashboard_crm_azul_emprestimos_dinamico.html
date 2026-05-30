@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Azul Empréstimos CRM</title>
+  <style>
+    :root{--azul:#073f9e;--azul2:#0b66ff;--verde:#25d366;--text:#102033;--muted:#64748b;--line:#dbe7f5;--shadow:0 18px 45px rgba(7,31,77,.10);--radius:22px}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}
+    body{background:linear-gradient(135deg,#eef5ff,#fff);color:var(--text)}
+    .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#03265f,#073f9e 55%,#05285f);color:white;padding:26px 20px;position:sticky;top:0;height:100vh}
+    .brand{display:flex;align-items:center;gap:14px;margin-bottom:34px}
+    .brand-logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#0b66ff,#00a3ff);display:grid;place-items:center;font-weight:900;font-size:22px;box-shadow:0 14px 30px rgba(0,163,255,.35)}
+    .brand h1{font-size:20px;line-height:1.1}.brand span{font-size:12px;color:#b7d3ff}
+    .nav{display:grid;gap:10px}.nav a{padding:14px;border-radius:14px;color:#dbeafe;display:flex;gap:12px;align-items:center;font-weight:700;font-size:14px}.nav a.active,.nav a:hover{background:rgba(255,255,255,.16);color:#fff}
+    .profile-box{margin-top:34px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:16px}.avatars{display:flex;margin-bottom:12px}
+    .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:3px solid #0b3b89;color:white}.avatar.a{background:#0b66ff}.avatar.m{background:#25d366;margin-left:-10px}.profile-box small{color:#cce0ff}
+    main{padding:28px 34px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.topbar h2{font-size:30px;color:#08234f}.topbar p{color:var(--muted);margin-top:5px}.actions{display:flex;gap:12px}
+    .btn{border:0;border-radius:14px;padding:13px 18px;font-weight:900;cursor:pointer;background:var(--azul2);color:white;box-shadow:0 10px 25px rgba(11,102,255,.22)}.btn.light{background:white;color:var(--azul);border:1px solid var(--line);box-shadow:none}
+    .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}.card small{color:var(--muted);font-weight:800}.card strong{display:block;font-size:32px;margin-top:10px;color:#08234f}.card span{display:inline-block;margin-top:10px;font-size:12px;font-weight:800;color:#0d8d4d;background:#e9fff3;padding:6px 10px;border-radius:999px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:24px}.panel{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.panel h3{font-size:20px;color:#08234f}.tag{font-size:12px;padding:7px 10px;background:#eef5ff;border:1px solid #d7e7ff;color:var(--azul);border-radius:999px;font-weight:900}
+    .funnel{display:grid;gap:12px}.funnel-row{display:grid;grid-template-columns:150px 1fr 55px;gap:12px;align-items:center}.bar{height:14px;background:#eef5ff;border-radius:999px;overflow:hidden}.bar div{height:100%;background:linear-gradient(90deg,#0b66ff,#25d366);border-radius:999px}.funnel-row span{font-weight:800;color:#334155;font-size:14px}.funnel-row b{text-align:right;color:#08234f}
+    .mini-list{display:grid;gap:12px}.person{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;background:#f8fbff;border:1px solid var(--line)}.person-left{display:flex;align-items:center;gap:12px}.circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:white;font-weight:900}.circle.blue{background:#0b66ff}.circle.green{background:#25d366}.person small{color:var(--muted)}
+    .filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px}input,select{height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;outline:none;background:#fff;color:#102033;font-size:14px}
+    table{width:100%;border-collapse:collapse;overflow:hidden}th,td{text-align:left;padding:14px;border-bottom:1px solid #edf2fa;font-size:14px}th{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px}td b{color:#08234f}.status{padding:7px 10px;border-radius:999px;font-weight:900;font-size:12px;display:inline-block}.novo{background:#eaf3ff;color:#0b66ff}.atendimento{background:#fff7e6;color:#b7791f}.convertido{background:#e9fff3;color:#0d8d4d}.whats{background:#25d366;color:white;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
+    .footer-note{color:var(--muted);font-size:13px;text-align:center;padding:20px}.loading{background:#fff7e6;color:#9a6700;border:1px solid #ffe4a3;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-weight:800;display:none}.error{background:#fff0f0;color:#b42318;border:1px solid #ffc9c9;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-weight:800;display:none}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-logo">AZ</div><div><h1>Azul CRM</h1><span>Operação Alan & Meriany</span></div></div>
+    <nav class="nav"><a class="active">📊 Dashboard</a><a>👥 Carteira</a><a>💬 Atendimentos</a><a>📈 Funil</a><a>💰 Propostas</a><a>⚙️ Configurações</a></nav>
+    <div class="profile-box"><div class="avatars"><div class="avatar a">A</div><div class="avatar m">M</div></div><b>Alan & Meriany</b><br><small>Gestão comercial da carteira</small></div>
+  </aside>
+  <main>
+    <div class="topbar"><div><h2>Dashboard da Carteira</h2><p>Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos.</p></div><div class="actions"><button class="btn light" onclick="carregarDashboard()">Atualizar Dados</button><button class="btn">Novo Lead</button></div></div>
+    <div id="loading" class="loading">Carregando dados do Supabase via n8n...</div><div id="error" class="error">Não foi possível carregar os dados. Verifique se o webhook do n8n está publicado.</div>
+    <section class="cards">
+      <div class="card"><small>Total de Leads</small><strong id="totalLeads">0</strong><span>Carteira total</span></div>
+      <div class="card"><small>Novos</small><strong id="novos">0</strong><span>Prontos para contato</span></div>
+      <div class="card"><small>Em Atendimento</small><strong id="emAtendimento">0</strong><span>Em andamento</span></div>
+      <div class="card"><small>Convertidos</small><strong id="convertidos">0</strong><span>Resultado comercial</span></div>
+      <div class="card"><small>Principal Responsável</small><strong id="principalResponsavel" style="font-size:26px">-</strong><span>Carteira ativa</span></div>
+    </section>
+    <section class="grid">
+      <div class="panel"><div class="panel-head"><h3>Funil Comercial</h3><span class="tag">Azul Empréstimos</span></div><div class="funnel">
+        <div class="funnel-row"><span>Novo Lead</span><div class="bar"><div id="barNovos" style="width:0%"></div></div><b id="funilNovos">0</b></div>
+        <div class="funnel-row"><span>Tentando contato</span><div class="bar"><div id="barTentando" style="width:0%"></div></div><b id="funilTentando">0</b></div>
+        <div class="funnel-row"><span>Em atendimento</span><div class="bar"><div id="barAtendimento" style="width:0%"></div></div><b id="funilAtendimento">0</b></div>
+        <div class="funnel-row"><span>Em análise</span><div class="bar"><div id="barAnalise" style="width:0%"></div></div><b id="funilAnalise">0</b></div>
+        <div class="funnel-row"><span>Convertido</span><div class="bar"><div id="barConvertidos" style="width:0%"></div></div><b id="funilConvertidos">0</b></div>
+      </div></div>
+      <div class="panel"><div class="panel-head"><h3>Responsáveis</h3><span class="tag">Equipe</span></div><div id="responsaveisLista" class="mini-list"></div></div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Supabase: leads_azul</span></div>
+      <div class="filters"><input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" /><select id="filtroStatus" onchange="renderizarTabela()"><option value="">Todos os status</option><option value="Novo Lead">Novo Lead</option><option value="Em Atendimento">Em Atendimento</option><option value="Convertido">Convertido</option></select><select id="filtroResponsavel" onchange="renderizarTabela()"><option value="">Todos responsáveis</option><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select><select id="filtroOrigem" onchange="renderizarTabela()"><option value="">Todas origens</option><option value="Mailing interno">Mailing interno</option><option value="Landing Page">Landing Page</option></select></div>
+      <table><thead><tr><th>Cliente</th><th>Documento</th><th>Telefone</th><th>Origem</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaLeads"><tr><td colspan="7">Carregando dados...</td></tr></tbody></table>
+    </section>
+    <div class="footer-note">CRM Azul Empréstimos conectado ao n8n e Supabase.</div>
+  </main>
+</div>
+<script>
+  const API_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-dashboard";
+  let leadsGlobais = [];
+  function normalizarStatus(status, convertido){ if(convertido === true) return "Convertido"; if(!status) return "Novo Lead"; return status; }
+  function classeStatus(status){ const s = String(status || "").toLowerCase(); if(s.includes("convert")) return "convertido"; if(s.includes("atendimento") || s.includes("tentando")) return "atendimento"; return "novo"; }
+  function abrirWhatsApp(telefone, nome){ const phone = String(telefone || "").replace(/\D/g, ""); if(!phone){ alert("Telefone não informado."); return; } const msg = `Olá, ${nome || ""}! Tudo bem? Aqui é da Azul Empréstimos. Estou entrando em contato para falar sobre opções de crédito e benefícios disponíveis para você.`; window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(msg)}`, "_blank"); }
+  function atualizarBarra(id, valor, total){ const pct = total > 0 ? Math.round((valor / total) * 100) : 0; document.getElementById(id).style.width = pct + "%"; }
+  function atualizarDashboard(data){
+    const total=Number(data.total_leads||0), novos=Number(data.novos||0), emAtendimento=Number(data.em_atendimento||0), convertidos=Number(data.convertidos||0);
+    document.getElementById("totalLeads").textContent=total; document.getElementById("novos").textContent=novos; document.getElementById("emAtendimento").textContent=emAtendimento; document.getElementById("convertidos").textContent=convertidos;
+    document.getElementById("funilNovos").textContent=novos; document.getElementById("funilTentando").textContent=0; document.getElementById("funilAtendimento").textContent=emAtendimento; document.getElementById("funilAnalise").textContent=0; document.getElementById("funilConvertidos").textContent=convertidos;
+    atualizarBarra("barNovos",novos,total); atualizarBarra("barTentando",0,total); atualizarBarra("barAtendimento",emAtendimento,total); atualizarBarra("barAnalise",0,total); atualizarBarra("barConvertidos",convertidos,total);
+    const porResp=data.por_responsavel||{}; const responsaveis=Object.entries(porResp).sort((a,b)=>b[1]-a[1]); document.getElementById("principalResponsavel").textContent=responsaveis[0]?.[0]||"-";
+    const lista=document.getElementById("responsaveisLista"); lista.innerHTML="";
+    if(responsaveis.length===0){lista.innerHTML='<div class="person"><div>Nenhum responsável encontrado</div></div>';return;}
+    responsaveis.forEach(([nome,qtd],index)=>{const inicial=nome.charAt(0).toUpperCase(); const pct=total>0?Math.round((qtd/total)*100):0; const cor=index===0?"green":"blue"; lista.innerHTML += `<div class="person"><div class="person-left"><div class="circle ${cor}">${inicial}</div><div><b>${nome}</b><br><small>${qtd} leads atribuídos</small></div></div><b>${pct}%</b></div>`;});
+  }
+  function renderizarTabela(){
+    const tbody=document.getElementById("tabelaLeads"); const busca=document.getElementById("busca").value.toLowerCase().trim(); const filtroStatus=document.getElementById("filtroStatus").value; const filtroResponsavel=document.getElementById("filtroResponsavel").value; const filtroOrigem=document.getElementById("filtroOrigem").value;
+    let leads=leadsGlobais;
+    if(busca){leads=leads.filter(l=>String(l.nome||"").toLowerCase().includes(busca)||String(l.documento||"").toLowerCase().includes(busca)||String(l.telefone||"").toLowerCase().includes(busca));}
+    if(filtroStatus){leads=leads.filter(l=>normalizarStatus(l.status,l.convertido)===filtroStatus);}
+    if(filtroResponsavel){leads=leads.filter(l=>String(l.responsavel||"")===filtroResponsavel);}
+    if(filtroOrigem){leads=leads.filter(l=>String(l.origem||"")===filtroOrigem);}
+    if(leads.length===0){tbody.innerHTML='<tr><td colspan="7">Nenhum lead encontrado.</td></tr>';return;}
+    tbody.innerHTML=leads.slice(0,100).map(lead=>{const status=normalizarStatus(lead.status,lead.convertido); const telefone=lead.telefone||""; const origem=lead.origem||"-"; const responsavel=lead.responsavel||"-"; const nomeSeguro=String(lead.nome||"").replace(/'/g,""); return `<tr><td><b>${lead.nome||"-"}</b></td><td>${lead.documento||"-"}</td><td>${telefone||"-"}</td><td>${origem}</td><td><span class="status ${classeStatus(status)}">${status}</span></td><td>${responsavel}</td><td><button class="whats" onclick="abrirWhatsApp('${telefone}','${nomeSeguro}')">WhatsApp</button></td></tr>`;}).join("");
+  }
+  async function carregarDashboard(){
+    const loading=document.getElementById("loading"), error=document.getElementById("error"); loading.style.display="block"; error.style.display="none";
+    try{ const response=await fetch(API_URL,{method:"GET"}); if(!response.ok) throw new Error("Erro ao consultar API"); const data=await response.json(); leadsGlobais=data.ultimos_leads||[]; atualizarDashboard(data); renderizarTabela(); }
+    catch(e){ console.error(e); error.style.display="block"; document.getElementById("tabelaLeads").innerHTML='<tr><td colspan="7">Erro ao carregar dados do n8n.</td></tr>'; }
+    finally{ loading.style.display="none"; }
+  }
+  carregarDashboard();
+</script>
+</body>
+</html>
