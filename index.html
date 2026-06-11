@@ -118,7 +118,7 @@
     </section>
     <section class="panel">
       <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Supabase: leads_azul</span></div>
-      <div class="filters"><input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" /><select id="filtroStatus" onchange="renderizarTabela()"><option value="">Todos os status</option><option value="Novo Lead">Novo Lead</option><option value="Em Atendimento">Em Atendimento</option><option value="Convertido">Convertido</option></select><select id="filtroResponsavel" onchange="renderizarTabela()"><option value="">Todos responsáveis</option><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select><select id="filtroOrigem" onchange="renderizarTabela()"><option value="">Todas origens</option><option value="Mailing interno">Mailing interno</option><option value="Landing Page">Landing Page</option></select></div>
+      <div class="filters"><input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" /><select id="filtroStatus" onchange="renderizarTabela()"><option value="">Todos os status</option><option value="Novo Lead">Novo Lead</option><option value="Em Atendimento">Em Atendimento</option><option value="Convertido">Convertido</option></select><select id="filtroResponsavel" onchange="renderizarTabela()"><option value="">Todos responsáveis</option><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select><select id="filtroOrigem" onchange="renderizarTabela()"><option value="">Todas origens</option><option value="Mailing interno">Mailing interno</option><option value="Landing Page Azul Empréstimos">Landing Page Azul Empréstimos</option></select></div>
       <table><thead><tr><th>Cliente</th><th>Documento</th><th>Telefone</th><th>Origem</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaLeads"><tr><td colspan="7">Carregando dados...</td></tr></tbody></table>
     </section>
     <div class="footer-note">CRM Azul Empréstimos conectado ao n8n e Supabase.</div>
@@ -172,7 +172,7 @@
 
   function normalizarOrigem(origem){
     const s = String(origem || "").trim().toLowerCase();
-    if(s.includes("landing")) return "Landing Page";
+    if(s.includes("landing")) return "Landing Page Azul Empréstimos";
     if(s.includes("mailing")) return "Mailing interno";
     return origem || "-";
   }
