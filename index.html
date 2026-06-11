@@ -67,6 +67,7 @@
       <a id="nav-atendimentos" onclick="mudarTela('atendimentos')">💬 Atendimentos</a>
       <a id="nav-funil" onclick="mudarTela('funil')">📈 Funil</a>
       <a id="nav-propostas" onclick="mudarTela('propostas')">💰 Propostas</a>
+      <a id="nav-relatorios" onclick="mudarTela('relatorios')">📑 Relatórios</a>
       <a id="nav-configuracoes" onclick="mudarTela('configuracoes')">⚙️ Configurações</a>
     </nav>
     <div class="profile-box"><div class="avatars"><div class="avatar a">A</div><div class="avatar m">M</div></div><b>Alan & Meriany</b><br><small>Gestão comercial da carteira</small></div>
@@ -174,6 +175,48 @@
       </section>
     </section>
 
+
+    <section id="view-relatorios" class="view">
+      <section class="cards">
+        <div class="card"><small>Total de Leads</small><strong id="relTotalLeads">0</strong><span>Base completa</span></div>
+        <div class="card"><small>Landing Page</small><strong id="relLanding">0</strong><span>Origem</span></div>
+        <div class="card"><small>Mailing Interno</small><strong id="relMailing">0</strong><span>Origem</span></div>
+        <div class="card"><small>Valor Solicitado</small><strong id="relValorTotal">R$ 0</strong><span>Total</span></div>
+        <div class="card"><small>Ticket Médio</small><strong id="relTicketMedio">R$ 0</strong><span>Média</span></div>
+      </section>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-head"><h3>Leads por Responsável</h3><span class="tag">Equipe</span></div>
+          <table><thead><tr><th>Responsável</th><th>Quantidade</th><th>%</th></tr></thead><tbody id="relPorResponsavel"></tbody></table>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Leads por Origem</h3><span class="tag">Origem</span></div>
+          <table><thead><tr><th>Origem</th><th>Quantidade</th><th>%</th></tr></thead><tbody id="relPorOrigem"></tbody></table>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-head"><h3>Leads por Produto</h3><span class="tag">Produto</span></div>
+          <table><thead><tr><th>Produto</th><th>Quantidade</th><th>Valor Solicitado</th></tr></thead><tbody id="relPorProduto"></tbody></table>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Leads por Status</h3><span class="tag">Funil</span></div>
+          <table><thead><tr><th>Status</th><th>Quantidade</th><th>%</th></tr></thead><tbody id="relPorStatus"></tbody></table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Exportação</h3>
+          <span class="tag">CSV</span>
+        </div>
+        <p style="color:var(--muted);font-weight:700;margin-bottom:14px">Baixe a base atual do CRM para análise externa ou backup operacional.</p>
+        <button class="btn" onclick="exportarCSV()">Exportar CSV</button>
+      </section>
+    </section>
+
     <section id="view-configuracoes" class="view">
       <section class="panel">
         <div class="panel-head"><h3>Configurações do CRM</h3><span class="tag">MVP</span></div>
@@ -246,6 +289,7 @@
     atendimentos:["Atendimentos","Fila operacional para contato, acompanhamento e retorno dos leads."],
     funil:["Funil Comercial","Visualização dos leads por etapa comercial."],
     propostas:["Propostas","Visão dos produtos solicitados e valores desejados."],
+    relatorios:["Relatórios","Análises consolidadas da carteira, origem, produto, status e responsáveis."],
     configuracoes:["Configurações","Parâmetros operacionais do CRM."]
   };
 
@@ -260,6 +304,7 @@
     if(tela==="atendimentos") renderizarAtendimentos();
     if(tela==="funil") renderizarKanban();
     if(tela==="propostas") renderizarPropostas();
+    if(tela==="relatorios") renderizarRelatorios();
     window.scrollTo({top:0,behavior:"smooth"});
   }
 
@@ -390,6 +435,7 @@
     renderizarAtendimentos();
     renderizarKanban();
     renderizarPropostas();
+    renderizarRelatorios();
   }
 
   function getLeadsFiltrados(){
@@ -511,6 +557,82 @@
       return `<tr><td><b>${escapeHtml(lead.nome||"-")}</b></td><td>${escapeHtml(lead.produto||lead.produto_interesse||"-")}</td><td>${formatarMoeda(lead.valor_desejado)}</td><td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td><td>${escapeHtml(lead.responsavel||"-")}</td><td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button></td></tr>`;
     }).join("");
   }
+
+
+  function agruparPor(chaveFn){
+    return leadsGlobais.reduce((acc,l)=>{
+      const chave = chaveFn(l) || "-";
+      acc[chave] = (acc[chave] || 0) + 1;
+      return acc;
+    },{});
+  }
+
+  function renderizarTabelaResumo(tbodyId, dados, total){
+    const tbody = document.getElementById(tbodyId);
+    if(!tbody) return;
+    const linhas = Object.entries(dados).sort((a,b)=>b[1]-a[1]);
+    if(linhas.length===0){tbody.innerHTML='<tr><td colspan="3">Sem dados.</td></tr>';return;}
+    tbody.innerHTML = linhas.map(([nome,qtd])=>{
+      const pct = total > 0 ? Math.round((qtd/total)*100) : 0;
+      return `<tr><td><b>${escapeHtml(nome)}</b></td><td>${qtd}</td><td>${pct}%</td></tr>`;
+    }).join("");
+  }
+
+  function renderizarRelatorios(){
+    const total = leadsGlobais.length;
+    const landing = leadsGlobais.filter(l => normalizarOrigem(l.origem) === "Landing Page Azul Empréstimos").length;
+    const mailing = leadsGlobais.filter(l => normalizarOrigem(l.origem) === "Mailing interno").length;
+    const valorTotal = leadsGlobais.reduce((acc,l)=>acc+(Number(l.valor_desejado)||0),0);
+    const leadsComValor = leadsGlobais.filter(l => Number(l.valor_desejado)>0).length;
+    const ticket = leadsComValor > 0 ? valorTotal / leadsComValor : 0;
+
+    document.getElementById("relTotalLeads").textContent = total;
+    document.getElementById("relLanding").textContent = landing;
+    document.getElementById("relMailing").textContent = mailing;
+    document.getElementById("relValorTotal").textContent = formatarMoeda(valorTotal);
+    document.getElementById("relTicketMedio").textContent = formatarMoeda(ticket);
+
+    renderizarTabelaResumo("relPorResponsavel", agruparPor(l => l.responsavel || "Sem Responsável"), total);
+    renderizarTabelaResumo("relPorOrigem", agruparPor(l => normalizarOrigem(l.origem)), total);
+    renderizarTabelaResumo("relPorStatus", agruparPor(l => normalizarStatus(l.status,l.convertido)), total);
+
+    const porProduto = leadsGlobais.reduce((acc,l)=>{
+      const produto = l.produto || l.produto_interesse || "Sem produto";
+      if(!acc[produto]) acc[produto] = {qtd:0, valor:0};
+      acc[produto].qtd += 1;
+      acc[produto].valor += Number(l.valor_desejado)||0;
+      return acc;
+    },{});
+
+    const tbodyProduto = document.getElementById("relPorProduto");
+    const produtos = Object.entries(porProduto).sort((a,b)=>b[1].qtd-a[1].qtd);
+    if(produtos.length===0){tbodyProduto.innerHTML='<tr><td colspan="3">Sem dados.</td></tr>';}
+    else{
+      tbodyProduto.innerHTML = produtos.map(([produto,d])=>`<tr><td><b>${escapeHtml(produto)}</b></td><td>${d.qtd}</td><td>${formatarMoeda(d.valor)}</td></tr>`).join("");
+    }
+  }
+
+  function exportarCSV(){
+    if(!leadsGlobais.length){ alert("Nenhum lead para exportar."); return; }
+    const colunas = ["id","created_at","nome","documento","telefone","email","produto","valor_desejado","origem","status","responsavel","consentimento_lgpd","etapa_funil","observacao"];
+    const linhas = [colunas.join(";")];
+    leadsGlobais.forEach(l=>{
+      linhas.push(colunas.map(c=>{
+        const valor = l[c] ?? "";
+        return `"${String(valor).replace(/"/g,'""')}"`;
+      }).join(";"));
+    });
+    const blob = new Blob(["\ufeff"+linhas.join("\n")], {type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "leads_azul_crm.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
 
   async function carregarDashboard(){
     if(sessionStorage.getItem("crm_logado") !== "true") return;
