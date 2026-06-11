@@ -26,6 +26,26 @@
     .filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px}input,select{height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;outline:none;background:#fff;color:#102033;font-size:14px}
     table{width:100%;border-collapse:collapse;overflow:hidden}th,td{text-align:left;padding:14px;border-bottom:1px solid #edf2fa;font-size:14px}th{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px}td b{color:#08234f}.status{padding:7px 10px;border-radius:999px;font-weight:900;font-size:12px;display:inline-block}.novo{background:#eaf3ff;color:#0b66ff}.atendimento{background:#fff7e6;color:#b7791f}.convertido{background:#e9fff3;color:#0d8d4d}.whats{background:#25d366;color:white;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
     .footer-note{color:var(--muted);font-size:13px;text-align:center;padding:20px}.loading{background:#fff7e6;color:#9a6700;border:1px solid #ffe4a3;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-weight:800;display:none}.error{background:#fff0f0;color:#b42318;border:1px solid #ffc9c9;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-weight:800;display:none}
+
+    /* Modal Detalhes do Lead */
+    .row-actions{display:flex;gap:8px;align-items:center}
+    .view-btn{background:#0b66ff;color:white;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
+    .view-btn:hover,.whats:hover,.btn:hover{filter:brightness(.96)}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,.55);display:none;align-items:center;justify-content:center;z-index:9998;padding:18px}
+    .modal{width:760px;max-width:100%;background:#fff;border-radius:24px;border:1px solid var(--line);box-shadow:0 30px 90px rgba(0,0,0,.30);overflow:hidden}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;background:linear-gradient(135deg,#eef5ff,#fff);border-bottom:1px solid var(--line)}
+    .modal-head h3{color:#08234f;font-size:22px}.modal-close{border:0;background:#eef5ff;color:#073f9e;border-radius:12px;width:38px;height:38px;font-weight:1000;cursor:pointer}
+    .modal-body{padding:22px}.lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+    .lead-field{background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:13px}
+    .lead-field small{display:block;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:900;margin-bottom:6px}
+    .lead-field b{color:#08234f;font-size:15px;word-break:break-word}.modal-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .modal-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+    .modal-form select,.modal-form textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;color:#102033;outline:none;margin-top:7px}
+    .modal-form textarea{height:94px;resize:vertical;grid-column:1 / -1}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}.btn.gray{background:#eef5ff;color:#073f9e;box-shadow:none;border:1px solid var(--line)}
+    .btn.green{background:#25d366;box-shadow:0 10px 25px rgba(37,211,102,.22)}
+    @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
+
     @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters{grid-template-columns:1fr}}
 
     /* Login */
@@ -118,12 +138,64 @@
     </section>
     <section class="panel">
       <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Supabase: leads_azul</span></div>
-      <div class="filters"><input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" /><select id="filtroStatus" onchange="renderizarTabela()"><option value="">Todos os status</option><option value="Novo Lead">Novo Lead</option><option value="Em Atendimento">Em Atendimento</option><option value="Convertido">Convertido</option></select><select id="filtroResponsavel" onchange="renderizarTabela()"><option value="">Todos responsáveis</option><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select><select id="filtroOrigem" onchange="renderizarTabela()"><option value="">Todas origens</option><option value="Mailing interno">Mailing interno</option><option value="Landing Page Azul Empréstimos">Landing Page Azul Empréstimos</option></select></div>
+      <div class="filters"><input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" /><select id="filtroStatus" onchange="renderizarTabela()"><option value="">Todos os status</option><option value="Novo Lead">Novo Lead</option><option value="Tentando contato">Tentando contato</option><option value="Em Atendimento">Em Atendimento</option><option value="Em análise">Em análise</option><option value="Proposta enviada">Proposta enviada</option><option value="Convertido">Convertido</option><option value="Perdido">Perdido</option></select><select id="filtroResponsavel" onchange="renderizarTabela()"><option value="">Todos responsáveis</option><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select><select id="filtroOrigem" onchange="renderizarTabela()"><option value="">Todas origens</option><option value="Mailing interno">Mailing interno</option><option value="Landing Page">Landing Page</option></select></div>
       <table><thead><tr><th>Cliente</th><th>Documento</th><th>Telefone</th><th>Origem</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaLeads"><tr><td colspan="7">Carregando dados...</td></tr></tbody></table>
     </section>
     <div class="footer-note">CRM Azul Empréstimos conectado ao n8n e Supabase.</div>
   </main>
 </div>
+
+<div id="modalLead" class="modal-backdrop" onclick="if(event.target.id==='modalLead') fecharModalLead()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Detalhes do Lead</h3>
+      <button class="modal-close" onclick="fecharModalLead()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="lead-grid">
+        <div class="lead-field"><small>Cliente</small><b id="detNome">-</b></div>
+        <div class="lead-field"><small>Documento</small><b id="detDocumento">-</b></div>
+        <div class="lead-field"><small>Telefone</small><b id="detTelefone">-</b></div>
+        <div class="lead-field"><small>E-mail</small><b id="detEmail">-</b></div>
+        <div class="lead-field"><small>Produto</small><b id="detProduto">-</b></div>
+        <div class="lead-field"><small>Valor desejado</small><b id="detValor">-</b></div>
+        <div class="lead-field"><small>Origem</small><b id="detOrigem">-</b></div>
+        <div class="lead-field"><small>Responsável</small><b id="detResponsavel">-</b></div>
+      </div>
+
+      <div class="modal-form">
+        <label>Status
+          <select id="detStatus">
+            <option value="Novo Lead">Novo Lead</option>
+            <option value="Tentando contato">Tentando contato</option>
+            <option value="Em Atendimento">Em Atendimento</option>
+            <option value="Em análise">Em análise</option>
+            <option value="Proposta enviada">Proposta enviada</option>
+            <option value="Convertido">Convertido</option>
+            <option value="Perdido">Perdido</option>
+          </select>
+        </label>
+        <label>Responsável
+          <select id="detRespEdit">
+            <option value="Meriany">Meriany</option>
+            <option value="Alan">Alan</option>
+          </select>
+        </label>
+        <label style="grid-column:1 / -1">Observação
+          <textarea id="detObs" placeholder="Registre uma observação do atendimento..."></textarea>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn gray" onclick="fecharModalLead()">Fechar</button>
+        <button class="btn green" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
+        <button class="btn" onclick="salvarLeadLocal()">Salvar na tela</button>
+      </div>
+      <div class="footer-note" style="padding-bottom:0">Nesta versão, o botão salvar atualiza a tela. Para gravar status/observação no Supabase, precisamos criar o webhook de atualização no n8n.</div>
+    </div>
+  </div>
+</div>
+
 <script>
   const API_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-dashboard";
   let leadsGlobais = [];
@@ -172,7 +244,7 @@
 
   function normalizarOrigem(origem){
     const s = String(origem || "").trim().toLowerCase();
-    if(s.includes("landing")) return "Landing Page Azul Empréstimos";
+    if(s.includes("landing")) return "Landing Page";
     if(s.includes("mailing")) return "Mailing interno";
     return origem || "-";
   }
@@ -190,6 +262,68 @@
     if(responsaveis.length===0){lista.innerHTML='<div class="person"><div>Nenhum responsável encontrado</div></div>';return;}
     responsaveis.forEach(([nome,qtd],index)=>{const inicial=nome.charAt(0).toUpperCase(); const pct=total>0?Math.round((qtd/total)*100):0; const cor=index===0?"green":"blue"; lista.innerHTML += `<div class="person"><div class="person-left"><div class="circle ${cor}">${inicial}</div><div><b>${nome}</b><br><small>${qtd} leads atribuídos</small></div></div><b>${pct}%</b></div>`;});
   }
+
+  function escapeHtml(value){
+    return String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+
+  function formatarMoeda(valor){
+    const n = Number(valor);
+    if(!Number.isFinite(n) || n === 0) return valor ? escapeHtml(valor) : "-";
+    return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  }
+
+  let leadSelecionado = null;
+
+  function abrirDetalhesLead(id){
+    leadSelecionado = leadsGlobais.find(l => String(l.id) === String(id));
+    if(!leadSelecionado){ alert("Lead não encontrado."); return; }
+
+    document.getElementById("detNome").textContent = leadSelecionado.nome || "-";
+    document.getElementById("detDocumento").textContent = leadSelecionado.documento || "-";
+    document.getElementById("detTelefone").textContent = leadSelecionado.telefone || "-";
+    document.getElementById("detEmail").textContent = leadSelecionado.email || "-";
+    document.getElementById("detProduto").textContent = leadSelecionado.produto || leadSelecionado.produto_interesse || "-";
+    document.getElementById("detValor").textContent = formatarMoeda(leadSelecionado.valor_desejado);
+    document.getElementById("detOrigem").textContent = normalizarOrigem(leadSelecionado.origem);
+    document.getElementById("detResponsavel").textContent = leadSelecionado.responsavel || "-";
+    document.getElementById("detStatus").value = normalizarStatus(leadSelecionado.status,leadSelecionado.convertido);
+    document.getElementById("detRespEdit").value = leadSelecionado.responsavel || "Meriany";
+    document.getElementById("detObs").value = leadSelecionado.observacao || "";
+    document.getElementById("modalLead").style.display = "flex";
+  }
+
+  function fecharModalLead(){
+    document.getElementById("modalLead").style.display = "none";
+    leadSelecionado = null;
+  }
+
+  function abrirWhatsAppLeadSelecionado(){
+    if(!leadSelecionado) return;
+    abrirWhatsApp(leadSelecionado.telefone, leadSelecionado.nome);
+  }
+
+  function salvarLeadLocal(){
+    if(!leadSelecionado) return;
+    leadSelecionado.status = document.getElementById("detStatus").value;
+    leadSelecionado.responsavel = document.getElementById("detRespEdit").value;
+    leadSelecionado.observacao = document.getElementById("detObs").value;
+    renderizarTabela();
+    atualizarDashboard({
+      total_leads: leadsGlobais.length,
+      novos: leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)==="Novo Lead").length,
+      em_atendimento: leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)==="Em Atendimento").length,
+      convertidos: leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)==="Convertido").length,
+      por_responsavel: leadsGlobais.reduce((acc,l)=>{ const r=l.responsavel||"Sem Responsável"; acc[r]=(acc[r]||0)+1; return acc; },{})
+    });
+    alert("Alteração aplicada na tela. Para salvar no Supabase, vamos criar o webhook de atualização no n8n.");
+  }
+
   function renderizarTabela(){
     const tbody=document.getElementById("tabelaLeads"); const busca=document.getElementById("busca").value.toLowerCase().trim(); const filtroStatus=document.getElementById("filtroStatus").value; const filtroResponsavel=document.getElementById("filtroResponsavel").value; const filtroOrigem=document.getElementById("filtroOrigem").value;
     let leads=leadsGlobais;
@@ -198,8 +332,25 @@
     if(filtroResponsavel){leads=leads.filter(l=>String(l.responsavel||"").trim().toLowerCase()===filtroResponsavel.toLowerCase());}
     if(filtroOrigem){leads=leads.filter(l=>normalizarOrigem(l.origem)===filtroOrigem);}
     if(leads.length===0){tbody.innerHTML='<tr><td colspan="7">Nenhum lead encontrado.</td></tr>';return;}
-    tbody.innerHTML=leads.slice(0,100).map(lead=>{const status=normalizarStatus(lead.status,lead.convertido); const telefone=lead.telefone||""; const origem=normalizarOrigem(lead.origem); const responsavel=lead.responsavel||"-"; const nomeSeguro=String(lead.nome||"").replace(/'/g,""); return `<tr><td><b>${lead.nome||"-"}</b></td><td>${lead.documento||"-"}</td><td>${telefone||"-"}</td><td>${origem}</td><td><span class="status ${classeStatus(status)}">${status}</span></td><td>${responsavel}</td><td><button class="whats" onclick="abrirWhatsApp('${telefone}','${nomeSeguro}')">WhatsApp</button></td></tr>`;}).join("");
+    tbody.innerHTML=leads.slice(0,100).map(lead=>{
+      const status=normalizarStatus(lead.status,lead.convertido);
+      const telefone=lead.telefone||"";
+      const origem=normalizarOrigem(lead.origem);
+      const responsavel=lead.responsavel||"-";
+      const nomeSeguro=String(lead.nome||"").replace(/'/g,"");
+      const idSeguro = escapeHtml(lead.id || "");
+      return `<tr>
+        <td><b>${escapeHtml(lead.nome||"-")}</b></td>
+        <td>${escapeHtml(lead.documento||"-")}</td>
+        <td>${escapeHtml(telefone||"-")}</td>
+        <td>${escapeHtml(origem)}</td>
+        <td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td>
+        <td>${escapeHtml(responsavel)}</td>
+        <td><div class="row-actions"><button class="view-btn" onclick="abrirDetalhesLead('${idSeguro}')">Ver</button><button class="whats" onclick="abrirWhatsApp('${telefone}','${nomeSeguro}')">WhatsApp</button></div></td>
+      </tr>`;
+    }).join("");
   }
+
   async function carregarDashboard(){
     if(sessionStorage.getItem("crm_logado") !== "true") return;
     const loading=document.getElementById("loading"), error=document.getElementById("error"); loading.style.display="block"; error.style.display="none";
