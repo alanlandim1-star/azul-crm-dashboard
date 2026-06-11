@@ -161,7 +161,22 @@
   }
 
 
-  function normalizarStatus(status, convertido){ if(convertido === true) return "Convertido"; if(!status) return "Novo Lead"; return status; }
+  function normalizarStatus(status, convertido){
+    const s = String(status || "").trim().toLowerCase();
+    if(convertido === true || s.includes("convert")) return "Convertido";
+    if(!s || s === "novo" || s === "novo lead" || s.includes("lead_landing")) return "Novo Lead";
+    if(s.includes("atendimento") || s.includes("tentando")) return "Em Atendimento";
+    if(s.includes("analise") || s.includes("análise")) return "Em análise";
+    return status;
+  }
+
+  function normalizarOrigem(origem){
+    const s = String(origem || "").trim().toLowerCase();
+    if(s.includes("landing")) return "Landing Page";
+    if(s.includes("mailing")) return "Mailing interno";
+    return origem || "-";
+  }
+
   function classeStatus(status){ const s = String(status || "").toLowerCase(); if(s.includes("convert")) return "convertido"; if(s.includes("atendimento") || s.includes("tentando")) return "atendimento"; return "novo"; }
   function abrirWhatsApp(telefone, nome){ const phone = String(telefone || "").replace(/\D/g, ""); if(!phone){ alert("Telefone não informado."); return; } const msg = `Olá, ${nome || ""}! Tudo bem? Aqui é da Azul Empréstimos. Estou entrando em contato para falar sobre opções de crédito e benefícios disponíveis para você.`; window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(msg)}`, "_blank"); }
   function atualizarBarra(id, valor, total){ const pct = total > 0 ? Math.round((valor / total) * 100) : 0; document.getElementById(id).style.width = pct + "%"; }
@@ -180,15 +195,29 @@
     let leads=leadsGlobais;
     if(busca){leads=leads.filter(l=>String(l.nome||"").toLowerCase().includes(busca)||String(l.documento||"").toLowerCase().includes(busca)||String(l.telefone||"").toLowerCase().includes(busca));}
     if(filtroStatus){leads=leads.filter(l=>normalizarStatus(l.status,l.convertido)===filtroStatus);}
-    if(filtroResponsavel){leads=leads.filter(l=>String(l.responsavel||"")===filtroResponsavel);}
-    if(filtroOrigem){leads=leads.filter(l=>String(l.origem||"")===filtroOrigem);}
+    if(filtroResponsavel){leads=leads.filter(l=>String(l.responsavel||"").trim().toLowerCase()===filtroResponsavel.toLowerCase());}
+    if(filtroOrigem){leads=leads.filter(l=>normalizarOrigem(l.origem)===filtroOrigem);}
     if(leads.length===0){tbody.innerHTML='<tr><td colspan="7">Nenhum lead encontrado.</td></tr>';return;}
-    tbody.innerHTML=leads.slice(0,100).map(lead=>{const status=normalizarStatus(lead.status,lead.convertido); const telefone=lead.telefone||""; const origem=lead.origem||"-"; const responsavel=lead.responsavel||"-"; const nomeSeguro=String(lead.nome||"").replace(/'/g,""); return `<tr><td><b>${lead.nome||"-"}</b></td><td>${lead.documento||"-"}</td><td>${telefone||"-"}</td><td>${origem}</td><td><span class="status ${classeStatus(status)}">${status}</span></td><td>${responsavel}</td><td><button class="whats" onclick="abrirWhatsApp('${telefone}','${nomeSeguro}')">WhatsApp</button></td></tr>`;}).join("");
+    tbody.innerHTML=leads.slice(0,100).map(lead=>{const status=normalizarStatus(lead.status,lead.convertido); const telefone=lead.telefone||""; const origem=normalizarOrigem(lead.origem); const responsavel=lead.responsavel||"-"; const nomeSeguro=String(lead.nome||"").replace(/'/g,""); return `<tr><td><b>${lead.nome||"-"}</b></td><td>${lead.documento||"-"}</td><td>${telefone||"-"}</td><td>${origem}</td><td><span class="status ${classeStatus(status)}">${status}</span></td><td>${responsavel}</td><td><button class="whats" onclick="abrirWhatsApp('${telefone}','${nomeSeguro}')">WhatsApp</button></td></tr>`;}).join("");
   }
   async function carregarDashboard(){
     if(sessionStorage.getItem("crm_logado") !== "true") return;
     const loading=document.getElementById("loading"), error=document.getElementById("error"); loading.style.display="block"; error.style.display="none";
-    try{ const response=await fetch(API_URL,{method:"GET"}); if(!response.ok) throw new Error("Erro ao consultar API"); const data=await response.json(); leadsGlobais=data.ultimos_leads||[]; atualizarDashboard(data); renderizarTabela(); }
+    try{
+      const response=await fetch(API_URL,{method:"GET"});
+      if(!response.ok) throw new Error("Erro ao consultar API");
+      const data=await response.json();
+
+      // Aceita vários nomes de retorno do n8n.
+      // O ideal é o n8n retornar TODOS os leads em "leads" ou "ultimos_leads".
+      leadsGlobais = data.leads || data.todos_leads || data.all_leads || data.ultimos_leads || [];
+
+      // Remove linhas vazias/null que podem ter sido criadas em testes.
+      leadsGlobais = leadsGlobais.filter(l => l && (l.nome || l.documento || l.telefone));
+
+      atualizarDashboard(data);
+      renderizarTabela();
+    }
     catch(e){ console.error(e); error.style.display="block"; document.getElementById("tabelaLeads").innerHTML='<tr><td colspan="7">Erro ao carregar dados do n8n.</td></tr>'; }
     finally{ loading.style.display="none"; }
   }
