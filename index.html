@@ -13,79 +13,32 @@
     .brand{display:flex;align-items:center;gap:14px;margin-bottom:34px}
     .brand-logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#0b66ff,#00a3ff);display:grid;place-items:center;font-weight:900;font-size:22px;box-shadow:0 14px 30px rgba(0,163,255,.35)}
     .brand h1{font-size:20px;line-height:1.1}.brand span{font-size:12px;color:#b7d3ff}
-    .nav{display:grid;gap:10px}.nav a{padding:14px;border-radius:14px;color:#dbeafe;display:flex;gap:12px;align-items:center;font-weight:700;font-size:14px}.nav a.active,.nav a:hover{background:rgba(255,255,255,.16);color:#fff}
+    .nav{display:grid;gap:10px}.nav a{padding:14px;border-radius:14px;color:#dbeafe;display:flex;gap:12px;align-items:center;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none}.nav a.active,.nav a:hover{background:rgba(255,255,255,.16);color:#fff}
     .profile-box{margin-top:34px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:16px}.avatars{display:flex;margin-bottom:12px}
     .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:3px solid #0b3b89;color:white}.avatar.a{background:#0b66ff}.avatar.m{background:#25d366;margin-left:-10px}.profile-box small{color:#cce0ff}
     main{padding:28px 34px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.topbar h2{font-size:30px;color:#08234f}.topbar p{color:var(--muted);margin-top:5px}.actions{display:flex;gap:12px}
-    .btn{border:0;border-radius:14px;padding:13px 18px;font-weight:900;cursor:pointer;background:var(--azul2);color:white;box-shadow:0 10px 25px rgba(11,102,255,.22)}.btn.light{background:white;color:var(--azul);border:1px solid var(--line);box-shadow:none}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;gap:16px}.topbar h2{font-size:30px;color:#08234f}.topbar p{color:var(--muted);margin-top:5px}.actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{border:0;border-radius:14px;padding:13px 18px;font-weight:900;cursor:pointer;background:var(--azul2);color:white;box-shadow:0 10px 25px rgba(11,102,255,.22)}.btn.light{background:white;color:var(--azul);border:1px solid var(--line);box-shadow:none}.btn.danger{background:#ef4444;box-shadow:0 10px 25px rgba(239,68,68,.22)}.btn.gray{background:#eef5ff;color:#073f9e;box-shadow:none;border:1px solid var(--line)}
+    .view{display:none}.view.active{display:block}
     .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}.card small{color:var(--muted);font-weight:800}.card strong{display:block;font-size:32px;margin-top:10px;color:#08234f}.card span{display:inline-block;margin-top:10px;font-size:12px;font-weight:800;color:#0d8d4d;background:#e9fff3;padding:6px 10px;border-radius:999px}
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:24px}.panel{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.panel h3{font-size:20px;color:#08234f}.tag{font-size:12px;padding:7px 10px;background:#eef5ff;border:1px solid #d7e7ff;color:var(--azul);border-radius:999px;font-weight:900}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:24px}.panel{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:24px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px}.panel h3{font-size:20px;color:#08234f}.tag{font-size:12px;padding:7px 10px;background:#eef5ff;border:1px solid #d7e7ff;color:var(--azul);border-radius:999px;font-weight:900;white-space:nowrap}
     .funnel{display:grid;gap:12px}.funnel-row{display:grid;grid-template-columns:150px 1fr 55px;gap:12px;align-items:center}.bar{height:14px;background:#eef5ff;border-radius:999px;overflow:hidden}.bar div{height:100%;background:linear-gradient(90deg,#0b66ff,#25d366);border-radius:999px}.funnel-row span{font-weight:800;color:#334155;font-size:14px}.funnel-row b{text-align:right;color:#08234f}
     .mini-list{display:grid;gap:12px}.person{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;background:#f8fbff;border:1px solid var(--line)}.person-left{display:flex;align-items:center;gap:12px}.circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:white;font-weight:900}.circle.blue{background:#0b66ff}.circle.green{background:#25d366}.person small{color:var(--muted)}
-    .filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px}input,select{height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;outline:none;background:#fff;color:#102033;font-size:14px}
-    table{width:100%;border-collapse:collapse;overflow:hidden}th,td{text-align:left;padding:14px;border-bottom:1px solid #edf2fa;font-size:14px}th{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px}td b{color:#08234f}.status{padding:7px 10px;border-radius:999px;font-weight:900;font-size:12px;display:inline-block}.novo{background:#eaf3ff;color:#0b66ff}.atendimento{background:#fff7e6;color:#b7791f}.convertido{background:#e9fff3;color:#0d8d4d}.whats{background:#25d366;color:white;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
+    .filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px}input,select,textarea{border:1px solid var(--line);border-radius:14px;padding:0 14px;outline:none;background:#fff;color:#102033;font-size:14px}input,select{height:46px}textarea{padding:12px;min-height:92px;resize:vertical}
+    table{width:100%;border-collapse:collapse;overflow:hidden}th,td{text-align:left;padding:14px;border-bottom:1px solid #edf2fa;font-size:14px;vertical-align:middle}th{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px}td b{color:#08234f}.status{padding:7px 10px;border-radius:999px;font-weight:900;font-size:12px;display:inline-block}.novo{background:#eaf3ff;color:#0b66ff}.atendimento{background:#fff7e6;color:#b7791f}.convertido{background:#e9fff3;color:#0d8d4d}.perdido{background:#fff0f0;color:#b42318}.whats{background:#25d366;color:white;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}.viewbtn{background:#eef5ff;color:#073f9e;border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
     .footer-note{color:var(--muted);font-size:13px;text-align:center;padding:20px}.loading{background:#fff7e6;color:#9a6700;border:1px solid #ffe4a3;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-weight:800;display:none}.error{background:#fff0f0;color:#b42318;border:1px solid #ffc9c9;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-weight:800;display:none}
-
-    /* Modal Detalhes do Lead */
-    .row-actions{display:flex;gap:8px;align-items:center}
-    .view-btn{background:#0b66ff;color:white;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
-    .view-btn:hover,.whats:hover,.btn:hover{filter:brightness(.96)}
-    .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,.55);display:none;align-items:center;justify-content:center;z-index:9998;padding:18px}
-    .modal{width:760px;max-width:100%;background:#fff;border-radius:24px;border:1px solid var(--line);box-shadow:0 30px 90px rgba(0,0,0,.30);overflow:hidden}
-    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;background:linear-gradient(135deg,#eef5ff,#fff);border-bottom:1px solid var(--line)}
-    .modal-head h3{color:#08234f;font-size:22px}.modal-close{border:0;background:#eef5ff;color:#073f9e;border-radius:12px;width:38px;height:38px;font-weight:1000;cursor:pointer}
-    .modal-body{padding:22px}.lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-    .lead-field{background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:13px}
-    .lead-field small{display:block;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:900;margin-bottom:6px}
-    .lead-field b{color:#08234f;font-size:15px;word-break:break-word}.modal-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-    .modal-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
-    .modal-form select,.modal-form textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;color:#102033;outline:none;margin-top:7px}
-    .modal-form textarea{height:94px;resize:vertical;grid-column:1 / -1}
-    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}.btn.gray{background:#eef5ff;color:#073f9e;box-shadow:none;border:1px solid var(--line)}
-    .btn.green{background:#25d366;box-shadow:0 10px 25px rgba(37,211,102,.22)}
+    .kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.col{background:#f8fbff;border:1px solid var(--line);border-radius:18px;padding:14px;min-height:230px}.col h4{color:#08234f;margin-bottom:10px}.lead-card{background:white;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;box-shadow:0 10px 24px rgba(7,31,77,.06)}.lead-card b{display:block;color:#08234f}.lead-card small{color:var(--muted)}
+    .empty{padding:18px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);background:#f8fbff;font-weight:800}
+    .config-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.config-item{background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:16px}.config-item small{color:var(--muted);font-weight:800}.config-item b{display:block;margin-top:6px;color:#08234f}
+    #loginScreen{position:fixed; inset:0;background:radial-gradient(circle at top left, rgba(37,211,102,.22), transparent 28%), linear-gradient(135deg,#03265f,#073f9e 60%,#041b44);display:flex; justify-content:center; align-items:center;z-index:9999; padding:22px}
+    .login-card{background:white; width:420px; max-width:100%;border-radius:28px; padding:34px;box-shadow:0 30px 80px rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.28)}
+    .login-logo{width:66px;height:66px;border-radius:20px;background:linear-gradient(135deg,#0b66ff,#00a3ff);display:grid;place-items:center;color:white;font-weight:1000;font-size:27px;margin:0 auto 16px;box-shadow:0 18px 40px rgba(11,102,255,.32)}
+    .login-card h2{text-align:center;color:#073f9e;font-size:28px;margin-bottom:6px}.login-card p{text-align:center;color:#64748b;margin-bottom:22px;font-weight:700}.login-card label{display:block;font-size:13px;color:#334155;font-weight:900;margin-bottom:7px}.login-card input{width:100%;margin-bottom:14px;background:#f8fbff}
+    .login-button{width:100%;height:48px;border:none;border-radius:14px;background:linear-gradient(135deg,#0b66ff,#073f9e);color:white;font-weight:1000;cursor:pointer;margin-top:6px;box-shadow:0 15px 35px rgba(11,102,255,.22)}
+    .login-error{color:#b42318;background:#fff0f0;border:1px solid #ffc9c9;border-radius:12px;padding:10px;margin-top:14px;text-align:center;font-weight:800;display:none}.login-hint{margin-top:16px;font-size:12px;color:#64748b;text-align:center;line-height:1.4}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,.55);display:none;align-items:center;justify-content:center;z-index:9998;padding:18px}.modal{width:780px;max-width:100%;background:#fff;border-radius:24px;border:1px solid var(--line);box-shadow:0 30px 90px rgba(0,0,0,.30);overflow:hidden}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;background:linear-gradient(135deg,#eef5ff,#fff);border-bottom:1px solid var(--line)}.modal-head h3{color:#08234f;font-size:22px}.modal-close{border:0;background:#eef5ff;color:#073f9e;border-radius:12px;width:38px;height:38px;font-weight:1000;cursor:pointer}.modal-body{padding:22px}.lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}.lead-field{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px}.lead-field small{display:block;color:#64748b;font-weight:900;font-size:11px;text-transform:uppercase;margin-bottom:6px}.lead-field b{color:#08234f;font-size:15px;word-break:break-word}.modal-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.modal-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}.modal-form select,.modal-form textarea{width:100%;margin-top:7px}.modal-form textarea{grid-column:1 / -1}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
-
-    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters{grid-template-columns:1fr}}
-
-    /* Login */
-    #loginScreen{
-      position:fixed; inset:0;
-      background:radial-gradient(circle at top left, rgba(37,211,102,.22), transparent 28%), linear-gradient(135deg,#03265f,#073f9e 60%,#041b44);
-      display:flex; justify-content:center; align-items:center;
-      z-index:9999; padding:22px;
-    }
-    .login-card{
-      background:white; width:420px; max-width:100%;
-      border-radius:28px; padding:34px;
-      box-shadow:0 30px 80px rgba(0,0,0,.32);
-      border:1px solid rgba(255,255,255,.28);
-    }
-    .login-logo{
-      width:66px;height:66px;border-radius:20px;
-      background:linear-gradient(135deg,#0b66ff,#00a3ff);
-      display:grid;place-items:center;color:white;
-      font-weight:1000;font-size:27px;margin:0 auto 16px;
-      box-shadow:0 18px 40px rgba(11,102,255,.32);
-    }
-    .login-card h2{text-align:center;color:#073f9e;font-size:28px;margin-bottom:6px}
-    .login-card p{text-align:center;color:#64748b;margin-bottom:22px;font-weight:700}
-    .login-card label{display:block;font-size:13px;color:#334155;font-weight:900;margin-bottom:7px}
-    .login-card input{width:100%;margin-bottom:14px;background:#f8fbff}
-    .login-button{
-      width:100%;height:48px;border:none;border-radius:14px;
-      background:linear-gradient(135deg,#0b66ff,#073f9e);
-      color:white;font-weight:1000;cursor:pointer;margin-top:6px;
-      box-shadow:0 15px 35px rgba(11,102,255,.22);
-    }
-    .login-error{
-      color:#b42318;background:#fff0f0;border:1px solid #ffc9c9;
-      border-radius:12px;padding:10px;margin-top:14px;
-      text-align:center;font-weight:800;display:none;
-    }
-    .login-hint{margin-top:16px;font-size:12px;color:#64748b;text-align:center;line-height:1.4}
-    .btn.danger{background:#ef4444;box-shadow:0 10px 25px rgba(239,68,68,.22)}
-
   </style>
 </head>
 <body>
@@ -95,17 +48,12 @@
     <div class="login-logo">AZ</div>
     <h2>Azul CRM</h2>
     <p>Área restrita da operação Alan & Meriany</p>
-
     <label for="usuario">Usuário</label>
     <input id="usuario" placeholder="Digite seu usuário" autocomplete="username" />
-
     <label for="senha">Senha</label>
     <input id="senha" type="password" placeholder="Digite sua senha" autocomplete="current-password" onkeydown="if(event.key === 'Enter') fazerLogin()" />
-
     <button class="login-button" onclick="fazerLogin()">Entrar no CRM</button>
-
     <div id="erroLogin" class="login-error">Usuário ou senha inválidos.</div>
-
     <div class="login-hint">Acesso permitido somente para usuários autorizados.</div>
   </div>
 </div>
@@ -113,44 +61,140 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand"><div class="brand-logo">AZ</div><div><h1>Azul CRM</h1><span>Operação Alan & Meriany</span></div></div>
-    <nav class="nav"><a class="active">📊 Dashboard</a><a>👥 Carteira</a><a>💬 Atendimentos</a><a>📈 Funil</a><a>💰 Propostas</a><a>⚙️ Configurações</a></nav>
+    <nav class="nav">
+      <a id="nav-dashboard" class="active" onclick="mudarTela('dashboard')">📊 Dashboard</a>
+      <a id="nav-carteira" onclick="mudarTela('carteira')">👥 Carteira</a>
+      <a id="nav-atendimentos" onclick="mudarTela('atendimentos')">💬 Atendimentos</a>
+      <a id="nav-funil" onclick="mudarTela('funil')">📈 Funil</a>
+      <a id="nav-propostas" onclick="mudarTela('propostas')">💰 Propostas</a>
+      <a id="nav-configuracoes" onclick="mudarTela('configuracoes')">⚙️ Configurações</a>
+    </nav>
     <div class="profile-box"><div class="avatars"><div class="avatar a">A</div><div class="avatar m">M</div></div><b>Alan & Meriany</b><br><small>Gestão comercial da carteira</small></div>
   </aside>
+
   <main>
-    <div class="topbar"><div><h2>Dashboard da Carteira</h2><p>Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos.</p></div><div class="actions"><button class="btn light" onclick="carregarDashboard()">Atualizar Dados</button><button class="btn">Novo Lead</button><button class="btn danger" onclick="sair()">Sair</button></div></div>
-    <div id="loading" class="loading">Carregando dados do Supabase via n8n...</div><div id="error" class="error">Não foi possível carregar os dados. Verifique se o webhook do n8n está publicado.</div>
-    <section class="cards">
-      <div class="card"><small>Total de Leads</small><strong id="totalLeads">0</strong><span>Carteira total</span></div>
-      <div class="card"><small>Novos</small><strong id="novos">0</strong><span>Prontos para contato</span></div>
-      <div class="card"><small>Em Atendimento</small><strong id="emAtendimento">0</strong><span>Em andamento</span></div>
-      <div class="card"><small>Convertidos</small><strong id="convertidos">0</strong><span>Resultado comercial</span></div>
-      <div class="card"><small>Principal Responsável</small><strong id="principalResponsavel" style="font-size:26px">-</strong><span>Carteira ativa</span></div>
+    <div class="topbar">
+      <div>
+        <h2 id="tituloTela">Dashboard da Carteira</h2>
+        <p id="subtituloTela">Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos.</p>
+      </div>
+      <div class="actions">
+        <button class="btn light" onclick="carregarDashboard()">Atualizar Dados</button>
+        <button class="btn" onclick="mudarTela('carteira')">Novo Lead</button>
+        <button class="btn danger" onclick="sair()">Sair</button>
+      </div>
+    </div>
+
+    <div id="loading" class="loading">Carregando dados do Supabase via n8n...</div>
+    <div id="error" class="error">Não foi possível carregar os dados. Verifique se o webhook do n8n está publicado.</div>
+
+    <section id="view-dashboard" class="view active">
+      <section class="cards">
+        <div class="card"><small>Total de Leads</small><strong id="totalLeads">0</strong><span>Carteira total</span></div>
+        <div class="card"><small>Novos</small><strong id="novos">0</strong><span>Prontos para contato</span></div>
+        <div class="card"><small>Em Atendimento</small><strong id="emAtendimento">0</strong><span>Em andamento</span></div>
+        <div class="card"><small>Convertidos</small><strong id="convertidos">0</strong><span>Resultado comercial</span></div>
+        <div class="card"><small>Principal Responsável</small><strong id="principalResponsavel" style="font-size:26px">-</strong><span>Carteira ativa</span></div>
+      </section>
+
+      <section class="grid">
+        <div class="panel"><div class="panel-head"><h3>Funil Comercial</h3><span class="tag">Azul Empréstimos</span></div><div class="funnel">
+          <div class="funnel-row"><span>Novo Lead</span><div class="bar"><div id="barNovos" style="width:0%"></div></div><b id="funilNovos">0</b></div>
+          <div class="funnel-row"><span>Tentando contato</span><div class="bar"><div id="barTentando" style="width:0%"></div></div><b id="funilTentando">0</b></div>
+          <div class="funnel-row"><span>Em atendimento</span><div class="bar"><div id="barAtendimento" style="width:0%"></div></div><b id="funilAtendimento">0</b></div>
+          <div class="funnel-row"><span>Em análise</span><div class="bar"><div id="barAnalise" style="width:0%"></div></div><b id="funilAnalise">0</b></div>
+          <div class="funnel-row"><span>Convertido</span><div class="bar"><div id="barConvertidos" style="width:0%"></div></div><b id="funilConvertidos">0</b></div>
+        </div></div>
+        <div class="panel"><div class="panel-head"><h3>Responsáveis</h3><span class="tag">Equipe</span></div><div id="responsaveisLista" class="mini-list"></div></div>
+      </section>
     </section>
-    <section class="grid">
-      <div class="panel"><div class="panel-head"><h3>Funil Comercial</h3><span class="tag">Azul Empréstimos</span></div><div class="funnel">
-        <div class="funnel-row"><span>Novo Lead</span><div class="bar"><div id="barNovos" style="width:0%"></div></div><b id="funilNovos">0</b></div>
-        <div class="funnel-row"><span>Tentando contato</span><div class="bar"><div id="barTentando" style="width:0%"></div></div><b id="funilTentando">0</b></div>
-        <div class="funnel-row"><span>Em atendimento</span><div class="bar"><div id="barAtendimento" style="width:0%"></div></div><b id="funilAtendimento">0</b></div>
-        <div class="funnel-row"><span>Em análise</span><div class="bar"><div id="barAnalise" style="width:0%"></div></div><b id="funilAnalise">0</b></div>
-        <div class="funnel-row"><span>Convertido</span><div class="bar"><div id="barConvertidos" style="width:0%"></div></div><b id="funilConvertidos">0</b></div>
-      </div></div>
-      <div class="panel"><div class="panel-head"><h3>Responsáveis</h3><span class="tag">Equipe</span></div><div id="responsaveisLista" class="mini-list"></div></div>
+
+    <section id="view-carteira" class="view">
+      <section class="panel">
+        <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Supabase: leads_azul</span></div>
+        <div class="filters">
+          <input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" />
+          <select id="filtroStatus" onchange="renderizarTabela()">
+            <option value="">Todos os status</option>
+            <option value="Novo Lead">Novo Lead</option>
+            <option value="Tentando contato">Tentando contato</option>
+            <option value="Em Atendimento">Em Atendimento</option>
+            <option value="Em análise">Em análise</option>
+            <option value="Proposta enviada">Proposta enviada</option>
+            <option value="Convertido">Convertido</option>
+            <option value="Perdido">Perdido</option>
+          </select>
+          <select id="filtroResponsavel" onchange="renderizarTabela()">
+            <option value="">Todos responsáveis</option>
+            <option value="Meriany">Meriany</option>
+            <option value="Alan">Alan</option>
+          </select>
+          <select id="filtroOrigem" onchange="renderizarTabela()">
+            <option value="">Todas origens</option>
+            <option value="Mailing interno">Mailing interno</option>
+            <option value="Landing Page Azul Empréstimos">Landing Page Azul Empréstimos</option>
+          </select>
+        </div>
+        <table><thead><tr><th>Cliente</th><th>Documento</th><th>Telefone</th><th>Origem</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaLeads"><tr><td colspan="7">Carregando dados...</td></tr></tbody></table>
+      </section>
     </section>
-    <section class="panel">
-      <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Supabase: leads_azul</span></div>
-      <div class="filters"><input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" /><select id="filtroStatus" onchange="renderizarTabela()"><option value="">Todos os status</option><option value="Novo Lead">Novo Lead</option><option value="Tentando contato">Tentando contato</option><option value="Em Atendimento">Em Atendimento</option><option value="Em análise">Em análise</option><option value="Proposta enviada">Proposta enviada</option><option value="Convertido">Convertido</option><option value="Perdido">Perdido</option></select><select id="filtroResponsavel" onchange="renderizarTabela()"><option value="">Todos responsáveis</option><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select><select id="filtroOrigem" onchange="renderizarTabela()"><option value="">Todas origens</option><option value="Mailing interno">Mailing interno</option><option value="Landing Page">Landing Page</option></select></div>
-      <table><thead><tr><th>Cliente</th><th>Documento</th><th>Telefone</th><th>Origem</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaLeads"><tr><td colspan="7">Carregando dados...</td></tr></tbody></table>
+
+    <section id="view-atendimentos" class="view">
+      <section class="cards">
+        <div class="card"><small>Para contato</small><strong id="atdNovos">0</strong><span>Novo Lead</span></div>
+        <div class="card"><small>Tentando contato</small><strong id="atdTentando">0</strong><span>Follow-up</span></div>
+        <div class="card"><small>Em atendimento</small><strong id="atdAtendimento">0</strong><span>Em andamento</span></div>
+        <div class="card"><small>Em análise</small><strong id="atdAnalise">0</strong><span>Análise</span></div>
+        <div class="card"><small>Perdidos</small><strong id="atdPerdidos">0</strong><span>Encerrados</span></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h3>Fila de Atendimentos</h3><span class="tag">Operação</span></div>
+        <table><thead><tr><th>Cliente</th><th>Produto</th><th>Valor</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaAtendimentos"></tbody></table>
+      </section>
     </section>
+
+    <section id="view-funil" class="view">
+      <section class="panel">
+        <div class="panel-head"><h3>Funil por Etapa</h3><span class="tag">Kanban visual</span></div>
+        <div class="kanban" id="kanbanFunil"></div>
+      </section>
+    </section>
+
+    <section id="view-propostas" class="view">
+      <section class="cards">
+        <div class="card"><small>Valor Solicitado</small><strong id="valorSolicitado">R$ 0</strong><span>Total</span></div>
+        <div class="card"><small>Consignado</small><strong id="produtoConsignado">0</strong><span>Produto</span></div>
+        <div class="card"><small>Cartão</small><strong id="produtoCartao">0</strong><span>Produto</span></div>
+        <div class="card"><small>Crédito Pessoal</small><strong id="produtoCredito">0</strong><span>Produto</span></div>
+        <div class="card"><small>Outros</small><strong id="produtoOutros">0</strong><span>Produto</span></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h3>Propostas e Interesses</h3><span class="tag">Produtos</span></div>
+        <table><thead><tr><th>Cliente</th><th>Produto</th><th>Valor Desejado</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaPropostas"></tbody></table>
+      </section>
+    </section>
+
+    <section id="view-configuracoes" class="view">
+      <section class="panel">
+        <div class="panel-head"><h3>Configurações do CRM</h3><span class="tag">MVP</span></div>
+        <div class="config-grid">
+          <div class="config-item"><small>Webhook Dashboard</small><b id="cfgApi"></b></div>
+          <div class="config-item"><small>Tabela Supabase</small><b>leads_azul</b></div>
+          <div class="config-item"><small>Usuários ativos</small><b>Alan / Meriany</b></div>
+          <div class="config-item"><small>Origem principal</small><b>Landing Page Azul Empréstimos</b></div>
+          <div class="config-item"><small>Status disponíveis</small><b>Novo, Tentando, Atendimento, Análise, Proposta, Convertido, Perdido</b></div>
+          <div class="config-item"><small>Próxima evolução</small><b>Salvar status e observações no Supabase via n8n</b></div>
+        </div>
+      </section>
+    </section>
+
     <div class="footer-note">CRM Azul Empréstimos conectado ao n8n e Supabase.</div>
   </main>
 </div>
 
 <div id="modalLead" class="modal-backdrop" onclick="if(event.target.id==='modalLead') fecharModalLead()">
   <div class="modal">
-    <div class="modal-head">
-      <h3>Detalhes do Lead</h3>
-      <button class="modal-close" onclick="fecharModalLead()">×</button>
-    </div>
+    <div class="modal-head"><h3>Detalhes do Lead</h3><button class="modal-close" onclick="fecharModalLead()">×</button></div>
     <div class="modal-body">
       <div class="lead-grid">
         <div class="lead-field"><small>Cliente</small><b id="detNome">-</b></div>
@@ -162,7 +206,6 @@
         <div class="lead-field"><small>Origem</small><b id="detOrigem">-</b></div>
         <div class="lead-field"><small>Responsável</small><b id="detResponsavel">-</b></div>
       </div>
-
       <div class="modal-form">
         <label>Status
           <select id="detStatus">
@@ -176,22 +219,17 @@
           </select>
         </label>
         <label>Responsável
-          <select id="detRespEdit">
-            <option value="Meriany">Meriany</option>
-            <option value="Alan">Alan</option>
-          </select>
+          <select id="detRespEdit"><option value="Meriany">Meriany</option><option value="Alan">Alan</option></select>
         </label>
         <label style="grid-column:1 / -1">Observação
           <textarea id="detObs" placeholder="Registre uma observação do atendimento..."></textarea>
         </label>
       </div>
-
       <div class="modal-actions">
         <button class="btn gray" onclick="fecharModalLead()">Fechar</button>
-        <button class="btn green" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
+        <button class="btn light" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
         <button class="btn" onclick="salvarLeadLocal()">Salvar na tela</button>
       </div>
-      <div class="footer-note" style="padding-bottom:0">Nesta versão, o botão salvar atualiza a tela. Para gravar status/observação no Supabase, precisamos criar o webhook de atualização no n8n.</div>
     </div>
   </div>
 </div>
@@ -199,16 +237,36 @@
 <script>
   const API_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-dashboard";
   let leadsGlobais = [];
+  let leadSelecionado = null;
+  document.getElementById("cfgApi").textContent = API_URL;
+
+  const titulos = {
+    dashboard:["Dashboard da Carteira","Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos."],
+    carteira:["Carteira de Clientes","Consulte, filtre e acesse os leads da operação."],
+    atendimentos:["Atendimentos","Fila operacional para contato, acompanhamento e retorno dos leads."],
+    funil:["Funil Comercial","Visualização dos leads por etapa comercial."],
+    propostas:["Propostas","Visão dos produtos solicitados e valores desejados."],
+    configuracoes:["Configurações","Parâmetros operacionais do CRM."]
+  };
+
+  function mudarTela(tela){
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    document.querySelectorAll(".nav a").forEach(a=>a.classList.remove("active"));
+    document.getElementById("view-"+tela).classList.add("active");
+    document.getElementById("nav-"+tela).classList.add("active");
+    document.getElementById("tituloTela").textContent = titulos[tela][0];
+    document.getElementById("subtituloTela").textContent = titulos[tela][1];
+    if(tela==="carteira") renderizarTabela();
+    if(tela==="atendimentos") renderizarAtendimentos();
+    if(tela==="funil") renderizarKanban();
+    if(tela==="propostas") renderizarPropostas();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
 
   function fazerLogin(){
     const usuario = document.getElementById("usuario").value.trim().toLowerCase();
     const senha = document.getElementById("senha").value;
-
-    const usuarios = {
-      "alan": "@@40563976##",
-      "meriany": "@@965279775##"
-    };
-
+    const usuarios = {"alan": "@@40563976##","meriany": "@@965279775##"};
     if(usuarios[usuario] && usuarios[usuario] === senha){
       sessionStorage.setItem("crm_logado", "true");
       sessionStorage.setItem("crm_usuario", usuario);
@@ -232,44 +290,35 @@
     document.getElementById("loginScreen").style.display = "flex";
   }
 
-
   function normalizarStatus(status, convertido){
     const s = String(status || "").trim().toLowerCase();
     if(convertido === true || s.includes("convert")) return "Convertido";
     if(!s || s === "novo" || s === "novo lead" || s.includes("lead_landing")) return "Novo Lead";
-    if(s.includes("atendimento") || s.includes("tentando")) return "Em Atendimento";
+    if(s.includes("tentando")) return "Tentando contato";
+    if(s.includes("atendimento")) return "Em Atendimento";
     if(s.includes("analise") || s.includes("análise")) return "Em análise";
+    if(s.includes("proposta")) return "Proposta enviada";
+    if(s.includes("perdido")) return "Perdido";
     return status;
   }
 
   function normalizarOrigem(origem){
     const s = String(origem || "").trim().toLowerCase();
-    if(s.includes("landing")) return "Landing Page";
+    if(s.includes("landing")) return "Landing Page Azul Empréstimos";
     if(s.includes("mailing")) return "Mailing interno";
     return origem || "-";
   }
 
-  function classeStatus(status){ const s = String(status || "").toLowerCase(); if(s.includes("convert")) return "convertido"; if(s.includes("atendimento") || s.includes("tentando")) return "atendimento"; return "novo"; }
-  function abrirWhatsApp(telefone, nome){ const phone = String(telefone || "").replace(/\D/g, ""); if(!phone){ alert("Telefone não informado."); return; } const msg = `Olá, ${nome || ""}! Tudo bem? Aqui é da Azul Empréstimos. Estou entrando em contato para falar sobre opções de crédito e benefícios disponíveis para você.`; window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(msg)}`, "_blank"); }
-  function atualizarBarra(id, valor, total){ const pct = total > 0 ? Math.round((valor / total) * 100) : 0; document.getElementById(id).style.width = pct + "%"; }
-  function atualizarDashboard(data){
-    const total=Number(data.total_leads||0), novos=Number(data.novos||0), emAtendimento=Number(data.em_atendimento||0), convertidos=Number(data.convertidos||0);
-    document.getElementById("totalLeads").textContent=total; document.getElementById("novos").textContent=novos; document.getElementById("emAtendimento").textContent=emAtendimento; document.getElementById("convertidos").textContent=convertidos;
-    document.getElementById("funilNovos").textContent=novos; document.getElementById("funilTentando").textContent=0; document.getElementById("funilAtendimento").textContent=emAtendimento; document.getElementById("funilAnalise").textContent=0; document.getElementById("funilConvertidos").textContent=convertidos;
-    atualizarBarra("barNovos",novos,total); atualizarBarra("barTentando",0,total); atualizarBarra("barAtendimento",emAtendimento,total); atualizarBarra("barAnalise",0,total); atualizarBarra("barConvertidos",convertidos,total);
-    const porResp=data.por_responsavel||{}; const responsaveis=Object.entries(porResp).sort((a,b)=>b[1]-a[1]); document.getElementById("principalResponsavel").textContent=responsaveis[0]?.[0]||"-";
-    const lista=document.getElementById("responsaveisLista"); lista.innerHTML="";
-    if(responsaveis.length===0){lista.innerHTML='<div class="person"><div>Nenhum responsável encontrado</div></div>';return;}
-    responsaveis.forEach(([nome,qtd],index)=>{const inicial=nome.charAt(0).toUpperCase(); const pct=total>0?Math.round((qtd/total)*100):0; const cor=index===0?"green":"blue"; lista.innerHTML += `<div class="person"><div class="person-left"><div class="circle ${cor}">${inicial}</div><div><b>${nome}</b><br><small>${qtd} leads atribuídos</small></div></div><b>${pct}%</b></div>`;});
+  function classeStatus(status){
+    const s = String(status || "").toLowerCase();
+    if(s.includes("convert")) return "convertido";
+    if(s.includes("perdido")) return "perdido";
+    if(s.includes("atendimento") || s.includes("tentando") || s.includes("análise") || s.includes("analise") || s.includes("proposta")) return "atendimento";
+    return "novo";
   }
 
   function escapeHtml(value){
-    return String(value ?? "")
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;")
-      .replace(/'/g,"&#039;");
+    return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
   }
 
   function formatarMoeda(valor){
@@ -278,12 +327,111 @@
     return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
   }
 
-  let leadSelecionado = null;
+  function abrirWhatsApp(telefone, nome){
+    const phone = String(telefone || "").replace(/\D/g, "");
+    if(!phone){ alert("Telefone não informado."); return; }
+    const msg = `Olá, ${nome || ""}! Tudo bem? Aqui é da Azul Empréstimos. Estou entrando em contato para falar sobre opções de crédito e benefícios disponíveis para você.`;
+    window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+
+  function atualizarBarra(id, valor, total){
+    const pct = total > 0 ? Math.round((valor / total) * 100) : 0;
+    const el = document.getElementById(id);
+    if(el) el.style.width = pct + "%";
+  }
+
+  function contarPorStatus(status){
+    return leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido) === status).length;
+  }
+
+  function atualizarDashboard(data){
+    const total = leadsGlobais.length || Number(data.total_leads||0);
+    const novos = contarPorStatus("Novo Lead");
+    const tentando = contarPorStatus("Tentando contato");
+    const emAtendimento = contarPorStatus("Em Atendimento");
+    const analise = contarPorStatus("Em análise");
+    const convertidos = contarPorStatus("Convertido");
+
+    document.getElementById("totalLeads").textContent=total;
+    document.getElementById("novos").textContent=novos;
+    document.getElementById("emAtendimento").textContent=emAtendimento;
+    document.getElementById("convertidos").textContent=convertidos;
+
+    document.getElementById("funilNovos").textContent=novos;
+    document.getElementById("funilTentando").textContent=tentando;
+    document.getElementById("funilAtendimento").textContent=emAtendimento;
+    document.getElementById("funilAnalise").textContent=analise;
+    document.getElementById("funilConvertidos").textContent=convertidos;
+
+    atualizarBarra("barNovos",novos,total);
+    atualizarBarra("barTentando",tentando,total);
+    atualizarBarra("barAtendimento",emAtendimento,total);
+    atualizarBarra("barAnalise",analise,total);
+    atualizarBarra("barConvertidos",convertidos,total);
+
+    const porResp = leadsGlobais.reduce((acc,l)=>{
+      const r = l.responsavel || "Sem Responsável";
+      acc[r] = (acc[r] || 0) + 1;
+      return acc;
+    },{});
+    const responsaveis=Object.entries(porResp).sort((a,b)=>b[1]-a[1]);
+    document.getElementById("principalResponsavel").textContent=responsaveis[0]?.[0]||"-";
+
+    const lista=document.getElementById("responsaveisLista");
+    lista.innerHTML="";
+    if(responsaveis.length===0){lista.innerHTML='<div class="person"><div>Nenhum responsável encontrado</div></div>';return;}
+    responsaveis.forEach(([nome,qtd],index)=>{
+      const inicial=nome.charAt(0).toUpperCase();
+      const pct=total>0?Math.round((qtd/total)*100):0;
+      const cor=index===0?"green":"blue";
+      lista.innerHTML += `<div class="person"><div class="person-left"><div class="circle ${cor}">${inicial}</div><div><b>${escapeHtml(nome)}</b><br><small>${qtd} leads atribuídos</small></div></div><b>${pct}%</b></div>`;
+    });
+
+    renderizarAtendimentos();
+    renderizarKanban();
+    renderizarPropostas();
+  }
+
+  function getLeadsFiltrados(){
+    const busca=document.getElementById("busca")?.value.toLowerCase().trim() || "";
+    const filtroStatus=document.getElementById("filtroStatus")?.value || "";
+    const filtroResponsavel=document.getElementById("filtroResponsavel")?.value || "";
+    const filtroOrigem=document.getElementById("filtroOrigem")?.value || "";
+    let leads=[...leadsGlobais];
+    if(busca){leads=leads.filter(l=>String(l.nome||"").toLowerCase().includes(busca)||String(l.documento||"").toLowerCase().includes(busca)||String(l.telefone||"").toLowerCase().includes(busca));}
+    if(filtroStatus){leads=leads.filter(l=>normalizarStatus(l.status,l.convertido)===filtroStatus);}
+    if(filtroResponsavel){leads=leads.filter(l=>String(l.responsavel||"").trim().toLowerCase()===filtroResponsavel.toLowerCase());}
+    if(filtroOrigem){leads=leads.filter(l=>normalizarOrigem(l.origem)===filtroOrigem);}
+    return leads;
+  }
+
+  function linhaLead(lead){
+    const status=normalizarStatus(lead.status,lead.convertido);
+    const telefone=lead.telefone||"";
+    const origem=normalizarOrigem(lead.origem);
+    const responsavel=lead.responsavel||"-";
+    const id=lead.id || lead.documento || lead.telefone || "";
+    return `<tr>
+      <td><b>${escapeHtml(lead.nome||"-")}</b></td>
+      <td>${escapeHtml(lead.documento||"-")}</td>
+      <td>${escapeHtml(telefone||"-")}</td>
+      <td>${escapeHtml(origem)}</td>
+      <td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td>
+      <td>${escapeHtml(responsavel)}</td>
+      <td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button> <button class="whats" onclick="abrirWhatsApp('${escapeHtml(telefone)}','${escapeHtml(lead.nome||"")}')">WhatsApp</button></td>
+    </tr>`;
+  }
+
+  function renderizarTabela(){
+    const tbody=document.getElementById("tabelaLeads");
+    const leads=getLeadsFiltrados();
+    if(leads.length===0){tbody.innerHTML='<tr><td colspan="7">Nenhum lead encontrado.</td></tr>';return;}
+    tbody.innerHTML=leads.slice(0,100).map(linhaLead).join("");
+  }
 
   function abrirDetalhesLead(id){
-    leadSelecionado = leadsGlobais.find(l => String(l.id) === String(id));
+    leadSelecionado = leadsGlobais.find(l => String(l.id||l.documento||l.telefone) === String(id));
     if(!leadSelecionado){ alert("Lead não encontrado."); return; }
-
     document.getElementById("detNome").textContent = leadSelecionado.nome || "-";
     document.getElementById("detDocumento").textContent = leadSelecionado.documento || "-";
     document.getElementById("detTelefone").textContent = leadSelecionado.telefone || "-";
@@ -314,64 +462,77 @@
     leadSelecionado.responsavel = document.getElementById("detRespEdit").value;
     leadSelecionado.observacao = document.getElementById("detObs").value;
     renderizarTabela();
-    atualizarDashboard({
-      total_leads: leadsGlobais.length,
-      novos: leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)==="Novo Lead").length,
-      em_atendimento: leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)==="Em Atendimento").length,
-      convertidos: leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)==="Convertido").length,
-      por_responsavel: leadsGlobais.reduce((acc,l)=>{ const r=l.responsavel||"Sem Responsável"; acc[r]=(acc[r]||0)+1; return acc; },{})
-    });
-    alert("Alteração aplicada na tela. Para salvar no Supabase, vamos criar o webhook de atualização no n8n.");
+    atualizarDashboard({});
+    alert("Alteração aplicada na tela. Para salvar definitivamente no Supabase, o próximo passo é criar o webhook de atualização no n8n.");
   }
 
-  function renderizarTabela(){
-    const tbody=document.getElementById("tabelaLeads"); const busca=document.getElementById("busca").value.toLowerCase().trim(); const filtroStatus=document.getElementById("filtroStatus").value; const filtroResponsavel=document.getElementById("filtroResponsavel").value; const filtroOrigem=document.getElementById("filtroOrigem").value;
-    let leads=leadsGlobais;
-    if(busca){leads=leads.filter(l=>String(l.nome||"").toLowerCase().includes(busca)||String(l.documento||"").toLowerCase().includes(busca)||String(l.telefone||"").toLowerCase().includes(busca));}
-    if(filtroStatus){leads=leads.filter(l=>normalizarStatus(l.status,l.convertido)===filtroStatus);}
-    if(filtroResponsavel){leads=leads.filter(l=>String(l.responsavel||"").trim().toLowerCase()===filtroResponsavel.toLowerCase());}
-    if(filtroOrigem){leads=leads.filter(l=>normalizarOrigem(l.origem)===filtroOrigem);}
-    if(leads.length===0){tbody.innerHTML='<tr><td colspan="7">Nenhum lead encontrado.</td></tr>';return;}
-    tbody.innerHTML=leads.slice(0,100).map(lead=>{
+  function renderizarAtendimentos(){
+    ["Novo Lead","Tentando contato","Em Atendimento","Em análise","Perdido"].forEach((s,i)=>{
+      const ids=["atdNovos","atdTentando","atdAtendimento","atdAnalise","atdPerdidos"];
+      const el=document.getElementById(ids[i]);
+      if(el) el.textContent = contarPorStatus(s);
+    });
+    const tbody=document.getElementById("tabelaAtendimentos");
+    if(!tbody) return;
+    const leads = leadsGlobais.filter(l => ["Novo Lead","Tentando contato","Em Atendimento","Em análise"].includes(normalizarStatus(l.status,l.convertido))).slice(0,80);
+    if(leads.length===0){tbody.innerHTML='<tr><td colspan="6">Nenhum atendimento encontrado.</td></tr>';return;}
+    tbody.innerHTML = leads.map(lead=>{
+      const id=lead.id || lead.documento || lead.telefone || "";
       const status=normalizarStatus(lead.status,lead.convertido);
-      const telefone=lead.telefone||"";
-      const origem=normalizarOrigem(lead.origem);
-      const responsavel=lead.responsavel||"-";
-      const nomeSeguro=String(lead.nome||"").replace(/'/g,"");
-      const idSeguro = escapeHtml(lead.id || "");
-      return `<tr>
-        <td><b>${escapeHtml(lead.nome||"-")}</b></td>
-        <td>${escapeHtml(lead.documento||"-")}</td>
-        <td>${escapeHtml(telefone||"-")}</td>
-        <td>${escapeHtml(origem)}</td>
-        <td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td>
-        <td>${escapeHtml(responsavel)}</td>
-        <td><div class="row-actions"><button class="view-btn" onclick="abrirDetalhesLead('${idSeguro}')">Ver</button><button class="whats" onclick="abrirWhatsApp('${telefone}','${nomeSeguro}')">WhatsApp</button></div></td>
-      </tr>`;
+      return `<tr><td><b>${escapeHtml(lead.nome||"-")}</b></td><td>${escapeHtml(lead.produto||lead.produto_interesse||"-")}</td><td>${formatarMoeda(lead.valor_desejado)}</td><td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td><td>${escapeHtml(lead.responsavel||"-")}</td><td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button></td></tr>`;
+    }).join("");
+  }
+
+  function renderizarKanban(){
+    const alvo=document.getElementById("kanbanFunil");
+    if(!alvo) return;
+    const etapas=["Novo Lead","Tentando contato","Em Atendimento","Em análise","Proposta enviada","Convertido","Perdido"];
+    alvo.innerHTML = etapas.map(etapa=>{
+      const leads = leadsGlobais.filter(l => normalizarStatus(l.status,l.convertido)===etapa).slice(0,8);
+      return `<div class="col"><h4>${escapeHtml(etapa)} (${leads.length})</h4>${leads.length?leads.map(l=>`<div class="lead-card"><b>${escapeHtml(l.nome||"-")}</b><small>${escapeHtml(l.produto||l.produto_interesse||"-")} • ${formatarMoeda(l.valor_desejado)}</small></div>`).join(""):`<div class="empty">Sem leads</div>`}</div>`;
+    }).join("");
+  }
+
+  function renderizarPropostas(){
+    const tbody=document.getElementById("tabelaPropostas");
+    if(!tbody) return;
+    const totalValor = leadsGlobais.reduce((acc,l)=>acc+(Number(l.valor_desejado)||0),0);
+    document.getElementById("valorSolicitado").textContent = formatarMoeda(totalValor);
+    const produtoTexto = (l)=>String(l.produto||l.produto_interesse||"").toLowerCase();
+    document.getElementById("produtoConsignado").textContent = leadsGlobais.filter(l=>produtoTexto(l).includes("consign")).length;
+    document.getElementById("produtoCartao").textContent = leadsGlobais.filter(l=>produtoTexto(l).includes("cart")).length;
+    document.getElementById("produtoCredito").textContent = leadsGlobais.filter(l=>produtoTexto(l).includes("crédito")||produtoTexto(l).includes("credito")).length;
+    document.getElementById("produtoOutros").textContent = leadsGlobais.filter(l=>!produtoTexto(l).includes("consign")&&!produtoTexto(l).includes("cart")&&!produtoTexto(l).includes("crédito")&&!produtoTexto(l).includes("credito")).length;
+    const leads = leadsGlobais.filter(l => l.produto || l.produto_interesse || Number(l.valor_desejado)>0).slice(0,100);
+    if(leads.length===0){tbody.innerHTML='<tr><td colspan="6">Nenhuma proposta/interesse encontrado.</td></tr>';return;}
+    tbody.innerHTML = leads.map(lead=>{
+      const id=lead.id || lead.documento || lead.telefone || "";
+      const status=normalizarStatus(lead.status,lead.convertido);
+      return `<tr><td><b>${escapeHtml(lead.nome||"-")}</b></td><td>${escapeHtml(lead.produto||lead.produto_interesse||"-")}</td><td>${formatarMoeda(lead.valor_desejado)}</td><td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td><td>${escapeHtml(lead.responsavel||"-")}</td><td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button></td></tr>`;
     }).join("");
   }
 
   async function carregarDashboard(){
     if(sessionStorage.getItem("crm_logado") !== "true") return;
-    const loading=document.getElementById("loading"), error=document.getElementById("error"); loading.style.display="block"; error.style.display="none";
+    const loading=document.getElementById("loading"), error=document.getElementById("error");
+    loading.style.display="block"; error.style.display="none";
     try{
       const response=await fetch(API_URL,{method:"GET"});
       if(!response.ok) throw new Error("Erro ao consultar API");
       const data=await response.json();
-
-      // Aceita vários nomes de retorno do n8n.
-      // O ideal é o n8n retornar TODOS os leads em "leads" ou "ultimos_leads".
       leadsGlobais = data.leads || data.todos_leads || data.all_leads || data.ultimos_leads || [];
-
-      // Remove linhas vazias/null que podem ter sido criadas em testes.
       leadsGlobais = leadsGlobais.filter(l => l && (l.nome || l.documento || l.telefone));
-
       atualizarDashboard(data);
       renderizarTabela();
+    }catch(e){
+      console.error(e);
+      error.style.display="block";
+      document.getElementById("tabelaLeads").innerHTML='<tr><td colspan="7">Erro ao carregar dados do n8n.</td></tr>';
+    }finally{
+      loading.style.display="none";
     }
-    catch(e){ console.error(e); error.style.display="block"; document.getElementById("tabelaLeads").innerHTML='<tr><td colspan="7">Erro ao carregar dados do n8n.</td></tr>'; }
-    finally{ loading.style.display="none"; }
   }
+
   verificarLogin();
 </script>
 </body>
