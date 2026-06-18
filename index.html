@@ -564,17 +564,63 @@
         const usuario = escapeHtml(item.usuario || "Sistema");
         const observacao = escapeHtml(item.observacao || "");
         const dataFormatada = escapeHtml(formatarDataHistorico(item.created_at));
+        const tipoEvento = String(item.tipo_evento || "STATUS").toUpperCase();
 
-        return `
-          <div class="historico-item">
+        let tituloEvento = "";
+
+        if(tipoEvento === "STATUS"){
+          tituloEvento = `
             <div class="historico-status">
-              <b>${statusAnterior}</b>
+              <b>🔄 ${statusAnterior}</b>
               <span>→</span>
               <b>${statusNovo}</b>
             </div>
+          `;
+        }else if(tipoEvento === "OBSERVACAO"){
+          tituloEvento = `
+            <div class="historico-status">
+              <b>📝 Nova observação</b>
+            </div>
+          `;
+        }else if(tipoEvento === "RESPONSAVEL"){
+          tituloEvento = `
+            <div class="historico-status">
+              <b>👤 Alteração de responsável</b>
+            </div>
+          `;
+        }else if(tipoEvento === "WHATSAPP"){
+          tituloEvento = `
+            <div class="historico-status">
+              <b>📲 Contato via WhatsApp</b>
+            </div>
+          `;
+        }else if(tipoEvento === "PROPOSTA"){
+          tituloEvento = `
+            <div class="historico-status">
+              <b>💰 Proposta registrada</b>
+            </div>
+          `;
+        }else if(tipoEvento === "CONTRATO"){
+          tituloEvento = `
+            <div class="historico-status">
+              <b>✅ Contrato/Conversão</b>
+            </div>
+          `;
+        }else{
+          tituloEvento = `
+            <div class="historico-status">
+              <b>📌 Evento registrado</b>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="historico-item">
+            ${tituloEvento}
+            ${tipoEvento === "STATUS" ? `<small><b>Tipo:</b> STATUS</small>` : `<small><b>Tipo:</b> ${escapeHtml(tipoEvento)}</small>`}
             <small><b>Responsável:</b> ${responsavel}</small>
             <small><b>Usuário:</b> ${usuario}</small>
-            ${observacao ? `<small><b>Observação:</b> ${observacao}</small>` : ""}
+            ${observacao ? `<small><b>Observação:</b><br>${observacao}</small>` : ""}
             ${dataFormatada ? `<small><b>Data:</b> ${dataFormatada}</small>` : ""}
           </div>
         `;
@@ -599,11 +645,20 @@
   async function salvarLeadLocal(){
     if(!leadSelecionado) return;
 
+    const statusAnterior = normalizarStatus(leadSelecionado.status, leadSelecionado.convertido);
+    const statusNovo = document.getElementById("detStatus").value;
+    const responsavelNovo = document.getElementById("detRespEdit").value;
+    const observacaoNova = document.getElementById("detObs").value;
+    const usuarioLogado = sessionStorage.getItem("crm_usuario") || "Sistema";
+
     const payload = {
       id: leadSelecionado.id,
-      status: document.getElementById("detStatus").value,
-      responsavel: document.getElementById("detRespEdit").value,
-      observacao: document.getElementById("detObs").value
+      nome: leadSelecionado.nome || "-",
+      status_anterior: statusAnterior || "Sem informação",
+      status: statusNovo,
+      responsavel: responsavelNovo,
+      observacao: observacaoNova,
+      usuario: usuarioLogado
     };
 
     if(!payload.id){
