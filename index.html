@@ -506,11 +506,20 @@
   async function salvarLeadLocal(){
     if(!leadSelecionado) return;
 
+    const statusAnterior = normalizarStatus(leadSelecionado.status, leadSelecionado.convertido);
+    const statusNovo = document.getElementById("detStatus").value;
+    const responsavelNovo = document.getElementById("detRespEdit").value;
+    const observacaoNova = document.getElementById("detObs").value;
+    const usuarioLogado = sessionStorage.getItem("crm_usuario") || "Sistema";
+
     const payload = {
       id: leadSelecionado.id,
-      status: document.getElementById("detStatus").value,
-      responsavel: document.getElementById("detRespEdit").value,
-      observacao: document.getElementById("detObs").value
+      nome: leadSelecionado.nome || "-",
+      status_anterior: statusAnterior || "Sem informação",
+      status: statusNovo,
+      responsavel: responsavelNovo,
+      observacao: observacaoNova,
+      usuario: usuarioLogado
     };
 
     if(!payload.id){
