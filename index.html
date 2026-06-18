@@ -37,6 +37,7 @@
     .login-button{width:100%;height:48px;border:none;border-radius:14px;background:linear-gradient(135deg,#0b66ff,#073f9e);color:white;font-weight:1000;cursor:pointer;margin-top:6px;box-shadow:0 15px 35px rgba(11,102,255,.22)}
     .login-error{color:#b42318;background:#fff0f0;border:1px solid #ffc9c9;border-radius:12px;padding:10px;margin-top:14px;text-align:center;font-weight:800;display:none}.login-hint{margin-top:16px;font-size:12px;color:#64748b;text-align:center;line-height:1.4}
     .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,.55);display:none;align-items:center;justify-content:center;z-index:9998;padding:18px}.modal{width:780px;max-width:100%;background:#fff;border-radius:24px;border:1px solid var(--line);box-shadow:0 30px 90px rgba(0,0,0,.30);overflow:hidden}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;background:linear-gradient(135deg,#eef5ff,#fff);border-bottom:1px solid var(--line)}.modal-head h3{color:#08234f;font-size:22px}.modal-close{border:0;background:#eef5ff;color:#073f9e;border-radius:12px;width:38px;height:38px;font-weight:1000;cursor:pointer}.modal-body{padding:22px}.lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}.lead-field{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px}.lead-field small{display:block;color:#64748b;font-weight:900;font-size:11px;text-transform:uppercase;margin-bottom:6px}.lead-field b{color:#08234f;font-size:15px;word-break:break-word}.modal-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.modal-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}.modal-form select,.modal-form textarea{width:100%;margin-top:7px}.modal-form textarea{grid-column:1 / -1}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+    .historico-box{grid-column:1 / -1;margin-top:10px}.historico-box-title{display:block;margin-bottom:10px;font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}.historico-list{max-height:220px;overflow-y:auto;background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px;color:#334155;font-weight:700}.historico-item{padding:12px;border-bottom:1px solid #dbe7f5;margin-bottom:8px}.historico-item:last-child{border-bottom:0;margin-bottom:0}.historico-item b{color:#08234f}.historico-item small{display:block;color:#64748b;margin-top:4px;line-height:1.35}.historico-empty{color:#64748b;font-weight:800}.historico-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
     @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
@@ -267,6 +268,13 @@
         <label style="grid-column:1 / -1">Observação
           <textarea id="detObs" placeholder="Registre uma observação do atendimento..."></textarea>
         </label>
+
+        <div class="historico-box">
+          <label class="historico-box-title">Histórico de Movimentações</label>
+          <div id="historicoLead" class="historico-list">
+            <span class="historico-empty">Nenhum histórico carregado.</span>
+          </div>
+        </div>
       </div>
       <div class="modal-actions">
         <button class="btn gray" onclick="fecharModalLead()">Fechar</button>
@@ -280,6 +288,7 @@
 <script>
   const API_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-dashboard";
   const UPDATE_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-atualizar-lead";
+  const HISTORICO_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-historico-lead";
   let leadsGlobais = [];
   let leadSelecionado = null;
   document.getElementById("cfgApi").textContent = API_URL;
@@ -491,6 +500,90 @@
     document.getElementById("detRespEdit").value = leadSelecionado.responsavel || "Meriany";
     document.getElementById("detObs").value = leadSelecionado.observacao || "";
     document.getElementById("modalLead").style.display = "flex";
+    carregarHistoricoLead(leadSelecionado.id);
+  }
+
+  function formatarDataHistorico(data){
+    if(!data) return "";
+    const d = new Date(data);
+    if(Number.isNaN(d.getTime())) return String(data);
+    return d.toLocaleString("pt-BR", {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+  }
+
+  function normalizarItemHistorico(item){
+    return item?.json || item || {};
+  }
+
+  async function carregarHistoricoLead(leadId){
+    const historicoDiv = document.getElementById("historicoLead");
+    if(!historicoDiv) return;
+
+    if(!leadId){
+      historicoDiv.innerHTML = '<span class="historico-empty">Lead sem ID para consultar histórico.</span>';
+      return;
+    }
+
+    historicoDiv.innerHTML = '<span class="historico-empty">Carregando histórico...</span>';
+
+    try{
+      const response = await fetch(HISTORICO_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          lead_id: leadId
+        })
+      });
+
+      if(!response.ok){
+        throw new Error("Erro ao consultar histórico");
+      }
+
+      const data = await response.json();
+      const historicoBruto = Array.isArray(data?.historico) ? data.historico : [];
+      const historico = historicoBruto
+        .map(normalizarItemHistorico)
+        .filter(item => item && (item.status_novo || item.observacao || item.created_at));
+
+      if(historico.length === 0){
+        historicoDiv.innerHTML = '<span class="historico-empty">Nenhuma movimentação encontrada para este lead.</span>';
+        return;
+      }
+
+      historicoDiv.innerHTML = historico.map(item => {
+        const statusAnterior = escapeHtml(item.status_anterior || "Status não informado");
+        const statusNovo = escapeHtml(item.status_novo || "-");
+        const responsavel = escapeHtml(item.responsavel || "-");
+        const usuario = escapeHtml(item.usuario || "Sistema");
+        const observacao = escapeHtml(item.observacao || "");
+        const dataFormatada = escapeHtml(formatarDataHistorico(item.created_at));
+
+        return `
+          <div class="historico-item">
+            <div class="historico-status">
+              <b>${statusAnterior}</b>
+              <span>→</span>
+              <b>${statusNovo}</b>
+            </div>
+            <small><b>Responsável:</b> ${responsavel}</small>
+            <small><b>Usuário:</b> ${usuario}</small>
+            ${observacao ? `<small><b>Observação:</b> ${observacao}</small>` : ""}
+            ${dataFormatada ? `<small><b>Data:</b> ${dataFormatada}</small>` : ""}
+          </div>
+        `;
+      }).join("");
+
+    }catch(error){
+      console.error(error);
+      historicoDiv.innerHTML = '<span class="historico-empty">Erro ao carregar histórico.</span>';
+    }
   }
 
   function fecharModalLead(){
@@ -506,20 +599,11 @@
   async function salvarLeadLocal(){
     if(!leadSelecionado) return;
 
-    const statusAnterior = normalizarStatus(leadSelecionado.status, leadSelecionado.convertido);
-    const statusNovo = document.getElementById("detStatus").value;
-    const responsavelNovo = document.getElementById("detRespEdit").value;
-    const observacaoNova = document.getElementById("detObs").value;
-    const usuarioLogado = sessionStorage.getItem("crm_usuario") || "Sistema";
-
     const payload = {
       id: leadSelecionado.id,
-      nome: leadSelecionado.nome || "-",
-      status_anterior: statusAnterior || "Sem informação",
-      status: statusNovo,
-      responsavel: responsavelNovo,
-      observacao: observacaoNova,
-      usuario: usuarioLogado
+      status: document.getElementById("detStatus").value,
+      responsavel: document.getElementById("detRespEdit").value,
+      observacao: document.getElementById("detObs").value
     };
 
     if(!payload.id){
@@ -546,6 +630,7 @@
 
       renderizarTabela();
       atualizarDashboard({});
+      carregarHistoricoLead(leadSelecionado.id);
 
       alert("Lead atualizado com sucesso no Supabase.");
     }catch(error){
