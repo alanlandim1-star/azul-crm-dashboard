@@ -226,7 +226,7 @@
           <div class="config-item"><small>Usuários ativos</small><b>Alan / Meriany</b></div>
           <div class="config-item"><small>Origem principal</small><b>Landing Page Azul Empréstimos</b></div>
           <div class="config-item"><small>Status disponíveis</small><b>Novo, Tentando, Atendimento, Análise, Proposta, Convertido, Perdido</b></div>
-          <div class="config-item"><small>Próxima evolução</small><b>Salvar status e observações no Supabase via n8n</b></div>
+          <div class="config-item"><small>Atualização CRM</small><b>Status e observações salvando no Supabase via n8n</b></div>
         </div>
       </section>
     </section>
@@ -279,6 +279,7 @@
 
 <script>
   const API_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-dashboard";
+  const UPDATE_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-atualizar-lead";
   let leadsGlobais = [];
   let leadSelecionado = null;
   document.getElementById("cfgApi").textContent = API_URL;
@@ -502,14 +503,46 @@
     abrirWhatsApp(leadSelecionado.telefone, leadSelecionado.nome);
   }
 
-  function salvarLeadLocal(){
+  async function salvarLeadLocal(){
     if(!leadSelecionado) return;
-    leadSelecionado.status = document.getElementById("detStatus").value;
-    leadSelecionado.responsavel = document.getElementById("detRespEdit").value;
-    leadSelecionado.observacao = document.getElementById("detObs").value;
-    renderizarTabela();
-    atualizarDashboard({});
-    alert("Alteração aplicada na tela. Para salvar definitivamente no Supabase, o próximo passo é criar o webhook de atualização no n8n.");
+
+    const payload = {
+      id: leadSelecionado.id,
+      status: document.getElementById("detStatus").value,
+      responsavel: document.getElementById("detRespEdit").value,
+      observacao: document.getElementById("detObs").value
+    };
+
+    if(!payload.id){
+      alert("Este lead não possui ID. Não foi possível salvar no Supabase.");
+      return;
+    }
+
+    try{
+      const response = await fetch(UPDATE_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(payload)
+      });
+
+      if(!response.ok){
+        throw new Error("Erro ao atualizar lead");
+      }
+
+      leadSelecionado.status = payload.status;
+      leadSelecionado.responsavel = payload.responsavel;
+      leadSelecionado.observacao = payload.observacao;
+
+      renderizarTabela();
+      atualizarDashboard({});
+
+      alert("Lead atualizado com sucesso no Supabase.");
+    }catch(error){
+      console.error(error);
+      alert("Erro ao salvar no Supabase. Verifique o workflow do n8n.");
+    }
   }
 
   function renderizarAtendimentos(){
