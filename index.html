@@ -38,6 +38,23 @@
     .login-error{color:#b42318;background:#fff0f0;border:1px solid #ffc9c9;border-radius:12px;padding:10px;margin-top:14px;text-align:center;font-weight:800;display:none}.login-hint{margin-top:16px;font-size:12px;color:#64748b;text-align:center;line-height:1.4}
     .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,.55);display:none;align-items:center;justify-content:center;z-index:9998;padding:18px}.modal{width:780px;max-width:100%;background:#fff;border-radius:24px;border:1px solid var(--line);box-shadow:0 30px 90px rgba(0,0,0,.30);overflow:hidden}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;background:linear-gradient(135deg,#eef5ff,#fff);border-bottom:1px solid var(--line)}.modal-head h3{color:#08234f;font-size:22px}.modal-close{border:0;background:#eef5ff;color:#073f9e;border-radius:12px;width:38px;height:38px;font-weight:1000;cursor:pointer}.modal-body{padding:22px}.lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}.lead-field{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px}.lead-field small{display:block;color:#64748b;font-weight:900;font-size:11px;text-transform:uppercase;margin-bottom:6px}.lead-field b{color:#08234f;font-size:15px;word-break:break-word}.modal-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.modal-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}.modal-form select,.modal-form textarea{width:100%;margin-top:7px}.modal-form textarea{grid-column:1 / -1}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
     .historico-box{grid-column:1 / -1;margin-top:10px}.historico-box-title{display:block;margin-bottom:10px;font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}.historico-list{max-height:220px;overflow-y:auto;background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px;color:#334155;font-weight:700}.historico-item{padding:12px;border-bottom:1px solid #dbe7f5;margin-bottom:8px}.historico-item:last-child{border-bottom:0;margin-bottom:0}.historico-item b{color:#08234f}.historico-item small{display:block;color:#64748b;margin-top:4px;line-height:1.35}.historico-empty{color:#64748b;font-weight:800}.historico-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+
+    .automation-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}
+    .automation-form{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .automation-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+    .automation-form input,.automation-form select,.automation-form textarea{width:100%;margin-top:7px}
+    .automation-form textarea{grid-column:1 / -1;min-height:120px}
+    .template-help{grid-column:1 / -1;background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px;color:#64748b;font-size:13px;line-height:1.5;font-weight:700}
+    .template-help code{background:#eef5ff;color:#073f9e;border-radius:8px;padding:3px 6px;font-weight:900}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid var(--line);background:#f8fbff;color:#073f9e}
+    .pill.on{background:#e9fff3;color:#0d8d4d;border-color:#b9f0d1}
+    .pill.off{background:#fff0f0;color:#b42318;border-color:#ffc9c9}
+    .channel{font-weight:1000}
+    .channel.whatsapp{color:#0d8d4d}
+    .channel.sms{color:#7c3aed}
+    .channel.email{color:#0b66ff}
+    .automation-actions{display:flex;gap:8px;flex-wrap:wrap}
+
     @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
@@ -69,6 +86,7 @@
       <a id="nav-funil" onclick="mudarTela('funil')">📈 Funil</a>
       <a id="nav-propostas" onclick="mudarTela('propostas')">💰 Propostas</a>
       <a id="nav-relatorios" onclick="mudarTela('relatorios')">📑 Relatórios</a>
+      <a id="nav-automacoes" onclick="mudarTela('automacoes')">⚡ Automações</a>
       <a id="nav-configuracoes" onclick="mudarTela('configuracoes')">⚙️ Configurações</a>
     </nav>
     <div class="profile-box"><div class="avatars"><div class="avatar a">A</div><div class="avatar m">M</div></div><b>Alan & Meriany</b><br><small>Gestão comercial da carteira</small></div>
@@ -218,6 +236,124 @@
       </section>
     </section>
 
+
+    <section id="view-automacoes" class="view">
+      <section class="cards">
+        <div class="card"><small>Automações Ativas</small><strong id="autoAtivas">0</strong><span>Regras ligadas</span></div>
+        <div class="card"><small>WhatsApp</small><strong id="autoWhats">0</strong><span>Canal</span></div>
+        <div class="card"><small>SMS</small><strong id="autoSms">0</strong><span>Canal</span></div>
+        <div class="card"><small>E-mail</small><strong id="autoEmail">0</strong><span>Canal</span></div>
+        <div class="card"><small>Pausadas</small><strong id="autoPausadas">0</strong><span>Controle</span></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Nova Regra de Automação</h3>
+            <p style="color:var(--muted);font-weight:700;margin-top:6px">Crie regras por mudança de status para disparos via WhatsApp, SMS ou E-mail.</p>
+          </div>
+          <span class="tag">CRM Azul</span>
+        </div>
+
+        <div class="automation-form">
+          <label>Nome da automação
+            <input id="autoNome" placeholder="Ex: Boas-vindas Novo Lead" />
+          </label>
+
+          <label>Status gatilho
+            <select id="autoGatilho">
+              <option value="Novo Lead">Novo Lead</option>
+              <option value="Tentando contato">Tentando contato</option>
+              <option value="Em Atendimento">Em Atendimento</option>
+              <option value="Em análise">Em análise</option>
+              <option value="Proposta enviada">Proposta enviada</option>
+              <option value="Convertido">Convertido</option>
+              <option value="Perdido">Perdido</option>
+            </select>
+          </label>
+
+          <label>Canal
+            <select id="autoCanal">
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="SMS">SMS</option>
+              <option value="E-mail">E-mail</option>
+            </select>
+          </label>
+
+          <label>Tempo de disparo
+            <select id="autoTempo">
+              <option value="Imediato">Imediato</option>
+              <option value="Após 15 minutos">Após 15 minutos</option>
+              <option value="Após 1 hora">Após 1 hora</option>
+              <option value="Após 1 dia">Após 1 dia</option>
+              <option value="Após 3 dias">Após 3 dias</option>
+            </select>
+          </label>
+
+          <label>Status da regra
+            <select id="autoAtiva">
+              <option value="true">Ativa</option>
+              <option value="false">Pausada</option>
+            </select>
+          </label>
+
+          <label>Fornecedor/Integração
+            <input id="autoFornecedor" placeholder="Ex: Z-API, Infobip, SMTP, fornecedor SMS" />
+          </label>
+
+          <label style="grid-column:1 / -1">Template da mensagem
+            <textarea id="autoTemplate" placeholder="Olá {{nome}}, aqui é da Azul Empréstimos. Vimos que você solicitou {{produto}} no valor de {{valor_desejado}}. Podemos seguir com sua simulação?"></textarea>
+          </label>
+
+          <div class="template-help">
+            Variáveis disponíveis para usar no template:
+            <code>{{nome}}</code>
+            <code>{{telefone}}</code>
+            <code>{{produto}}</code>
+            <code>{{valor_desejado}}</code>
+            <code>{{status}}</code>
+            <code>{{responsavel}}</code>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn gray" onclick="limparFormularioAutomacao()">Limpar</button>
+          <button class="btn" onclick="salvarAutomacaoLocal()">Salvar Regra</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Regras Cadastradas</h3>
+          <span class="tag">Disparos automáticos</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Automação</th>
+              <th>Gatilho</th>
+              <th>Canal</th>
+              <th>Tempo</th>
+              <th>Status</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaAutomacoes"></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Próxima integração n8n</h3>
+          <span class="tag">Fase seguinte</span>
+        </div>
+        <p style="color:var(--muted);font-weight:700;line-height:1.6">
+          Nesta primeira versão, as regras ficam configuradas na tela do CRM. O próximo passo será criar a tabela
+          <b>automacoes_crm</b> no Supabase e o fluxo no n8n para consultar as regras ativas quando um lead mudar de status.
+        </p>
+      </section>
+    </section>
+
     <section id="view-configuracoes" class="view">
       <section class="panel">
         <div class="panel-head"><h3>Configurações do CRM</h3><span class="tag">MVP</span></div>
@@ -300,6 +436,7 @@
     funil:["Funil Comercial","Visualização dos leads por etapa comercial."],
     propostas:["Propostas","Visão dos produtos solicitados e valores desejados."],
     relatorios:["Relatórios","Análises consolidadas da carteira, origem, produto, status e responsáveis."],
+    automacoes:["Automações","Configure regras de disparo por status, canal e template de mensagem."],
     configuracoes:["Configurações","Parâmetros operacionais do CRM."]
   };
 
@@ -315,6 +452,7 @@
     if(tela==="funil") renderizarKanban();
     if(tela==="propostas") renderizarPropostas();
     if(tela==="relatorios") renderizarRelatorios();
+    if(tela==="automacoes") renderizarAutomacoes();
     window.scrollTo({top:0,behavior:"smooth"});
   }
 
@@ -564,63 +702,17 @@
         const usuario = escapeHtml(item.usuario || "Sistema");
         const observacao = escapeHtml(item.observacao || "");
         const dataFormatada = escapeHtml(formatarDataHistorico(item.created_at));
-        const tipoEvento = String(item.tipo_evento || "STATUS").toUpperCase();
-
-        let tituloEvento = "";
-
-        if(tipoEvento === "STATUS"){
-          tituloEvento = `
-            <div class="historico-status">
-              <b>🔄 ${statusAnterior}</b>
-              <span>→</span>
-              <b>${statusNovo}</b>
-            </div>
-          `;
-        }else if(tipoEvento === "OBSERVACAO"){
-          tituloEvento = `
-            <div class="historico-status">
-              <b>📝 Nova observação</b>
-            </div>
-          `;
-        }else if(tipoEvento === "RESPONSAVEL"){
-          tituloEvento = `
-            <div class="historico-status">
-              <b>👤 Alteração de responsável</b>
-            </div>
-          `;
-        }else if(tipoEvento === "WHATSAPP"){
-          tituloEvento = `
-            <div class="historico-status">
-              <b>📲 Contato via WhatsApp</b>
-            </div>
-          `;
-        }else if(tipoEvento === "PROPOSTA"){
-          tituloEvento = `
-            <div class="historico-status">
-              <b>💰 Proposta registrada</b>
-            </div>
-          `;
-        }else if(tipoEvento === "CONTRATO"){
-          tituloEvento = `
-            <div class="historico-status">
-              <b>✅ Contrato/Conversão</b>
-            </div>
-          `;
-        }else{
-          tituloEvento = `
-            <div class="historico-status">
-              <b>📌 Evento registrado</b>
-            </div>
-          `;
-        }
 
         return `
           <div class="historico-item">
-            ${tituloEvento}
-            ${tipoEvento === "STATUS" ? `<small><b>Tipo:</b> STATUS</small>` : `<small><b>Tipo:</b> ${escapeHtml(tipoEvento)}</small>`}
+            <div class="historico-status">
+              <b>${statusAnterior}</b>
+              <span>→</span>
+              <b>${statusNovo}</b>
+            </div>
             <small><b>Responsável:</b> ${responsavel}</small>
             <small><b>Usuário:</b> ${usuario}</small>
-            ${observacao ? `<small><b>Observação:</b><br>${observacao}</small>` : ""}
+            ${observacao ? `<small><b>Observação:</b> ${observacao}</small>` : ""}
             ${dataFormatada ? `<small><b>Data:</b> ${dataFormatada}</small>` : ""}
           </div>
         `;
@@ -645,20 +737,11 @@
   async function salvarLeadLocal(){
     if(!leadSelecionado) return;
 
-    const statusAnterior = normalizarStatus(leadSelecionado.status, leadSelecionado.convertido);
-    const statusNovo = document.getElementById("detStatus").value;
-    const responsavelNovo = document.getElementById("detRespEdit").value;
-    const observacaoNova = document.getElementById("detObs").value;
-    const usuarioLogado = sessionStorage.getItem("crm_usuario") || "Sistema";
-
     const payload = {
       id: leadSelecionado.id,
-      nome: leadSelecionado.nome || "-",
-      status_anterior: statusAnterior || "Sem informação",
-      status: statusNovo,
-      responsavel: responsavelNovo,
-      observacao: observacaoNova,
-      usuario: usuarioLogado
+      status: document.getElementById("detStatus").value,
+      responsavel: document.getElementById("detRespEdit").value,
+      observacao: document.getElementById("detObs").value
     };
 
     if(!payload.id){
@@ -813,6 +896,191 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+
+
+  function automacoesPadrao(){
+    return [
+      {
+        id: 1,
+        nome: "Boas-vindas Novo Lead",
+        gatilho: "Novo Lead",
+        canal: "WhatsApp",
+        tempo: "Imediato",
+        ativo: true,
+        fornecedor: "Fornecedor WhatsApp",
+        template: "Olá {{nome}}, aqui é da Azul Empréstimos. Recebemos sua solicitação de {{produto}} e vamos te ajudar na melhor opção de crédito."
+      },
+      {
+        id: 2,
+        nome: "Follow-up Proposta",
+        gatilho: "Proposta enviada",
+        canal: "SMS",
+        tempo: "Após 1 dia",
+        ativo: true,
+        fornecedor: "Fornecedor SMS",
+        template: "Azul Empréstimos: {{nome}}, sua proposta está em acompanhamento. Responda nosso WhatsApp para seguir com a simulação."
+      },
+      {
+        id: 3,
+        nome: "E-mail Em Análise",
+        gatilho: "Em análise",
+        canal: "E-mail",
+        tempo: "Imediato",
+        ativo: false,
+        fornecedor: "SMTP / Outlook",
+        template: "Olá {{nome}}, sua solicitação está em análise. Em breve retornaremos com as próximas etapas."
+      }
+    ];
+  }
+
+  function obterAutomacoes(){
+    try{
+      const salvas = localStorage.getItem("azul_crm_automacoes");
+      if(salvas) return JSON.parse(salvas);
+    }catch(e){
+      console.error(e);
+    }
+    const padrao = automacoesPadrao();
+    localStorage.setItem("azul_crm_automacoes", JSON.stringify(padrao));
+    return padrao;
+  }
+
+  function salvarAutomacoes(automacoes){
+    localStorage.setItem("azul_crm_automacoes", JSON.stringify(automacoes));
+  }
+
+  function classeCanal(canal){
+    const c = String(canal || "").toLowerCase();
+    if(c.includes("whats")) return "whatsapp";
+    if(c.includes("sms")) return "sms";
+    if(c.includes("mail")) return "email";
+    return "";
+  }
+
+  function renderizarAutomacoes(){
+    const automacoes = obterAutomacoes();
+    const ativas = automacoes.filter(a=>a.ativo).length;
+    const pausadas = automacoes.filter(a=>!a.ativo).length;
+    const whats = automacoes.filter(a=>String(a.canal).toLowerCase().includes("whats")).length;
+    const sms = automacoes.filter(a=>String(a.canal).toLowerCase().includes("sms")).length;
+    const email = automacoes.filter(a=>String(a.canal).toLowerCase().includes("mail")).length;
+
+    const setText = (id,value)=>{ const el=document.getElementById(id); if(el) el.textContent=value; };
+    setText("autoAtivas", ativas);
+    setText("autoPausadas", pausadas);
+    setText("autoWhats", whats);
+    setText("autoSms", sms);
+    setText("autoEmail", email);
+
+    const tbody = document.getElementById("tabelaAutomacoes");
+    if(!tbody) return;
+
+    if(automacoes.length === 0){
+      tbody.innerHTML = '<tr><td colspan="6">Nenhuma automação cadastrada.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = automacoes.map(a=>`
+      <tr>
+        <td><b>${escapeHtml(a.nome)}</b><br><small style="color:#64748b">${escapeHtml(a.fornecedor || "-")}</small></td>
+        <td>${escapeHtml(a.gatilho)}</td>
+        <td><span class="channel ${classeCanal(a.canal)}">${escapeHtml(a.canal)}</span></td>
+        <td>${escapeHtml(a.tempo || "Imediato")}</td>
+        <td><span class="pill ${a.ativo ? "on" : "off"}">${a.ativo ? "Ativa" : "Pausada"}</span></td>
+        <td>
+          <div class="automation-actions">
+            <button class="viewbtn" onclick="alternarAutomacao(${a.id})">${a.ativo ? "Pausar" : "Ativar"}</button>
+            <button class="viewbtn" onclick="editarAutomacao(${a.id})">Editar</button>
+            <button class="viewbtn" onclick="excluirAutomacao(${a.id})">Excluir</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function limparFormularioAutomacao(){
+    document.getElementById("autoNome").value = "";
+    document.getElementById("autoGatilho").value = "Novo Lead";
+    document.getElementById("autoCanal").value = "WhatsApp";
+    document.getElementById("autoTempo").value = "Imediato";
+    document.getElementById("autoAtiva").value = "true";
+    document.getElementById("autoFornecedor").value = "";
+    document.getElementById("autoTemplate").value = "";
+  }
+
+  function salvarAutomacaoLocal(){
+    const nome = document.getElementById("autoNome").value.trim();
+    const gatilho = document.getElementById("autoGatilho").value;
+    const canal = document.getElementById("autoCanal").value;
+    const tempo = document.getElementById("autoTempo").value;
+    const ativo = document.getElementById("autoAtiva").value === "true";
+    const fornecedor = document.getElementById("autoFornecedor").value.trim();
+    const template = document.getElementById("autoTemplate").value.trim();
+
+    if(!nome){
+      alert("Informe o nome da automação.");
+      return;
+    }
+
+    if(!template){
+      alert("Informe o template da mensagem.");
+      return;
+    }
+
+    const automacoes = obterAutomacoes();
+    const nova = {
+      id: Date.now(),
+      nome,
+      gatilho,
+      canal,
+      tempo,
+      ativo,
+      fornecedor,
+      template
+    };
+
+    automacoes.push(nova);
+    salvarAutomacoes(automacoes);
+    limparFormularioAutomacao();
+    renderizarAutomacoes();
+
+    alert("Regra de automação criada na tela. Próximo passo: salvar no Supabase e conectar ao n8n.");
+  }
+
+  function alternarAutomacao(id){
+    const automacoes = obterAutomacoes().map(a=>{
+      if(a.id === id) return {...a, ativo: !a.ativo};
+      return a;
+    });
+    salvarAutomacoes(automacoes);
+    renderizarAutomacoes();
+  }
+
+  function editarAutomacao(id){
+    const automacao = obterAutomacoes().find(a=>a.id === id);
+    if(!automacao) return;
+
+    document.getElementById("autoNome").value = automacao.nome || "";
+    document.getElementById("autoGatilho").value = automacao.gatilho || "Novo Lead";
+    document.getElementById("autoCanal").value = automacao.canal || "WhatsApp";
+    document.getElementById("autoTempo").value = automacao.tempo || "Imediato";
+    document.getElementById("autoAtiva").value = automacao.ativo ? "true" : "false";
+    document.getElementById("autoFornecedor").value = automacao.fornecedor || "";
+    document.getElementById("autoTemplate").value = automacao.template || "";
+
+    const filtradas = obterAutomacoes().filter(a=>a.id !== id);
+    salvarAutomacoes(filtradas);
+    renderizarAutomacoes();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function excluirAutomacao(id){
+    if(!confirm("Deseja excluir esta automação?")) return;
+    const automacoes = obterAutomacoes().filter(a=>a.id !== id);
+    salvarAutomacoes(automacoes);
+    renderizarAutomacoes();
   }
 
 
