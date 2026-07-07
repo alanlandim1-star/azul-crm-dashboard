@@ -55,7 +55,29 @@
     .channel.email{color:#0b66ff}
     .automation-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
+
+    .settings-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 22px}
+    .settings-tab{border:1px solid var(--line);background:#f8fbff;color:#073f9e;border-radius:999px;padding:10px 13px;font-weight:1000;cursor:pointer}
+    .settings-tab.active,.settings-tab:hover{background:linear-gradient(135deg,#0b66ff,#073f9e);color:#fff;border-color:#0b66ff}
+    .settings-panel{display:none;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 12px 30px rgba(7,31,77,.06)}
+    .settings-panel.active{display:block}
+    .settings-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .settings-header h3{color:#08234f;font-size:21px;margin-bottom:6px}
+    .settings-header p{color:var(--muted);font-weight:700;line-height:1.45}
+    .settings-form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .settings-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+    .settings-form input,.settings-form select{width:100%;margin-top:7px;background:#f8fbff}
+    .permission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .permission-card,.integration-card{background:#f8fbff;border:1px solid var(--line);border-radius:18px;padding:16px}
+    .permission-card h4,.integration-card h4{color:#08234f;margin-bottom:12px}
+    .permission-card label{display:flex;gap:10px;align-items:center;color:#334155;font-weight:800;margin:10px 0}
+    .permission-card input{width:16px;height:16px}
+    .integration-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .integration-card small{display:block;color:var(--muted);font-weight:700;line-height:1.45;margin-bottom:10px}
+    .integration-card b{display:block;color:#08234f;margin-bottom:12px}
+    .config-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
 </head>
@@ -105,8 +127,8 @@
       </div>
     </div>
 
-    <div id="loading" class="loading">Carregando dados do Supabase via n8n...</div>
-    <div id="error" class="error">Não foi possível carregar os dados. Verifique se o webhook do n8n está publicado.</div>
+    <div id="loading" class="loading">Carregando dados do Azul Core...</div>
+    <div id="error" class="error">Não foi possível carregar os dados. Verifique a conexão do sistema.</div>
 
     <section id="view-dashboard" class="view active">
       <section class="cards">
@@ -131,7 +153,7 @@
 
     <section id="view-carteira" class="view">
       <section class="panel">
-        <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Supabase: leads_azul</span></div>
+        <div class="panel-head"><h3>Carteira de Clientes</h3><span class="tag">Base Comercial</span></div>
         <div class="filters">
           <input id="busca" placeholder="Buscar por nome, CPF ou telefone..." oninput="renderizarTabela()" />
           <select id="filtroStatus" onchange="renderizarTabela()">
@@ -297,8 +319,8 @@
             </select>
           </label>
 
-          <label>Fornecedor/Integração
-            <input id="autoFornecedor" placeholder="Ex: Z-API, Infobip, SMTP, fornecedor SMS" />
+          <label>Canal de Disparo
+            <input id="autoFornecedor" placeholder="Ex: WhatsApp Oficial, SMS Corporativo, E-mail Comercial" />
           </label>
 
           <label style="grid-column:1 / -1">Template da mensagem
@@ -344,26 +366,179 @@
 
       <section class="panel">
         <div class="panel-head">
-          <h3>Próxima integração n8n</h3>
+          <h3>Próxima etapa da automação</h3>
           <span class="tag">Fase seguinte</span>
         </div>
         <p style="color:var(--muted);font-weight:700;line-height:1.6">
-          Nesta primeira versão, as regras ficam configuradas na tela do CRM. O próximo passo será criar a tabela
-          <b>automacoes_crm</b> no Supabase e o fluxo no n8n para consultar as regras ativas quando um lead mudar de status.
+          Nesta primeira versão, as regras ficam configuradas na tela do CRM. O próximo passo será conectar essas regras ao motor de automação para executar disparos automáticos quando um lead mudar de status.
         </p>
       </section>
     </section>
 
     <section id="view-configuracoes" class="view">
       <section class="panel">
-        <div class="panel-head"><h3>Configurações do CRM</h3><span class="tag">MVP</span></div>
-        <div class="config-grid">
-          <div class="config-item"><small>Webhook Dashboard</small><b id="cfgApi"></b></div>
-          <div class="config-item"><small>Tabela Supabase</small><b>leads_azul</b></div>
-          <div class="config-item"><small>Usuários ativos</small><b>Alan / Meriany</b></div>
-          <div class="config-item"><small>Origem principal</small><b>Landing Page Azul Empréstimos</b></div>
-          <div class="config-item"><small>Status disponíveis</small><b>Novo, Tentando, Atendimento, Análise, Proposta, Convertido, Perdido</b></div>
-          <div class="config-item"><small>Atualização CRM</small><b>Status e observações salvando no Supabase via n8n</b></div>
+        <div class="panel-head">
+          <div>
+            <h3>Configurações do CRM</h3>
+            <p style="color:var(--muted);font-weight:700;margin-top:6px">Central administrativa do SaaS: empresa, usuários, permissões, funil, integrações, templates, segurança e plano.</p>
+          </div>
+          <span class="tag">Admin SaaS</span>
+        </div>
+
+        <div class="settings-tabs">
+          <button class="settings-tab active" onclick="abrirConfigTab('geral', this)">⚙️ Geral</button>
+          <button class="settings-tab" onclick="abrirConfigTab('usuarios', this)">👥 Usuários</button>
+          <button class="settings-tab" onclick="abrirConfigTab('permissoes', this)">🔐 Permissões</button>
+          <button class="settings-tab" onclick="abrirConfigTab('funilcfg', this)">📈 Funil</button>
+          <button class="settings-tab" onclick="abrirConfigTab('integracoes', this)">🌐 Integrações</button>
+          <button class="settings-tab" onclick="abrirConfigTab('landingcfg', this)">🧲 Landing Page</button>
+          <button class="settings-tab" onclick="abrirConfigTab('templatescfg', this)">📨 Templates</button>
+          <button class="settings-tab" onclick="abrirConfigTab('notificacoes', this)">🔔 Notificações</button>
+          <button class="settings-tab" onclick="abrirConfigTab('seguranca', this)">🛡️ Segurança</button>
+          <button class="settings-tab" onclick="abrirConfigTab('backup', this)">💾 Backup</button>
+          <button class="settings-tab" onclick="abrirConfigTab('logs', this)">📜 Logs</button>
+          <button class="settings-tab" onclick="abrirConfigTab('plano', this)">💳 Plano</button>
+        </div>
+
+        <div id="cfg-geral" class="settings-panel active">
+          <div class="settings-header">
+            <div><h3>Geral da Empresa</h3><p>Identidade visual, domínio, canais principais e dados operacionais.</p></div>
+            <span class="tag">Institucional</span>
+          </div>
+          <div class="settings-form">
+            <label>Nome da empresa<input value="Azul Empréstimo ABC" /></label>
+            <label>Nome do CRM<input value="Azul CRM" /></label>
+            <label>Domínio principal<input value="azulemprestimosabc.com.br" /></label>
+            <label>Domínio do CRM<input value="crm.azulemprestimosabc.com.br" /></label>
+            <label>WhatsApp principal<input value="(11) 98844-7237" /></label>
+            <label>E-mail principal<input value="contato@azulemprestimosabc.com.br" /></label>
+            <label>Cor primária<input value="#073f9e" /></label>
+            <label>Cor secundária<input value="#0b66ff" /></label>
+          </div>
+          <div class="config-actions"><button class="btn gray">Restaurar padrão</button><button class="btn">Salvar Configurações</button></div>
+        </div>
+
+        <div id="cfg-usuarios" class="settings-panel">
+          <div class="settings-header"><div><h3>Usuários</h3><p>Controle de acesso, perfis e status operacional.</p></div><button class="btn">Novo Usuário</button></div>
+          <table>
+            <thead><tr><th>Usuário</th><th>Perfil</th><th>Status</th><th>Último acesso</th><th>Ação</th></tr></thead>
+            <tbody>
+              <tr><td><b>Alan</b><br><small>alan@azulemprestimosabc.com.br</small></td><td>Administrador</td><td><span class="pill on">Ativo</span></td><td>Hoje</td><td><button class="viewbtn">Editar</button></td></tr>
+              <tr><td><b>Meriany</b><br><small>meriany@azulemprestimosabc.com.br</small></td><td>Operação</td><td><span class="pill on">Ativo</span></td><td>Hoje</td><td><button class="viewbtn">Editar</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="cfg-permissoes" class="settings-panel">
+          <div class="settings-header"><div><h3>Permissões</h3><p>Defina o que cada perfil pode acessar no CRM.</p></div><span class="tag">RBAC</span></div>
+          <div class="permission-grid">
+            <div class="permission-card"><h4>Administrador</h4><label><input type="checkbox" checked> Dashboard</label><label><input type="checkbox" checked> Carteira</label><label><input type="checkbox" checked> Automações</label><label><input type="checkbox" checked> Configurações</label></div>
+            <div class="permission-card"><h4>Supervisor</h4><label><input type="checkbox" checked> Dashboard</label><label><input type="checkbox" checked> Carteira</label><label><input type="checkbox" checked> Relatórios</label><label><input type="checkbox"> Configurações</label></div>
+            <div class="permission-card"><h4>Operador</h4><label><input type="checkbox" checked> Carteira</label><label><input type="checkbox" checked> Atendimentos</label><label><input type="checkbox"> Relatórios</label><label><input type="checkbox"> Configurações</label></div>
+          </div>
+          <div class="config-actions"><button class="btn">Salvar Permissões</button></div>
+        </div>
+
+        <div id="cfg-funilcfg" class="settings-panel">
+          <div class="settings-header"><div><h3>Funil Comercial</h3><p>Status, ordem, cor e SLA por etapa.</p></div><button class="btn">Nova Etapa</button></div>
+          <table>
+            <thead><tr><th>Ordem</th><th>Status</th><th>Cor</th><th>SLA</th><th>Ativo</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><b>Novo Lead</b></td><td>Azul</td><td>Até 30 min</td><td><span class="pill on">Sim</span></td></tr>
+              <tr><td>2</td><td><b>Tentando contato</b></td><td>Laranja</td><td>Até 2h</td><td><span class="pill on">Sim</span></td></tr>
+              <tr><td>3</td><td><b>Em Atendimento</b></td><td>Amarelo</td><td>Até 1 dia</td><td><span class="pill on">Sim</span></td></tr>
+              <tr><td>4</td><td><b>Proposta enviada</b></td><td>Roxo</td><td>Até 3 dias</td><td><span class="pill on">Sim</span></td></tr>
+              <tr><td>5</td><td><b>Convertido</b></td><td>Verde</td><td>-</td><td><span class="pill on">Sim</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="cfg-integracoes" class="settings-panel">
+          <div class="settings-header"><div><h3>Integrações</h3><p>Central de conexões, canais de comunicação e serviços do Azul Core.</p></div><span class="tag">Conexões</span></div>
+          <div class="integration-grid">
+            <div class="integration-card"><h4>Banco de Dados</h4><small>Armazenamento comercial sincronizado</small><b>Conectado</b><button class="viewbtn">Testar Conexão</button></div>
+            <div class="integration-card"><h4>Azul Core</h4><small id="cfgApiText">Motor de automação e sincronização</small><b>Ativo</b><button class="viewbtn">Testar Serviço</button></div>
+            <div class="integration-card"><h4>WhatsApp</h4><small>Canal oficial de relacionamento</small><b>Pendente configuração</b><button class="viewbtn">Configurar</button></div>
+            <div class="integration-card"><h4>SMS</h4><small>Canal corporativo de mensagens</small><b>Pendente configuração</b><button class="viewbtn">Configurar</button></div>
+            <div class="integration-card"><h4>E-mail</h4><small>Servidor de envio comercial</small><b>Pendente</b><button class="viewbtn">Configurar</button></div>
+            <div class="integration-card"><h4>Google</h4><small>Sheets, Drive, Calendar e Analytics</small><b>Planejado</b><button class="viewbtn">Configurar</button></div>
+          </div>
+        </div>
+
+        <div id="cfg-landingcfg" class="settings-panel">
+          <div class="settings-header"><div><h3>Landing Page</h3><p>Conteúdo e rastreamento da página de captura.</p></div><span class="tag">Conversão</span></div>
+          <div class="settings-form">
+            <label>Título principal<input value="Soluções financeiras para você e sua empresa!" /></label>
+            <label>Origem padrão<input value="Landing Page Azul Empréstimo" /></label>
+            <label>URL da landing<input value="https://azulemprestimosabc.com.br" /></label>
+            <label>WhatsApp de destino<input value="5511988447237" /></label>
+            <label>Meta Pixel<input placeholder="ID do Pixel" /></label>
+            <label>Google Analytics<input placeholder="G-XXXXXXXXXX" /></label>
+          </div>
+          <div class="config-actions"><button class="btn">Salvar Landing</button></div>
+        </div>
+
+        <div id="cfg-templatescfg" class="settings-panel">
+          <div class="settings-header"><div><h3>Templates</h3><p>Mensagens padrão para WhatsApp, SMS e e-mail.</p></div><button class="btn">Novo Template</button></div>
+          <table>
+            <thead><tr><th>Template</th><th>Canal</th><th>Variáveis</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><b>Boas-vindas Novo Lead</b></td><td>WhatsApp</td><td>{{nome}}, {{produto}}</td><td><span class="pill on">Ativo</span></td></tr>
+              <tr><td><b>Follow-up Proposta</b></td><td>SMS</td><td>{{nome}}, {{status}}</td><td><span class="pill on">Ativo</span></td></tr>
+              <tr><td><b>Retorno Análise</b></td><td>E-mail</td><td>{{nome}}, {{responsavel}}</td><td><span class="pill off">Rascunho</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="cfg-notificacoes" class="settings-panel">
+          <div class="settings-header"><div><h3>Notificações</h3><p>Alertas internos para equipe e gestores.</p></div><span class="tag">Alertas</span></div>
+          <div class="permission-grid">
+            <div class="permission-card"><h4>Novos Leads</h4><label><input type="checkbox" checked> Notificar operador</label><label><input type="checkbox" checked> WhatsApp interno</label><label><input type="checkbox"> E-mail gestor</label></div>
+            <div class="permission-card"><h4>SLA</h4><label><input type="checkbox" checked> Lead parado</label><label><input type="checkbox" checked> Proposta sem retorno</label><label><input type="checkbox"> Perda automática</label></div>
+            <div class="permission-card"><h4>Erros</h4><label><input type="checkbox" checked> Falha na integração</label><label><input type="checkbox" checked> Falha de envio</label><label><input type="checkbox"> Erro de autenticação</label></div>
+          </div>
+        </div>
+
+        <div id="cfg-seguranca" class="settings-panel">
+          <div class="settings-header"><div><h3>Segurança e LGPD</h3><p>Controle de sessão, consentimento e proteção dos dados.</p></div><span class="tag">LGPD</span></div>
+          <div class="settings-form">
+            <label>Tempo de sessão<select><option>8 horas</option><option>4 horas</option><option>1 hora</option></select></label>
+            <label>Exigir consentimento LGPD<select><option>Sim</option><option>Não</option></select></label>
+            <label>Mascarar CPF/CNPJ<select><option>Sim</option><option>Não</option></select></label>
+            <label>Permitir exportação CSV<select><option>Somente administrador</option><option>Todos</option></select></label>
+          </div>
+        </div>
+
+        <div id="cfg-backup" class="settings-panel">
+          <div class="settings-header"><div><h3>Backup</h3><p>Rotina de exportação e contingência operacional.</p></div><span class="tag">Dados</span></div>
+          <div class="integration-grid">
+            <div class="integration-card"><h4>Backup Manual</h4><small>Exporta dados atuais em CSV.</small><button class="viewbtn" onclick="exportarCSV()">Exportar Leads</button></div>
+            <div class="integration-card"><h4>Backup Diário</h4><small>Rotina automática para armazenamento seguro.</small><b>Planejado</b><button class="viewbtn">Configurar</button></div>
+            <div class="integration-card"><h4>Restauração</h4><small>Importação controlada de base.</small><b>Bloqueado</b><button class="viewbtn">Solicitar</button></div>
+          </div>
+        </div>
+
+        <div id="cfg-logs" class="settings-panel">
+          <div class="settings-header"><div><h3>Logs de Auditoria</h3><p>Registro de ações críticas dentro do CRM.</p></div><span class="tag">Auditoria</span></div>
+          <table>
+            <thead><tr><th>Data</th><th>Usuário</th><th>Módulo</th><th>Ação</th></tr></thead>
+            <tbody>
+              <tr><td>Hoje</td><td>Alan</td><td>Configurações</td><td>Acessou painel de configuração</td></tr>
+              <tr><td>Hoje</td><td>Sistema</td><td>Integração</td><td>Serviço de sincronização conectado</td></tr>
+              <tr><td>Hoje</td><td>Meriany</td><td>Carteira</td><td>Consulta de leads</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="cfg-plano" class="settings-panel">
+          <div class="settings-header"><div><h3>Plano SaaS</h3><p>Controle comercial da conta, uso e limites do ambiente.</p></div><span class="tag">Business</span></div>
+          <section class="cards" style="margin-bottom:0">
+            <div class="card"><small>Plano</small><strong style="font-size:26px">MVP</strong><span>Homologação</span></div>
+            <div class="card"><small>Usuários</small><strong>2</strong><span>Ativos</span></div>
+            <div class="card"><small>Leads</small><strong id="cfgPlanoLeads">0</strong><span>Base atual</span></div>
+            <div class="card"><small>Automações</small><strong id="cfgPlanoAutomacoes">0</strong><span>Regras</span></div>
+            <div class="card"><small>Status</small><strong style="font-size:26px">Ativo</strong><span>Operação</span></div>
+          </section>
         </div>
       </section>
     </section>
@@ -427,7 +602,7 @@
   const HISTORICO_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-historico-lead";
   let leadsGlobais = [];
   let leadSelecionado = null;
-  document.getElementById("cfgApi").textContent = API_URL;
+  document.getElementById("cfgApi").textContent = "Azul Core Online";
 
   const titulos = {
     dashboard:["Dashboard da Carteira","Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos."],
@@ -437,8 +612,22 @@
     propostas:["Propostas","Visão dos produtos solicitados e valores desejados."],
     relatorios:["Relatórios","Análises consolidadas da carteira, origem, produto, status e responsáveis."],
     automacoes:["Automações","Configure regras de disparo por status, canal e template de mensagem."],
-    configuracoes:["Configurações","Parâmetros operacionais do CRM."]
+    configuracoes:["Configurações","Central administrativa SaaS: empresa, usuários, permissões, integrações, segurança e plano."]
   };
+
+  function abrirConfigTab(tab, btn){
+    document.querySelectorAll(".settings-panel").forEach(p=>p.classList.remove("active"));
+    document.querySelectorAll(".settings-tab").forEach(b=>b.classList.remove("active"));
+    const painel = document.getElementById("cfg-" + tab);
+    if(painel) painel.classList.add("active");
+    if(btn) btn.classList.add("active");
+    const planoLeads = document.getElementById("cfgPlanoLeads");
+    const planoAutomacoes = document.getElementById("cfgPlanoAutomacoes");
+    if(planoLeads) planoLeads.textContent = leadsGlobais.length || 0;
+    if(planoAutomacoes) planoAutomacoes.textContent = obterAutomacoes().length || 0;
+    const cfgApiText = document.getElementById("cfgApiText");
+    if(cfgApiText) cfgApiText.textContent = "Motor de automação e sincronização";
+  }
 
   function mudarTela(tela){
     document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
@@ -745,7 +934,7 @@
     };
 
     if(!payload.id){
-      alert("Este lead não possui ID. Não foi possível salvar no Supabase.");
+      alert("Este lead não possui identificação válida. Não foi possível salvar a alteração.");
       return;
     }
 
@@ -770,10 +959,10 @@
       atualizarDashboard({});
       carregarHistoricoLead(leadSelecionado.id);
 
-      alert("Lead atualizado com sucesso no Supabase.");
+      alert("Lead atualizado com sucesso.");
     }catch(error){
       console.error(error);
-      alert("Erro ao salvar no Supabase. Verifique o workflow do n8n.");
+      alert("Erro ao salvar. Verifique a conexão do sistema.");
     }
   }
 
@@ -909,7 +1098,7 @@
         canal: "WhatsApp",
         tempo: "Imediato",
         ativo: true,
-        fornecedor: "Fornecedor WhatsApp",
+        fornecedor: "Canal WhatsApp",
         template: "Olá {{nome}}, aqui é da Azul Empréstimos. Recebemos sua solicitação de {{produto}} e vamos te ajudar na melhor opção de crédito."
       },
       {
@@ -919,7 +1108,7 @@
         canal: "SMS",
         tempo: "Após 1 dia",
         ativo: true,
-        fornecedor: "Fornecedor SMS",
+        fornecedor: "Canal SMS",
         template: "Azul Empréstimos: {{nome}}, sua proposta está em acompanhamento. Responda nosso WhatsApp para seguir com a simulação."
       },
       {
@@ -929,7 +1118,7 @@
         canal: "E-mail",
         tempo: "Imediato",
         ativo: false,
-        fornecedor: "SMTP / Outlook",
+        fornecedor: "Canal E-mail",
         template: "Olá {{nome}}, sua solicitação está em análise. Em breve retornaremos com as próximas etapas."
       }
     ];
@@ -1046,7 +1235,7 @@
     limparFormularioAutomacao();
     renderizarAutomacoes();
 
-    alert("Regra de automação criada na tela. Próximo passo: salvar no Supabase e conectar ao n8n.");
+    alert("Regra de automação criada. Próximo passo: sincronizar com o motor de automação.");
   }
 
   function alternarAutomacao(id){
@@ -1090,7 +1279,7 @@
     loading.style.display="block"; error.style.display="none";
     try{
       const response=await fetch(API_URL,{method:"GET"});
-      if(!response.ok) throw new Error("Erro ao consultar API");
+      if(!response.ok) throw new Error("Erro ao consultar serviço");
       const data=await response.json();
       leadsGlobais = data.leads || data.todos_leads || data.all_leads || data.ultimos_leads || [];
       leadsGlobais = leadsGlobais.filter(l => l && (l.nome || l.documento || l.telefone));
@@ -1099,7 +1288,7 @@
     }catch(e){
       console.error(e);
       error.style.display="block";
-      document.getElementById("tabelaLeads").innerHTML='<tr><td colspan="7">Erro ao carregar dados do n8n.</td></tr>';
+      document.getElementById("tabelaLeads").innerHTML='<tr><td colspan="7">Erro ao carregar dados do sistema.</td></tr>';
     }finally{
       loading.style.display="none";
     }
