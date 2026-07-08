@@ -123,7 +123,7 @@
       </div>
       <div class="actions">
         <button class="btn light" onclick="carregarDashboard()">Atualizar Dados</button>
-        <button class="btn" onclick="mudarTela('carteira')">Novo Lead</button>
+        <button class="btn" onclick="abrirModalNovoLead()">Novo Lead</button>
         <button class="btn danger" onclick="sair()">Sair</button>
       </div>
     </div>
@@ -176,6 +176,7 @@
             <option value="">Todas origens</option>
             <option value="Mailing interno">Mailing interno</option>
             <option value="Landing Page Azul Empréstimos">Landing Page Azul Empréstimos</option>
+            <option value="Cadastro Manual">Cadastro Manual</option>
           </select>
         </div>
         <table><thead><tr><th>Cliente</th><th>Documento</th><th>Telefone</th><th>Origem</th><th>Status</th><th>Responsável</th><th>Ação</th></tr></thead><tbody id="tabelaLeads"><tr><td colspan="7">Carregando dados...</td></tr></tbody></table>
@@ -548,6 +549,99 @@
   </main>
 </div>
 
+
+<div id="modalNovoLead" class="modal-backdrop" onclick="if(event.target.id==='modalNovoLead') fecharModalNovoLead()">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Novo Lead Manual</h3>
+        <p style="color:var(--muted);font-weight:700;margin-top:5px">Cadastre clientes que chegaram por indicação, contato direto, telefone ou atendimento presencial.</p>
+      </div>
+      <button class="modal-close" onclick="fecharModalNovoLead()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form">
+        <label>Nome completo *
+          <input id="novoNome" placeholder="Ex: João da Silva" />
+        </label>
+
+        <label>CPF ou CNPJ
+          <input id="novoDocumento" placeholder="Ex: 000.000.000-00" />
+        </label>
+
+        <label>WhatsApp *
+          <input id="novoTelefone" placeholder="Ex: (11) 99999-9999" />
+        </label>
+
+        <label>E-mail
+          <input id="novoEmail" placeholder="cliente@email.com" />
+        </label>
+
+        <label>Produto desejado
+          <select id="novoProduto">
+            <option value="">Selecione</option>
+            <option value="Crédito Pessoal">Crédito Pessoal</option>
+            <option value="Consignado">Consignado</option>
+            <option value="Cartão Benefício">Cartão Benefício</option>
+            <option value="Empréstimo FGTS">Empréstimo FGTS</option>
+            <option value="Refinanciamento">Refinanciamento</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </label>
+
+        <label>Valor solicitado
+          <input id="novoValor" placeholder="Ex: 10000" />
+        </label>
+
+        <label>Status inicial
+          <select id="novoStatus">
+            <option value="Novo Lead">Novo Lead</option>
+            <option value="Tentando contato">Tentando contato</option>
+            <option value="Em Atendimento">Em Atendimento</option>
+            <option value="Em análise">Em análise</option>
+            <option value="Proposta enviada">Proposta enviada</option>
+          </select>
+        </label>
+
+        <label>Responsável
+          <select id="novoResponsavel">
+            <option value="Meriany">Meriany</option>
+            <option value="Alan">Alan</option>
+          </select>
+        </label>
+
+        <label>Origem
+          <select id="novoOrigem">
+            <option value="Cadastro Manual">Cadastro Manual</option>
+            <option value="Indicação">Indicação</option>
+            <option value="Telefone">Telefone</option>
+            <option value="WhatsApp Direto">WhatsApp Direto</option>
+            <option value="Atendimento Presencial">Atendimento Presencial</option>
+            <option value="Parceria">Parceria</option>
+          </select>
+        </label>
+
+        <label>Consentimento LGPD
+          <select id="novoLgpd">
+            <option value="Sim">Sim</option>
+            <option value="Não informado">Não informado</option>
+          </select>
+        </label>
+
+        <label style="grid-column:1 / -1">Observação
+          <textarea id="novoObservacao" placeholder="Ex: Cliente veio por indicação, deseja simular crédito ainda hoje."></textarea>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn gray" onclick="limparFormularioNovoLead()">Limpar</button>
+        <button class="btn light" onclick="fecharModalNovoLead()">Cancelar</button>
+        <button class="btn" onclick="salvarNovoLeadManual()">Salvar Lead</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="modalLead" class="modal-backdrop" onclick="if(event.target.id==='modalLead') fecharModalLead()">
   <div class="modal">
     <div class="modal-head"><h3>Detalhes do Lead</h3><button class="modal-close" onclick="fecharModalLead()">×</button></div>
@@ -601,9 +695,11 @@
   const API_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-dashboard";
   const UPDATE_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-atualizar-lead";
   const HISTORICO_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-historico-lead";
+  const CREATE_LEAD_URL = ""; // Futuro endpoint do Azul Core para gravar cadastro manual
   let leadsGlobais = [];
   let leadSelecionado = null;
-  document.getElementById("cfgApi").textContent = "Azul Core Online";
+  const cfgApi = document.getElementById("cfgApi");
+  if(cfgApi) cfgApi.textContent = "Azul Core Online";
 
   const titulos = {
     dashboard:["Dashboard da Carteira","Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos."],
@@ -1272,6 +1368,112 @@
     salvarAutomacoes(automacoes);
     renderizarAutomacoes();
   }
+
+
+  function abrirModalNovoLead(){
+    limparFormularioNovoLead();
+    document.getElementById("modalNovoLead").style.display = "flex";
+  }
+
+  function fecharModalNovoLead(){
+    document.getElementById("modalNovoLead").style.display = "none";
+  }
+
+  function limparFormularioNovoLead(){
+    const usuarioLogado = sessionStorage.getItem("crm_usuario") || "";
+    document.getElementById("novoNome").value = "";
+    document.getElementById("novoDocumento").value = "";
+    document.getElementById("novoTelefone").value = "";
+    document.getElementById("novoEmail").value = "";
+    document.getElementById("novoProduto").value = "";
+    document.getElementById("novoValor").value = "";
+    document.getElementById("novoStatus").value = "Novo Lead";
+    document.getElementById("novoResponsavel").value = usuarioLogado === "alan" ? "Alan" : "Meriany";
+    document.getElementById("novoOrigem").value = "Cadastro Manual";
+    document.getElementById("novoLgpd").value = "Sim";
+    document.getElementById("novoObservacao").value = "";
+  }
+
+  function valorParaNumero(valor){
+    if(valor === null || valor === undefined) return 0;
+    const limpo = String(valor)
+      .replace(/\s/g, "")
+      .replace("R$", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+    const n = Number(limpo);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function montarPayloadNovoLead(){
+    return {
+      id: "manual_" + Date.now(),
+      created_at: new Date().toISOString(),
+      nome: document.getElementById("novoNome").value.trim(),
+      documento: document.getElementById("novoDocumento").value.trim(),
+      telefone: document.getElementById("novoTelefone").value.trim(),
+      email: document.getElementById("novoEmail").value.trim(),
+      produto: document.getElementById("novoProduto").value,
+      produto_interesse: document.getElementById("novoProduto").value,
+      valor_desejado: valorParaNumero(document.getElementById("novoValor").value),
+      origem: document.getElementById("novoOrigem").value,
+      status: document.getElementById("novoStatus").value,
+      responsavel: document.getElementById("novoResponsavel").value,
+      consentimento_lgpd: document.getElementById("novoLgpd").value,
+      etapa_funil: document.getElementById("novoStatus").value,
+      observacao: document.getElementById("novoObservacao").value.trim(),
+      cadastro_manual: true,
+      usuario_cadastro: sessionStorage.getItem("crm_usuario") || "Sistema"
+    };
+  }
+
+  async function salvarNovoLeadManual(){
+    const novoLead = montarPayloadNovoLead();
+
+    if(!novoLead.nome){
+      alert("Informe o nome do cliente.");
+      return;
+    }
+
+    if(!novoLead.telefone){
+      alert("Informe o WhatsApp do cliente.");
+      return;
+    }
+
+    try{
+      if(CREATE_LEAD_URL){
+        const response = await fetch(CREATE_LEAD_URL,{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(novoLead)
+        });
+
+        if(!response.ok){
+          throw new Error("Erro ao gravar lead manual");
+        }
+
+        const retorno = await response.json().catch(()=>null);
+        if(retorno?.id) novoLead.id = retorno.id;
+      }
+
+      leadsGlobais.unshift(novoLead);
+      atualizarDashboard({});
+      renderizarTabela();
+      renderizarAtendimentos();
+      renderizarKanban();
+      renderizarPropostas();
+      renderizarRelatorios();
+
+      fecharModalNovoLead();
+      mudarTela("carteira");
+      alert("Lead manual cadastrado com sucesso.");
+
+    }catch(error){
+      console.error(error);
+      alert("Erro ao cadastrar lead. Verifique a conexão do sistema.");
+    }
+  }
+
 
 
   async function carregarDashboard(){
