@@ -78,6 +78,25 @@
     .integration-card b{display:block;color:#08234f;margin-bottom:12px}
     .config-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
 
+
+    .agenda-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:24px}
+    .agenda-list{display:grid;gap:12px}
+    .agenda-item{display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center;background:#f8fbff;border:1px solid var(--line);border-radius:18px;padding:14px}
+    .agenda-time{font-weight:1000;color:#073f9e;background:#eef5ff;border:1px solid #d7e7ff;border-radius:14px;padding:10px;text-align:center}
+    .agenda-item b{color:#08234f}.agenda-item small{display:block;color:#64748b;font-weight:700;margin-top:4px;line-height:1.4}
+    .priority-list{display:grid;gap:12px}
+    .priority-card{background:#fff;border:1px solid var(--line);border-left:5px solid #ef4444;border-radius:18px;padding:14px;box-shadow:0 10px 24px rgba(7,31,77,.06)}
+    .priority-card.medium{border-left-color:#ffb020}.priority-card.low{border-left-color:#25d366}
+    .priority-card b{display:block;color:#08234f}.priority-card small{display:block;color:#64748b;font-weight:700;margin-top:5px;line-height:1.4}
+    .agenda-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .timeline-day{display:grid;gap:10px}
+    .timeline-row{display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:flex-start}
+    .timeline-hour{color:#073f9e;font-weight:1000;text-align:right;padding-top:10px}
+    .timeline-content{background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:12px}
+    .timeline-content b{color:#08234f}.timeline-content small{display:block;color:#64748b;font-weight:700;margin-top:4px}
+    .sla-table input,.sla-table select{height:38px;border-radius:10px;width:100%;background:#fff}
+
+
     @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
@@ -104,6 +123,7 @@
     <div class="brand"><div class="brand-logo">AZ</div><div><h1>Azul CRM</h1><span>Operação Alan & Meriany</span></div></div>
     <nav class="nav">
       <a id="nav-dashboard" class="active" onclick="mudarTela('dashboard')">📊 Dashboard</a>
+      <a id="nav-agenda" onclick="mudarTela('agenda')">📅 Agenda</a>
       <a id="nav-carteira" onclick="mudarTela('carteira')">👥 Carteira</a>
       <a id="nav-atendimentos" onclick="mudarTela('atendimentos')">💬 Atendimentos</a>
       <a id="nav-funil" onclick="mudarTela('funil')">📈 Funil</a>
@@ -149,6 +169,56 @@
           <div class="funnel-row"><span>Convertido</span><div class="bar"><div id="barConvertidos" style="width:0%"></div></div><b id="funilConvertidos">0</b></div>
         </div></div>
         <div class="panel"><div class="panel-head"><h3>Responsáveis</h3><span class="tag">Equipe</span></div><div id="responsaveisLista" class="mini-list"></div></div>
+      </section>
+    </section>
+
+
+    <section id="view-agenda" class="view">
+      <section class="cards">
+        <div class="card"><small>Retornos Hoje</small><strong id="agendaRetornosHoje">0</strong><span>Agenda diária</span></div>
+        <div class="card"><small>Follow-ups Vencidos</small><strong id="agendaVencidos">0</strong><span>Atenção</span></div>
+        <div class="card"><small>Propostas Pendentes</small><strong id="agendaPropostas">0</strong><span>Comercial</span></div>
+        <div class="card"><small>Sem Contato</small><strong id="agendaSemContato">0</strong><span>SLA</span></div>
+        <div class="card"><small>Prioridade Alta</small><strong id="agendaPrioridadeAlta">0</strong><span>Foco do dia</span></div>
+      </section>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Agenda do Dia</h3>
+              <p style="color:var(--muted);font-weight:700;margin-top:6px">Lista operacional com retornos, ligações, WhatsApp e propostas que precisam de ação.</p>
+            </div>
+            <button class="btn" onclick="abrirProximoClienteAgenda()">Próximo Cliente</button>
+          </div>
+          <div id="agendaListaHoje" class="agenda-list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Prioridades</h3>
+            <span class="tag">SLA</span>
+          </div>
+          <div id="agendaPrioridades" class="priority-list"></div>
+        </div>
+      </section>
+
+      <section class="agenda-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Clientes sem contato</h3>
+            <span class="tag">Ação recomendada</span>
+          </div>
+          <div id="agendaSemContatoLista" class="priority-list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Linha do tempo</h3>
+            <span class="tag">Hoje</span>
+          </div>
+          <div id="agendaTimeline" class="timeline-day"></div>
+        </div>
       </section>
     </section>
 
@@ -396,6 +466,7 @@
           <button class="settings-tab" onclick="abrirConfigTab('landingcfg', this)">🧲 Landing Page</button>
           <button class="settings-tab" onclick="abrirConfigTab('templatescfg', this)">📨 Templates</button>
           <button class="settings-tab" onclick="abrirConfigTab('notificacoes', this)">🔔 Notificações</button>
+          <button class="settings-tab" onclick="abrirConfigTab('slacfg', this)">⏱️ SLA e Retornos</button>
           <button class="settings-tab" onclick="abrirConfigTab('seguranca', this)">🛡️ Segurança</button>
           <button class="settings-tab" onclick="abrirConfigTab('backup', this)">💾 Backup</button>
           <button class="settings-tab" onclick="abrirConfigTab('logs', this)">📜 Logs</button>
@@ -498,6 +569,29 @@
             <div class="permission-card"><h4>Novos Leads</h4><label><input type="checkbox" checked> Notificar operador</label><label><input type="checkbox" checked> WhatsApp interno</label><label><input type="checkbox"> E-mail gestor</label></div>
             <div class="permission-card"><h4>SLA</h4><label><input type="checkbox" checked> Lead parado</label><label><input type="checkbox" checked> Proposta sem retorno</label><label><input type="checkbox"> Perda automática</label></div>
             <div class="permission-card"><h4>Erros</h4><label><input type="checkbox" checked> Falha na integração</label><label><input type="checkbox" checked> Falha de envio</label><label><input type="checkbox"> Erro de autenticação</label></div>
+          </div>
+        </div>
+
+
+        <div id="cfg-slacfg" class="settings-panel">
+          <div class="settings-header">
+            <div><h3>SLA e Retornos</h3><p>Configure os prazos usados pela Agenda para classificar vencimentos, prioridades e retornos automáticos.</p></div>
+            <span class="tag">Regras editáveis</span>
+          </div>
+          <table class="sla-table">
+            <thead><tr><th>Regra</th><th>Prazo em dias</th><th>Horário padrão</th><th>Ativo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Retorno por ligação</b></td><td><input id="slaLigacao" type="number" min="1" value="5"></td><td><input id="slaLigacaoHora" type="time" value="09:00"></td><td><select id="slaLigacaoAtivo"><option value="true">Sim</option><option value="false">Não</option></select></td></tr>
+              <tr><td><b>Retorno por WhatsApp</b></td><td><input id="slaWhatsapp" type="number" min="1" value="2"></td><td><input id="slaWhatsappHora" type="time" value="10:00"></td><td><select id="slaWhatsappAtivo"><option value="true">Sim</option><option value="false">Não</option></select></td></tr>
+              <tr><td><b>Proposta enviada</b></td><td><input id="slaProposta" type="number" min="1" value="3"></td><td><input id="slaPropostaHora" type="time" value="14:00"></td><td><select id="slaPropostaAtivo"><option value="true">Sim</option><option value="false">Não</option></select></td></tr>
+              <tr><td><b>Documentação pendente</b></td><td><input id="slaDocumentacao" type="number" min="1" value="2"></td><td><input id="slaDocumentacaoHora" type="time" value="11:00"></td><td><select id="slaDocumentacaoAtivo"><option value="true">Sim</option><option value="false">Não</option></select></td></tr>
+              <tr><td><b>Lead sem contato</b></td><td><input id="slaSemContato" type="number" min="1" value="1"></td><td><input id="slaSemContatoHora" type="time" value="09:30"></td><td><select id="slaSemContatoAtivo"><option value="true">Sim</option><option value="false">Não</option></select></td></tr>
+              <tr><td><b>Lead perdido automático</b></td><td><input id="slaPerdido" type="number" min="1" value="15"></td><td><input id="slaPerdidoHora" type="time" value="16:00"></td><td><select id="slaPerdidoAtivo"><option value="true">Sim</option><option value="false">Não</option></select></td></tr>
+            </tbody>
+          </table>
+          <div class="config-actions">
+            <button class="btn gray" onclick="restaurarSlaPadrao()">Restaurar padrão</button>
+            <button class="btn" onclick="salvarSlaConfiguracoes()">Salvar SLA</button>
           </div>
         </div>
 
@@ -685,6 +779,7 @@
       <div class="modal-actions">
         <button class="btn gray" onclick="fecharModalLead()">Fechar</button>
         <button class="btn light" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
+        <button class="btn light" onclick="agendarRetornoLeadSelecionado()">Agendar Retorno</button>
         <button class="btn" onclick="salvarLeadLocal()">Salvar na tela</button>
       </div>
     </div>
@@ -703,6 +798,7 @@
 
   const titulos = {
     dashboard:["Dashboard da Carteira","Visão geral dos leads importados, atendimentos e oportunidades da Azul Empréstimos."],
+    agenda:["Agenda","Painel diário de retornos, prioridades, SLAs e próximos contatos."],
     carteira:["Carteira de Clientes","Consulte, filtre e acesse os leads da operação."],
     atendimentos:["Atendimentos","Fila operacional para contato, acompanhamento e retorno dos leads."],
     funil:["Funil Comercial","Visualização dos leads por etapa comercial."],
@@ -724,6 +820,7 @@
     if(planoAutomacoes) planoAutomacoes.textContent = obterAutomacoes().length || 0;
     const cfgApiText = document.getElementById("cfgApiText");
     if(cfgApiText) cfgApiText.textContent = "Motor de automação e sincronização";
+    if(tab === "slacfg") preencherSlaTela();
   }
 
   function mudarTela(tela){
@@ -733,6 +830,7 @@
     document.getElementById("nav-"+tela).classList.add("active");
     document.getElementById("tituloTela").textContent = titulos[tela][0];
     document.getElementById("subtituloTela").textContent = titulos[tela][1];
+    if(tela==="agenda") renderizarAgenda();
     if(tela==="carteira") renderizarTabela();
     if(tela==="atendimentos") renderizarAtendimentos();
     if(tela==="funil") renderizarKanban();
@@ -870,6 +968,7 @@
     renderizarKanban();
     renderizarPropostas();
     renderizarRelatorios();
+    renderizarAgenda();
   }
 
   function getLeadsFiltrados(){
@@ -1472,6 +1571,186 @@
       console.error(error);
       alert("Erro ao cadastrar lead. Verifique a conexão do sistema.");
     }
+  }
+
+
+
+
+  function slaPadrao(){
+    return {
+      ligacao:{dias:5,hora:"09:00",ativo:true},
+      whatsapp:{dias:2,hora:"10:00",ativo:true},
+      proposta:{dias:3,hora:"14:00",ativo:true},
+      documentacao:{dias:2,hora:"11:00",ativo:true},
+      semContato:{dias:1,hora:"09:30",ativo:true},
+      perdido:{dias:15,hora:"16:00",ativo:true}
+    };
+  }
+
+  function obterSla(){
+    try{
+      const salvo = localStorage.getItem("azul_crm_sla");
+      if(salvo) return JSON.parse(salvo);
+    }catch(e){ console.error(e); }
+    const padrao = slaPadrao();
+    localStorage.setItem("azul_crm_sla", JSON.stringify(padrao));
+    return padrao;
+  }
+
+  function preencherSlaTela(){
+    const sla = obterSla();
+    const set = (id,value)=>{ const el=document.getElementById(id); if(el) el.value = value; };
+    set("slaLigacao", sla.ligacao?.dias ?? 5); set("slaLigacaoHora", sla.ligacao?.hora ?? "09:00"); set("slaLigacaoAtivo", String(sla.ligacao?.ativo ?? true));
+    set("slaWhatsapp", sla.whatsapp?.dias ?? 2); set("slaWhatsappHora", sla.whatsapp?.hora ?? "10:00"); set("slaWhatsappAtivo", String(sla.whatsapp?.ativo ?? true));
+    set("slaProposta", sla.proposta?.dias ?? 3); set("slaPropostaHora", sla.proposta?.hora ?? "14:00"); set("slaPropostaAtivo", String(sla.proposta?.ativo ?? true));
+    set("slaDocumentacao", sla.documentacao?.dias ?? 2); set("slaDocumentacaoHora", sla.documentacao?.hora ?? "11:00"); set("slaDocumentacaoAtivo", String(sla.documentacao?.ativo ?? true));
+    set("slaSemContato", sla.semContato?.dias ?? 1); set("slaSemContatoHora", sla.semContato?.hora ?? "09:30"); set("slaSemContatoAtivo", String(sla.semContato?.ativo ?? true));
+    set("slaPerdido", sla.perdido?.dias ?? 15); set("slaPerdidoHora", sla.perdido?.hora ?? "16:00"); set("slaPerdidoAtivo", String(sla.perdido?.ativo ?? true));
+  }
+
+  function salvarSlaConfiguracoes(){
+    const num = (id,padrao)=> Number(document.getElementById(id)?.value || padrao);
+    const val = (id,padrao)=> document.getElementById(id)?.value || padrao;
+    const bool = (id)=> (document.getElementById(id)?.value || "true") === "true";
+    const sla = {
+      ligacao:{dias:num("slaLigacao",5),hora:val("slaLigacaoHora","09:00"),ativo:bool("slaLigacaoAtivo")},
+      whatsapp:{dias:num("slaWhatsapp",2),hora:val("slaWhatsappHora","10:00"),ativo:bool("slaWhatsappAtivo")},
+      proposta:{dias:num("slaProposta",3),hora:val("slaPropostaHora","14:00"),ativo:bool("slaPropostaAtivo")},
+      documentacao:{dias:num("slaDocumentacao",2),hora:val("slaDocumentacaoHora","11:00"),ativo:bool("slaDocumentacaoAtivo")},
+      semContato:{dias:num("slaSemContato",1),hora:val("slaSemContatoHora","09:30"),ativo:bool("slaSemContatoAtivo")},
+      perdido:{dias:num("slaPerdido",15),hora:val("slaPerdidoHora","16:00"),ativo:bool("slaPerdidoAtivo")}
+    };
+    localStorage.setItem("azul_crm_sla", JSON.stringify(sla));
+    renderizarAgenda();
+    alert("Regras de SLA salvas com sucesso.");
+  }
+
+  function restaurarSlaPadrao(){
+    localStorage.setItem("azul_crm_sla", JSON.stringify(slaPadrao()));
+    preencherSlaTela();
+    renderizarAgenda();
+    alert("SLA padrão restaurado.");
+  }
+
+  function diasDesdeData(data){
+    if(!data) return 0;
+    const d = new Date(data);
+    if(Number.isNaN(d.getTime())) return 0;
+    const diff = Date.now() - d.getTime();
+    return Math.max(0, Math.floor(diff / (1000*60*60*24)));
+  }
+
+  function regraAgendaPorStatus(status){
+    const s = String(status || "").toLowerCase();
+    if(s.includes("proposta")) return "proposta";
+    if(s.includes("análise") || s.includes("analise")) return "documentacao";
+    if(s.includes("tentando")) return "ligacao";
+    if(s.includes("atendimento")) return "whatsapp";
+    if(s.includes("perdido")) return "perdido";
+    return "semContato";
+  }
+
+  function montarItensAgenda(){
+    const sla = obterSla();
+    const itens = leadsGlobais.map((lead, idx)=>{
+      const status = normalizarStatus(lead.status, lead.convertido);
+      const regra = regraAgendaPorStatus(status);
+      const conf = sla[regra] || sla.semContato;
+      const dias = diasDesdeData(lead.updated_at || lead.created_at || lead.data_cadastro);
+      const vencido = conf?.ativo && dias >= Number(conf.dias || 1);
+      const prioridade = vencido ? (dias >= (Number(conf.dias || 1)+2) ? "alta" : "media") : "baixa";
+      const tipo = regra === "proposta" ? "Proposta" : regra === "documentacao" ? "Documentação" : regra === "whatsapp" ? "WhatsApp" : "Ligação";
+      return {lead, idx, status, regra, conf, dias, vencido, prioridade, tipo, hora: conf?.hora || "09:00"};
+    });
+    return itens.sort((a,b)=>{
+      const peso = {alta:3,media:2,baixa:1};
+      return (peso[b.prioridade]-peso[a.prioridade]) || (b.dias-a.dias);
+    });
+  }
+
+  function renderizarAgenda(){
+    const itens = montarItensAgenda();
+    const vencidos = itens.filter(i=>i.vencido);
+    const propostas = itens.filter(i=>i.regra==="proposta");
+    const semContato = itens.filter(i=>i.regra==="semContato" || i.dias >= (obterSla().semContato?.dias || 1));
+    const alta = itens.filter(i=>i.prioridade==="alta");
+
+    const set = (id,value)=>{ const el=document.getElementById(id); if(el) el.textContent = value; };
+    set("agendaRetornosHoje", vencidos.length);
+    set("agendaVencidos", vencidos.length);
+    set("agendaPropostas", propostas.length);
+    set("agendaSemContato", semContato.length);
+    set("agendaPrioridadeAlta", alta.length);
+
+    const hoje = document.getElementById("agendaListaHoje");
+    if(hoje){
+      const lista = vencidos.slice(0,10);
+      hoje.innerHTML = lista.length ? lista.map(i=>{
+        const id = i.lead.id || i.lead.documento || i.lead.telefone || "";
+        return `<div class="agenda-item">
+          <div class="agenda-time">${escapeHtml(i.hora)}</div>
+          <div><b>${escapeHtml(i.lead.nome || "-")}</b><small>${escapeHtml(i.tipo)} • ${escapeHtml(i.status)} • ${i.dias} dia(s) sem avanço</small></div>
+          <div class="agenda-actions"><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Abrir</button><button class="whats" onclick="abrirWhatsApp('${escapeHtml(i.lead.telefone||"")}','${escapeHtml(i.lead.nome||"")}')">WhatsApp</button></div>
+        </div>`;
+      }).join("") : '<div class="empty">Nenhum retorno vencido para hoje.</div>';
+    }
+
+    const prio = document.getElementById("agendaPrioridades");
+    if(prio){
+      const lista = itens.filter(i=>i.prioridade!=="baixa").slice(0,8);
+      prio.innerHTML = lista.length ? lista.map(i=>{
+        const id = i.lead.id || i.lead.documento || i.lead.telefone || "";
+        const cls = i.prioridade === "alta" ? "" : "medium";
+        return `<div class="priority-card ${cls}">
+          <b>${escapeHtml(i.lead.nome || "-")}</b>
+          <small>${escapeHtml(i.status)} • ${escapeHtml(i.tipo)} • prazo configurado: ${i.conf?.dias || 0} dia(s)</small>
+          <div class="agenda-actions"><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver lead</button></div>
+        </div>`;
+      }).join("") : '<div class="empty">Nenhuma prioridade crítica no momento.</div>';
+    }
+
+    const sem = document.getElementById("agendaSemContatoLista");
+    if(sem){
+      const lista = semContato.slice(0,8);
+      sem.innerHTML = lista.length ? lista.map(i=>{
+        const id = i.lead.id || i.lead.documento || i.lead.telefone || "";
+        return `<div class="priority-card low">
+          <b>${escapeHtml(i.lead.nome || "-")}</b>
+          <small>${i.dias} dia(s) desde a entrada/última atualização • responsável: ${escapeHtml(i.lead.responsavel || "-")}</small>
+          <div class="agenda-actions"><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Abrir</button><button class="whats" onclick="abrirWhatsApp('${escapeHtml(i.lead.telefone||"")}','${escapeHtml(i.lead.nome||"")}')">WhatsApp</button></div>
+        </div>`;
+      }).join("") : '<div class="empty">Nenhum cliente sem contato fora do prazo.</div>';
+    }
+
+    const timeline = document.getElementById("agendaTimeline");
+    if(timeline){
+      const lista = vencidos.slice(0,6);
+      timeline.innerHTML = lista.length ? lista.map(i=>{
+        return `<div class="timeline-row">
+          <div class="timeline-hour">${escapeHtml(i.hora)}</div>
+          <div class="timeline-content"><b>${escapeHtml(i.tipo)} - ${escapeHtml(i.lead.nome || "-")}</b><small>${escapeHtml(i.status)} • ${escapeHtml(i.lead.produto || i.lead.produto_interesse || "Produto não informado")}</small></div>
+        </div>`;
+      }).join("") : '<div class="empty">Agenda limpa para hoje.</div>';
+    }
+  }
+
+  function abrirProximoClienteAgenda(){
+    const item = montarItensAgenda().find(i=>i.vencido) || montarItensAgenda()[0];
+    if(!item){ alert("Nenhum cliente disponível na agenda."); return; }
+    const id = item.lead.id || item.lead.documento || item.lead.telefone || "";
+    abrirDetalhesLead(id);
+  }
+
+  function agendarRetornoLeadSelecionado(){
+    if(!leadSelecionado) return;
+    const data = prompt("Informe a data do retorno (AAAA-MM-DD):");
+    if(!data) return;
+    const hora = prompt("Informe o horário do retorno (HH:MM):","09:00") || "09:00";
+    leadSelecionado.retorno_agendado = `${data} ${hora}`;
+    leadSelecionado.observacao = `${leadSelecionado.observacao || ""}\nRetorno agendado para ${data} às ${hora}.`.trim();
+    document.getElementById("detObs").value = leadSelecionado.observacao;
+    renderizarAgenda();
+    alert("Retorno registrado na tela. Ao salvar o lead, a observação será enviada ao sistema.");
   }
 
 
