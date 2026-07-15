@@ -97,6 +97,22 @@
     .sla-table input,.sla-table select{height:38px;border-radius:10px;width:100%;background:#fff}
 
 
+    .emailbtn{background:#0b66ff;color:#fff;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
+    .emailbtn:disabled{background:#cbd5e1;cursor:not-allowed}
+    .email-compose-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .email-compose-grid label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+    .email-compose-grid input,.email-compose-grid select,.email-compose-grid textarea{width:100%;margin-top:7px}
+    .email-compose-grid .full{grid-column:1 / -1}
+    .email-from{background:#eef5ff!important;color:#073f9e;font-weight:900}
+    .email-history{margin-top:16px;background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:14px}
+    .email-history h4{color:#08234f;margin-bottom:10px}
+    .email-history-item{padding:12px 0;border-bottom:1px solid #dbe7f5}
+    .email-history-item:last-child{border-bottom:0}
+    .email-history-item b{display:block;color:#08234f}
+    .email-history-item small{display:block;color:#64748b;margin-top:4px;line-height:1.45}
+    .email-status{display:inline-flex;padding:5px 9px;border-radius:999px;background:#eef5ff;color:#073f9e;font-size:11px;font-weight:900;margin-top:6px}
+
+
     @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
@@ -533,7 +549,7 @@
             <div class="integration-card"><h4>Azul Core</h4><small id="cfgApiText">Motor de automação e sincronização</small><b>Ativo</b><button class="viewbtn">Testar Serviço</button></div>
             <div class="integration-card"><h4>WhatsApp</h4><small>Canal oficial de relacionamento</small><b>Pendente configuração</b><button class="viewbtn">Configurar</button></div>
             <div class="integration-card"><h4>SMS</h4><small>Canal corporativo de mensagens</small><b>Pendente configuração</b><button class="viewbtn">Configurar</button></div>
-            <div class="integration-card"><h4>E-mail</h4><small>Servidor de envio comercial</small><b>Pendente</b><button class="viewbtn">Configurar</button></div>
+            <div class="integration-card"><h4>E-mail Corporativo</h4><small>Microsoft 365 • contato@azulemprestimosabc.com.br</small><b>Conectado</b><button class="viewbtn" onclick="testarEmailCorporativo()">Testar Canal</button></div>
             <div class="integration-card"><h4>Google</h4><small>Sheets, Drive, Calendar e Analytics</small><b>Planejado</b><button class="viewbtn">Configurar</button></div>
           </div>
         </div>
@@ -775,12 +791,68 @@
             <span class="historico-empty">Nenhum histórico carregado.</span>
           </div>
         </div>
+
+        <div class="historico-box">
+          <label class="historico-box-title">Histórico de E-mails</label>
+          <div id="historicoEmailLead" class="historico-list">
+            <span class="historico-empty">Nenhum e-mail registrado para este cliente.</span>
+          </div>
+        </div>
       </div>
       <div class="modal-actions">
         <button class="btn gray" onclick="fecharModalLead()">Fechar</button>
         <button class="btn light" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
+        <button class="btn light" onclick="abrirModalEmailLead()">Enviar E-mail</button>
         <button class="btn light" onclick="agendarRetornoLeadSelecionado()">Agendar Retorno</button>
         <button class="btn" onclick="salvarLeadLocal()">Salvar na tela</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalEmail" class="modal-backdrop" onclick="if(event.target.id==='modalEmail') fecharModalEmail()">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Enviar E-mail ao Cliente</h3>
+        <p style="color:var(--muted);font-weight:700;margin-top:5px">Envio corporativo pela conta contato@azulemprestimosabc.com.br.</p>
+      </div>
+      <button class="modal-close" onclick="fecharModalEmail()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="email-compose-grid">
+        <label>De
+          <input id="emailDe" class="email-from" value="contato@azulemprestimosabc.com.br" readonly />
+        </label>
+        <label>Para
+          <input id="emailPara" placeholder="cliente@email.com" />
+        </label>
+        <label>Modelo
+          <select id="emailTemplate" onchange="aplicarTemplateEmail()">
+            <option value="">Mensagem livre</option>
+            <option value="boas_vindas">Boas-vindas</option>
+            <option value="proposta">Envio de proposta</option>
+            <option value="documentos">Documentação pendente</option>
+            <option value="analise">Retorno de análise</option>
+            <option value="followup">Follow-up comercial</option>
+          </select>
+        </label>
+        <label>Assunto
+          <input id="emailAssunto" placeholder="Assunto do e-mail" />
+        </label>
+        <label class="full">Mensagem
+          <textarea id="emailMensagem" style="min-height:220px" placeholder="Digite a mensagem para o cliente..."></textarea>
+        </label>
+      </div>
+
+      <div class="template-help" style="margin-top:14px">
+        O envio direto por automação ficará disponível quando o endpoint corporativo for conectado. Enquanto isso, o CRM abre a mensagem pronta no Outlook e registra a ação no histórico local do cliente.
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn gray" onclick="fecharModalEmail()">Cancelar</button>
+        <button class="btn light" onclick="salvarRascunhoEmail()">Salvar Rascunho</button>
+        <button class="btn" onclick="enviarEmailLead()">Enviar / Abrir no Outlook</button>
       </div>
     </div>
   </div>
@@ -791,6 +863,8 @@
   const UPDATE_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-atualizar-lead";
   const HISTORICO_URL = "https://n8n.srv1000187.hstgr.cloud/webhook/azul-crm-historico-lead";
   const CREATE_LEAD_URL = ""; // Futuro endpoint do Azul Core para gravar cadastro manual
+  const EMAIL_SEND_URL = ""; // Endpoint futuro para envio automático pelo Azul Core
+  const EMAIL_FROM = "contato@azulemprestimosabc.com.br";
   let leadsGlobais = [];
   let leadSelecionado = null;
   const cfgApi = document.getElementById("cfgApi");
@@ -997,7 +1071,7 @@
       <td>${escapeHtml(origem)}</td>
       <td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td>
       <td>${escapeHtml(responsavel)}</td>
-      <td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button> <button class="whats" onclick="abrirWhatsApp('${escapeHtml(telefone)}','${escapeHtml(lead.nome||"")}')">WhatsApp</button></td>
+      <td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button> <button class="whats" onclick="abrirWhatsApp('${escapeHtml(telefone)}','${escapeHtml(lead.nome||"")}')">WhatsApp</button> <button class="emailbtn" ${lead.email ? "" : "disabled"} onclick="abrirEmailDireto('${escapeHtml(id)}')">E-mail</button></td>
     </tr>`;
   }
 
@@ -1024,6 +1098,7 @@
     document.getElementById("detObs").value = leadSelecionado.observacao || "";
     document.getElementById("modalLead").style.display = "flex";
     carregarHistoricoLead(leadSelecionado.id);
+    renderizarHistoricoEmailLead();
   }
 
   function formatarDataHistorico(data){
@@ -1753,6 +1828,183 @@
     alert("Retorno registrado na tela. Ao salvar o lead, a observação será enviada ao sistema.");
   }
 
+
+
+  const EMAIL_TEMPLATES = {
+    boas_vindas: {
+      assunto: "Recebemos sua solicitação de crédito",
+      mensagem: "Olá, {{nome}}!\n\nRecebemos sua solicitação de {{produto}} e nossa equipe já está analisando as melhores opções para o seu perfil.\n\nEm breve entraremos em contato.\n\nAtenciosamente,\nAzul Empréstimo ABC"
+    },
+    proposta: {
+      assunto: "Sua proposta está pronta",
+      mensagem: "Olá, {{nome}}!\n\nPreparamos as informações da sua proposta de {{produto}}. Por favor, responda este e-mail ou fale conosco pelo WhatsApp para seguirmos com os próximos passos.\n\nAtenciosamente,\nAzul Empréstimo ABC"
+    },
+    documentos: {
+      assunto: "Documentação necessária para sua solicitação",
+      mensagem: "Olá, {{nome}}!\n\nPara avançarmos com sua solicitação, precisamos concluir o envio da documentação pendente.\n\nResponda este e-mail para receber a relação atualizada dos documentos.\n\nAtenciosamente,\nAzul Empréstimo ABC"
+    },
+    analise: {
+      assunto: "Atualização da sua solicitação",
+      mensagem: "Olá, {{nome}}!\n\nSua solicitação de {{produto}} está em análise. Assim que houver uma atualização, nossa equipe entrará em contato.\n\nAtenciosamente,\nAzul Empréstimo ABC"
+    },
+    followup: {
+      assunto: "Podemos continuar sua simulação?",
+      mensagem: "Olá, {{nome}}!\n\nEstamos acompanhando sua solicitação de {{produto}} e gostaríamos de confirmar se podemos continuar sua simulação.\n\nFicamos à disposição.\n\nAtenciosamente,\nAzul Empréstimo ABC"
+    }
+  };
+
+  function substituirVariaveisEmail(texto){
+    const lead = leadSelecionado || {};
+    return String(texto || "")
+      .replaceAll("{{nome}}", lead.nome || "Cliente")
+      .replaceAll("{{produto}}", lead.produto || lead.produto_interesse || "crédito")
+      .replaceAll("{{valor_desejado}}", formatarMoeda(lead.valor_desejado))
+      .replaceAll("{{responsavel}}", lead.responsavel || "Equipe Azul");
+  }
+
+  function abrirEmailDireto(id){
+    const lead = leadsGlobais.find(l => String(l.id||l.documento||l.telefone) === String(id));
+    if(!lead || !lead.email){
+      alert("Este cliente não possui e-mail cadastrado.");
+      return;
+    }
+    leadSelecionado = lead;
+    abrirModalEmailLead();
+  }
+
+  function abrirModalEmailLead(){
+    if(!leadSelecionado){
+      alert("Selecione um cliente antes de enviar o e-mail.");
+      return;
+    }
+    if(!leadSelecionado.email){
+      alert("Este cliente não possui e-mail cadastrado.");
+      return;
+    }
+    document.getElementById("emailDe").value = EMAIL_FROM;
+    document.getElementById("emailPara").value = leadSelecionado.email || "";
+    document.getElementById("emailTemplate").value = "";
+    document.getElementById("emailAssunto").value = "";
+    document.getElementById("emailMensagem").value = "";
+    document.getElementById("modalEmail").style.display = "flex";
+  }
+
+  function fecharModalEmail(){
+    document.getElementById("modalEmail").style.display = "none";
+  }
+
+  function aplicarTemplateEmail(){
+    const chave = document.getElementById("emailTemplate").value;
+    if(!chave || !EMAIL_TEMPLATES[chave]) return;
+    const template = EMAIL_TEMPLATES[chave];
+    document.getElementById("emailAssunto").value = substituirVariaveisEmail(template.assunto);
+    document.getElementById("emailMensagem").value = substituirVariaveisEmail(template.mensagem);
+  }
+
+  function chaveHistoricoEmail(lead){
+    const id = lead?.id || lead?.documento || lead?.telefone || lead?.email || "sem_id";
+    return "azul_crm_email_" + String(id);
+  }
+
+  function obterHistoricoEmail(lead){
+    try{
+      return JSON.parse(localStorage.getItem(chaveHistoricoEmail(lead)) || "[]");
+    }catch(e){
+      return [];
+    }
+  }
+
+  function registrarHistoricoEmail(item){
+    if(!leadSelecionado) return;
+    const historico = obterHistoricoEmail(leadSelecionado);
+    historico.unshift(item);
+    localStorage.setItem(chaveHistoricoEmail(leadSelecionado), JSON.stringify(historico.slice(0,50)));
+    renderizarHistoricoEmailLead();
+  }
+
+  function renderizarHistoricoEmailLead(){
+    const alvo = document.getElementById("historicoEmailLead");
+    if(!alvo || !leadSelecionado) return;
+    const historico = obterHistoricoEmail(leadSelecionado);
+    if(!historico.length){
+      alvo.innerHTML = '<span class="historico-empty">Nenhum e-mail registrado para este cliente.</span>';
+      return;
+    }
+    alvo.innerHTML = historico.map(item => `
+      <div class="historico-item">
+        <b>${escapeHtml(item.assunto || "Sem assunto")}</b>
+        <small><b>Para:</b> ${escapeHtml(item.para || "-")}</small>
+        <small><b>Data:</b> ${escapeHtml(formatarDataHistorico(item.data))}</small>
+        <small>${escapeHtml(item.mensagem || "")}</small>
+        <span class="email-status">${escapeHtml(item.status || "Registrado")}</span>
+      </div>
+    `).join("");
+  }
+
+  function salvarRascunhoEmail(){
+    const para = document.getElementById("emailPara").value.trim();
+    const assunto = document.getElementById("emailAssunto").value.trim();
+    const mensagem = document.getElementById("emailMensagem").value.trim();
+    if(!para || !assunto || !mensagem){
+      alert("Preencha destinatário, assunto e mensagem.");
+      return;
+    }
+    registrarHistoricoEmail({
+      para,
+      assunto,
+      mensagem,
+      status:"Rascunho",
+      data:new Date().toISOString()
+    });
+    alert("Rascunho registrado no histórico do cliente.");
+  }
+
+  async function enviarEmailLead(){
+    const para = document.getElementById("emailPara").value.trim();
+    const assunto = document.getElementById("emailAssunto").value.trim();
+    const mensagem = document.getElementById("emailMensagem").value.trim();
+
+    if(!para || !assunto || !mensagem){
+      alert("Preencha destinatário, assunto e mensagem.");
+      return;
+    }
+
+    const payload = {
+      lead_id: leadSelecionado?.id || null,
+      de: EMAIL_FROM,
+      para,
+      assunto,
+      mensagem,
+      cliente: leadSelecionado?.nome || "",
+      usuario: sessionStorage.getItem("crm_usuario") || "Sistema"
+    };
+
+    try{
+      if(EMAIL_SEND_URL){
+        const response = await fetch(EMAIL_SEND_URL,{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(payload)
+        });
+        if(!response.ok) throw new Error("Falha no envio do e-mail");
+        registrarHistoricoEmail({...payload,status:"Enviado",data:new Date().toISOString()});
+        alert("E-mail enviado com sucesso.");
+      }else{
+        const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(para)}&subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(mensagem)}`;
+        registrarHistoricoEmail({...payload,status:"Aberto no Outlook",data:new Date().toISOString()});
+        window.open(outlookUrl, "_blank");
+      }
+      fecharModalEmail();
+    }catch(error){
+      console.error(error);
+      registrarHistoricoEmail({...payload,status:"Falha no envio",data:new Date().toISOString()});
+      alert("Não foi possível enviar o e-mail. Verifique a integração do canal corporativo.");
+    }
+  }
+
+  function testarEmailCorporativo(){
+    window.open("https://outlook.office.com/mail/", "_blank");
+  }
 
 
   async function carregarDashboard(){
