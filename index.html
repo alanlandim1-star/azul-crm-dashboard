@@ -113,7 +113,23 @@
     .email-status{display:inline-flex;padding:5px 9px;border-radius:999px;background:#eef5ff;color:#073f9e;font-size:11px;font-weight:900;margin-top:6px}
 
 
-    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
+    /* BLACKLIST / NÃO PERTURBE */
+    .blacklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+    .blacklist-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .blacklist-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+    .blacklist-form input,.blacklist-form select,.blacklist-form textarea{width:100%;margin-top:7px}
+    .blacklist-form textarea{grid-column:1 / -1;min-height:100px}
+    .blacklist-note{background:#fff7e6;border:1px solid #ffe4a3;color:#8a5a00;border-radius:14px;padding:13px;font-weight:800;line-height:1.5;margin-top:14px}
+    .blacklist-status{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900}
+    .blacklist-status.on{background:#fff0f0;color:#b42318;border:1px solid #ffc9c9}
+    .blacklist-status.off{background:#f1f5f9;color:#64748b;border:1px solid #dbe7f5}
+    .blocked-row{background:#fff8f8}
+    .blocked-badge{display:inline-flex;align-items:center;gap:6px;margin-left:7px;padding:5px 8px;border-radius:999px;background:#fff0f0;color:#b42318;border:1px solid #ffc9c9;font-size:10px;font-weight:1000}
+    .blacklist-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn-blacklist{background:#111827;color:#fff;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
+    .btn-blacklist:hover{background:#000}
+
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid,.blacklist-grid,.blacklist-form{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
 </head>
@@ -146,6 +162,7 @@
       <a id="nav-propostas" onclick="mudarTela('propostas')">💰 Propostas</a>
       <a id="nav-relatorios" onclick="mudarTela('relatorios')">📑 Relatórios</a>
       <a id="nav-automacoes" onclick="mudarTela('automacoes')">⚡ Automações</a>
+      <a id="nav-blacklist" onclick="mudarTela('blacklist')">🚫 Blacklist</a>
       <a id="nav-configuracoes" onclick="mudarTela('configuracoes')">⚙️ Configurações</a>
     </nav>
     <div class="profile-box"><div class="avatars"><div class="avatar a">A</div><div class="avatar m">M</div></div><b>Alan & Meriany</b><br><small>Gestão comercial da carteira</small></div>
@@ -460,6 +477,117 @@
         <p style="color:var(--muted);font-weight:700;line-height:1.6">
           Nesta primeira versão, as regras ficam configuradas na tela do CRM. O próximo passo será conectar essas regras ao motor de automação para executar disparos automáticos quando um lead mudar de status.
         </p>
+      </section>
+    </section>
+
+
+    <section id="view-blacklist" class="view">
+      <section class="cards">
+        <div class="card"><small>Total bloqueados</small><strong id="blTotal">0</strong><span>Não perturbe</span></div>
+        <div class="card"><small>Telefones</small><strong id="blTelefones">0</strong><span>Chamadas e WhatsApp</span></div>
+        <div class="card"><small>E-mails</small><strong id="blEmails">0</strong><span>Comunicação eletrônica</span></div>
+        <div class="card"><small>Documentos</small><strong id="blDocumentos">0</strong><span>CPF/CNPJ</span></div>
+        <div class="card"><small>Ativos</small><strong id="blAtivos">0</strong><span>Bloqueio vigente</span></div>
+      </section>
+
+      <section class="blacklist-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Adicionar à Blacklist</h3>
+              <p style="color:var(--muted);font-weight:700;margin-top:6px">Bloqueie contatos que não desejam receber ligações, WhatsApp, SMS ou e-mails.</p>
+            </div>
+            <span class="tag">Não perturbe</span>
+          </div>
+
+          <div class="blacklist-form">
+            <label>Nome do cliente
+              <input id="blNome" placeholder="Nome opcional" />
+            </label>
+
+            <label>Tipo de bloqueio
+              <select id="blTipo">
+                <option value="Telefone">Telefone / WhatsApp / SMS</option>
+                <option value="E-mail">E-mail</option>
+                <option value="Documento">CPF / CNPJ</option>
+                <option value="Todos">Todos os canais</option>
+              </select>
+            </label>
+
+            <label>Valor a bloquear
+              <input id="blValor" placeholder="Telefone, e-mail ou documento" />
+            </label>
+
+            <label>Motivo
+              <select id="blMotivo">
+                <option value="Solicitação do cliente">Solicitação do cliente</option>
+                <option value="Não deseja receber contatos">Não deseja receber contatos</option>
+                <option value="Reclamação">Reclamação</option>
+                <option value="Contato incorreto">Contato incorreto</option>
+                <option value="Risco de fraude">Risco de fraude</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </label>
+
+            <label style="grid-column:1 / -1">Observação
+              <textarea id="blObservacao" placeholder="Registre quando e como o cliente solicitou o bloqueio."></textarea>
+            </label>
+          </div>
+
+          <div class="blacklist-note">
+            Um contato bloqueado continua visível no CRM, mas não pode receber ligações, WhatsApp, SMS, e-mails ou automações enquanto o bloqueio estiver ativo.
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn gray" onclick="limparBlacklistForm()">Limpar</button>
+            <button class="btn danger" onclick="salvarBlacklistManual()">Adicionar à Blacklist</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Validação operacional</h3>
+              <p style="color:var(--muted);font-weight:700;margin-top:6px">Consulte rapidamente antes de qualquer contato.</p>
+            </div>
+            <span class="tag">Proteção</span>
+          </div>
+          <div class="blacklist-form">
+            <label style="grid-column:1 / -1">Telefone, e-mail ou documento
+              <input id="blConsulta" placeholder="Digite para consultar..." oninput="consultarBlacklistRapida()" />
+            </label>
+          </div>
+          <div id="blConsultaResultado" class="empty" style="margin-top:14px">Digite um dado para verificar se está bloqueado.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Registros da Blacklist</h3>
+            <p style="color:var(--muted);font-weight:700;margin-top:6px">Histórico local de bloqueios e reativações.</p>
+          </div>
+          <span class="tag">LGPD / Não perturbe</span>
+        </div>
+        <div class="filters" style="grid-template-columns:2fr 1fr 1fr">
+          <input id="blBusca" placeholder="Buscar por nome, valor ou motivo..." oninput="renderizarBlacklist()" />
+          <select id="blFiltroTipo" onchange="renderizarBlacklist()">
+            <option value="">Todos os tipos</option>
+            <option value="Telefone">Telefone</option>
+            <option value="E-mail">E-mail</option>
+            <option value="Documento">Documento</option>
+            <option value="Todos">Todos os canais</option>
+          </select>
+          <select id="blFiltroStatus" onchange="renderizarBlacklist()">
+            <option value="">Todos os status</option>
+            <option value="Ativo">Ativos</option>
+            <option value="Inativo">Inativos</option>
+          </select>
+        </div>
+        <table>
+          <thead><tr><th>Cliente</th><th>Tipo</th><th>Valor</th><th>Motivo</th><th>Data</th><th>Status</th><th>Ação</th></tr></thead>
+          <tbody id="tabelaBlacklist"></tbody>
+        </table>
       </section>
     </section>
 
@@ -804,6 +932,7 @@
         <button class="btn light" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
         <button class="btn light" onclick="abrirModalEmailLead()">Enviar E-mail</button>
         <button class="btn light" onclick="agendarRetornoLeadSelecionado()">Agendar Retorno</button>
+        <button class="btn danger" onclick="adicionarLeadSelecionadoBlacklist()">Blacklist</button>
         <button class="btn" onclick="salvarLeadLocal()">Salvar na tela</button>
       </div>
     </div>
@@ -865,6 +994,7 @@
   const CREATE_LEAD_URL = ""; // Futuro endpoint do Azul Core para gravar cadastro manual
   const EMAIL_SEND_URL = ""; // Endpoint futuro para envio automático pelo Azul Core
   const EMAIL_FROM = "contato@azulemprestimosabc.com.br";
+  const BLACKLIST_API_URL = ""; // Futuro endpoint do Azul Core para persistência central
   let leadsGlobais = [];
   let leadSelecionado = null;
   const cfgApi = document.getElementById("cfgApi");
@@ -879,6 +1009,7 @@
     propostas:["Propostas","Visão dos produtos solicitados e valores desejados."],
     relatorios:["Relatórios","Análises consolidadas da carteira, origem, produto, status e responsáveis."],
     automacoes:["Automações","Configure regras de disparo por status, canal e template de mensagem."],
+    blacklist:["Blacklist","Controle de clientes que não desejam receber contatos ou comunicações."],
     configuracoes:["Configurações","Central administrativa SaaS: empresa, usuários, permissões, integrações, segurança e plano."]
   };
 
@@ -911,6 +1042,7 @@
     if(tela==="propostas") renderizarPropostas();
     if(tela==="relatorios") renderizarRelatorios();
     if(tela==="automacoes") renderizarAutomacoes();
+    if(tela==="blacklist") renderizarBlacklist();
     window.scrollTo({top:0,behavior:"smooth"});
   }
 
@@ -979,6 +1111,11 @@
   }
 
   function abrirWhatsApp(telefone, nome){
+    const lead = leadsGlobais.find(l => String(l.telefone||"").replace(/\D/g,"") === String(telefone||"").replace(/\D/g,"")) || {telefone,nome};
+    if(leadEstaBloqueado(lead)){
+      alert("Contato bloqueado pela Blacklist. Nenhuma comunicação pode ser realizada.");
+      return;
+    }
     const phone = String(telefone || "").replace(/\D/g, "");
     if(!phone){ alert("Telefone não informado."); return; }
     const msg = `Olá, ${nome || ""}! Tudo bem? Aqui é da Azul Empréstimos. Estou entrando em contato para falar sobre opções de crédito e benefícios disponíveis para você.`;
@@ -1061,17 +1198,18 @@
   function linhaLead(lead){
     const status=normalizarStatus(lead.status,lead.convertido);
     const telefone=lead.telefone||"";
+    const bloqueado=leadEstaBloqueado(lead);
     const origem=normalizarOrigem(lead.origem);
     const responsavel=lead.responsavel||"-";
     const id=lead.id || lead.documento || lead.telefone || "";
-    return `<tr>
-      <td><b>${escapeHtml(lead.nome||"-")}</b></td>
+    return `<tr class="${bloqueado ? "blocked-row" : ""}">
+      <td><b>${escapeHtml(lead.nome||"-")}</b>${bloqueado ? '<span class="blocked-badge">🚫 Bloqueado</span>' : ""}</td>
       <td>${escapeHtml(lead.documento||"-")}</td>
       <td>${escapeHtml(telefone||"-")}</td>
       <td>${escapeHtml(origem)}</td>
       <td><span class="status ${classeStatus(status)}">${escapeHtml(status)}</span></td>
       <td>${escapeHtml(responsavel)}</td>
-      <td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button> <button class="whats" onclick="abrirWhatsApp('${escapeHtml(telefone)}','${escapeHtml(lead.nome||"")}')">WhatsApp</button> <button class="emailbtn" ${lead.email ? "" : "disabled"} onclick="abrirEmailDireto('${escapeHtml(id)}')">E-mail</button></td>
+      <td><button class="viewbtn" onclick="abrirDetalhesLead('${escapeHtml(id)}')">Ver</button> <button class="whats" ${bloqueado ? "disabled" : ""} onclick="abrirWhatsApp('${escapeHtml(telefone)}','${escapeHtml(lead.nome||"")}')">WhatsApp</button> <button class="emailbtn" ${(lead.email && !bloqueado) ? "" : "disabled"} onclick="abrirEmailDireto('${escapeHtml(id)}')">E-mail</button></td>
     </tr>`;
   }
 
@@ -1868,6 +2006,10 @@
       alert("Este cliente não possui e-mail cadastrado.");
       return;
     }
+    if(leadEstaBloqueado(lead)){
+      alert("Cliente bloqueado pela Blacklist. O envio de e-mail não é permitido.");
+      return;
+    }
     leadSelecionado = lead;
     abrirModalEmailLead();
   }
@@ -1879,6 +2021,10 @@
     }
     if(!leadSelecionado.email){
       alert("Este cliente não possui e-mail cadastrado.");
+      return;
+    }
+    if(leadEstaBloqueado(leadSelecionado)){
+      alert("Cliente bloqueado pela Blacklist. O envio de e-mail não é permitido.");
       return;
     }
     document.getElementById("emailDe").value = EMAIL_FROM;
@@ -2007,6 +2153,228 @@
   }
 
 
+
+  function normalizarBlacklistValor(valor, tipo){
+    const t = String(tipo || "").toLowerCase();
+    if(t === "e-mail" || t === "email") return String(valor || "").trim().toLowerCase();
+    return String(valor || "").replace(/\D/g,"");
+  }
+
+  function obterBlacklist(){
+    try{
+      return JSON.parse(localStorage.getItem("azul_crm_blacklist") || "[]");
+    }catch(e){
+      console.error(e);
+      return [];
+    }
+  }
+
+  function salvarBlacklist(lista){
+    localStorage.setItem("azul_crm_blacklist", JSON.stringify(lista));
+  }
+
+  function leadEstaBloqueado(lead){
+    const lista = obterBlacklist().filter(item => item.ativo !== false);
+    const telefone = normalizarBlacklistValor(lead?.telefone || "", "Telefone");
+    const email = normalizarBlacklistValor(lead?.email || "", "E-mail");
+    const documento = normalizarBlacklistValor(lead?.documento || "", "Documento");
+
+    return lista.some(item => {
+      const tipo = item.tipo;
+      const valor = normalizarBlacklistValor(item.valor, tipo);
+      if(tipo === "Todos"){
+        return (telefone && valor === telefone) || (email && String(item.valor||"").trim().toLowerCase() === email) || (documento && valor === documento);
+      }
+      if(tipo === "Telefone") return telefone && valor === telefone;
+      if(tipo === "E-mail") return email && normalizarBlacklistValor(item.valor,"E-mail") === email;
+      if(tipo === "Documento") return documento && valor === documento;
+      return false;
+    });
+  }
+
+  function limparBlacklistForm(){
+    document.getElementById("blNome").value = "";
+    document.getElementById("blTipo").value = "Telefone";
+    document.getElementById("blValor").value = "";
+    document.getElementById("blMotivo").value = "Solicitação do cliente";
+    document.getElementById("blObservacao").value = "";
+  }
+
+  async function salvarBlacklistManual(){
+    const tipo = document.getElementById("blTipo").value;
+    const valor = document.getElementById("blValor").value.trim();
+    if(!valor){
+      alert("Informe o telefone, e-mail ou documento que será bloqueado.");
+      return;
+    }
+
+    const novo = {
+      id: Date.now(),
+      nome: document.getElementById("blNome").value.trim(),
+      tipo,
+      valor,
+      motivo: document.getElementById("blMotivo").value,
+      observacao: document.getElementById("blObservacao").value.trim(),
+      ativo: true,
+      criado_em: new Date().toISOString(),
+      usuario: sessionStorage.getItem("crm_usuario") || "Sistema"
+    };
+
+    const lista = obterBlacklist();
+    const normalizado = normalizarBlacklistValor(valor, tipo);
+    const duplicado = lista.some(item => item.ativo !== false && item.tipo === tipo && normalizarBlacklistValor(item.valor,item.tipo) === normalizado);
+    if(duplicado){
+      alert("Este dado já está ativo na Blacklist.");
+      return;
+    }
+
+    if(BLACKLIST_API_URL){
+      try{
+        const response = await fetch(BLACKLIST_API_URL,{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(novo)
+        });
+        if(!response.ok) throw new Error("Falha ao gravar blacklist");
+      }catch(error){
+        console.error(error);
+        alert("Não foi possível salvar a Blacklist no servidor.");
+        return;
+      }
+    }
+
+    lista.unshift(novo);
+    salvarBlacklist(lista);
+    limparBlacklistForm();
+    renderizarBlacklist();
+    renderizarTabela();
+    alert("Contato adicionado à Blacklist. As ações de comunicação foram bloqueadas.");
+  }
+
+  function adicionarLeadSelecionadoBlacklist(){
+    if(!leadSelecionado) return;
+    if(leadEstaBloqueado(leadSelecionado)){
+      alert("Este cliente já está bloqueado.");
+      return;
+    }
+
+    const valorPreferencial = leadSelecionado.telefone || leadSelecionado.email || leadSelecionado.documento || "";
+    if(!valorPreferencial){
+      alert("O cliente não possui telefone, e-mail ou documento para bloquear.");
+      return;
+    }
+
+    document.getElementById("blNome").value = leadSelecionado.nome || "";
+    if(leadSelecionado.telefone){
+      document.getElementById("blTipo").value = "Telefone";
+      document.getElementById("blValor").value = leadSelecionado.telefone;
+    }else if(leadSelecionado.email){
+      document.getElementById("blTipo").value = "E-mail";
+      document.getElementById("blValor").value = leadSelecionado.email;
+    }else{
+      document.getElementById("blTipo").value = "Documento";
+      document.getElementById("blValor").value = leadSelecionado.documento;
+    }
+    document.getElementById("blMotivo").value = "Solicitação do cliente";
+    document.getElementById("blObservacao").value = "Bloqueio iniciado a partir da ficha do cliente.";
+    fecharModalLead();
+    mudarTela("blacklist");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function alternarBlacklist(id){
+    const lista = obterBlacklist().map(item => item.id === id ? {...item, ativo: !item.ativo, atualizado_em:new Date().toISOString()} : item);
+    salvarBlacklist(lista);
+    renderizarBlacklist();
+    renderizarTabela();
+  }
+
+  function excluirBlacklist(id){
+    if(!confirm("Deseja excluir este registro da Blacklist?")) return;
+    salvarBlacklist(obterBlacklist().filter(item => item.id !== id));
+    renderizarBlacklist();
+    renderizarTabela();
+  }
+
+  function renderizarBlacklist(){
+    const lista = obterBlacklist();
+    const busca = String(document.getElementById("blBusca")?.value || "").toLowerCase();
+    const tipo = document.getElementById("blFiltroTipo")?.value || "";
+    const status = document.getElementById("blFiltroStatus")?.value || "";
+
+    const ativos = lista.filter(i=>i.ativo !== false);
+    const set = (id,value)=>{ const el=document.getElementById(id); if(el) el.textContent=value; };
+    set("blTotal", lista.length);
+    set("blTelefones", lista.filter(i=>i.tipo==="Telefone").length);
+    set("blEmails", lista.filter(i=>i.tipo==="E-mail").length);
+    set("blDocumentos", lista.filter(i=>i.tipo==="Documento").length);
+    set("blAtivos", ativos.length);
+
+    const filtrada = lista.filter(item=>{
+      const texto = `${item.nome||""} ${item.valor||""} ${item.motivo||""}`.toLowerCase();
+      const okBusca = !busca || texto.includes(busca);
+      const okTipo = !tipo || item.tipo === tipo;
+      const itemStatus = item.ativo !== false ? "Ativo" : "Inativo";
+      const okStatus = !status || itemStatus === status;
+      return okBusca && okTipo && okStatus;
+    });
+
+    const tbody = document.getElementById("tabelaBlacklist");
+    if(!tbody) return;
+    if(!filtrada.length){
+      tbody.innerHTML = '<tr><td colspan="7">Nenhum registro encontrado.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtrada.map(item=>`
+      <tr>
+        <td><b>${escapeHtml(item.nome || "Não informado")}</b><br><small>${escapeHtml(item.usuario || "Sistema")}</small></td>
+        <td>${escapeHtml(item.tipo)}</td>
+        <td>${escapeHtml(item.valor)}</td>
+        <td>${escapeHtml(item.motivo || "-")}<br><small>${escapeHtml(item.observacao || "")}</small></td>
+        <td>${escapeHtml(formatarDataHistorico(item.criado_em))}</td>
+        <td><span class="blacklist-status ${item.ativo !== false ? "on" : "off"}">${item.ativo !== false ? "Bloqueado" : "Inativo"}</span></td>
+        <td>
+          <div class="blacklist-actions">
+            <button class="viewbtn" onclick="alternarBlacklist(${item.id})">${item.ativo !== false ? "Desativar" : "Reativar"}</button>
+            <button class="viewbtn" onclick="excluirBlacklist(${item.id})">Excluir</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function consultarBlacklistRapida(){
+    const valor = document.getElementById("blConsulta").value.trim();
+    const alvo = document.getElementById("blConsultaResultado");
+    if(!valor){
+      alvo.className = "empty";
+      alvo.textContent = "Digite um dado para verificar se está bloqueado.";
+      return;
+    }
+
+    const lista = obterBlacklist().filter(i=>i.ativo !== false);
+    const valorEmail = normalizarBlacklistValor(valor,"E-mail");
+    const valorNum = normalizarBlacklistValor(valor,"Telefone");
+    const encontrado = lista.find(item=>{
+      if(item.tipo === "E-mail") return normalizarBlacklistValor(item.valor,"E-mail") === valorEmail;
+      return normalizarBlacklistValor(item.valor,item.tipo) === valorNum;
+    });
+
+    if(encontrado){
+      alvo.className = "error";
+      alvo.style.display = "block";
+      alvo.innerHTML = `🚫 Bloqueado: <b>${escapeHtml(encontrado.tipo)}</b> • ${escapeHtml(encontrado.motivo || "")}`;
+    }else{
+      alvo.className = "loading";
+      alvo.style.display = "block";
+      alvo.style.background = "#e9fff3";
+      alvo.style.color = "#0d8d4d";
+      alvo.style.borderColor = "#b9f0d1";
+      alvo.innerHTML = "✅ Nenhum bloqueio ativo encontrado.";
+    }
+  }
+
   async function carregarDashboard(){
     if(sessionStorage.getItem("crm_logado") !== "true") return;
     const loading=document.getElementById("loading"), error=document.getElementById("error");
@@ -2019,6 +2387,7 @@
       leadsGlobais = leadsGlobais.filter(l => l && (l.nome || l.documento || l.telefone));
       atualizarDashboard(data);
       renderizarTabela();
+      renderizarBlacklist();
     }catch(e){
       console.error(e);
       error.style.display="block";
