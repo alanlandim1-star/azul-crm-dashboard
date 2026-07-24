@@ -132,6 +132,163 @@
     .commission-preview strong{display:block;color:#073f9e;font-size:30px;margin-top:6px}
     .finance-actions{display:flex;gap:8px;flex-wrap:wrap}
 
+
+    /* FINANCEIRO AVANÇADO */
+    .finance-toolbar{
+      display:grid;
+      grid-template-columns:1.2fr 1.2fr 1fr 1fr 1fr auto auto;
+      gap:12px;
+      align-items:end;
+      margin-bottom:18px
+    }
+    .finance-toolbar label{
+      font-size:11px;
+      color:#64748b;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.45px
+    }
+    .finance-toolbar input,.finance-toolbar select{width:100%;margin-top:7px}
+    .finance-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+    .finance-kpis.secondary{margin-top:0}
+    .finance-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+    .chart-bars{display:grid;gap:13px}
+    .chart-row{display:grid;grid-template-columns:110px 1fr 120px;gap:12px;align-items:center}
+    .chart-label{font-size:13px;font-weight:900;color:#334155}
+    .chart-track{height:14px;background:#eef5ff;border-radius:999px;overflow:hidden}
+    .chart-fill{height:100%;background:linear-gradient(90deg,#0b66ff,#25d366);border-radius:999px}
+    .chart-value{text-align:right;font-weight:900;color:#08234f;font-size:13px}
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .compare-card{background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:16px}
+    .compare-card small{color:#64748b;font-weight:900}
+    .compare-card strong{display:block;font-size:28px;color:#08234f;margin-top:7px}
+    .month-summary{display:grid;gap:10px}
+    .month-item{display:grid;grid-template-columns:120px 1fr 110px;gap:12px;align-items:center}
+    .month-bar{height:12px;background:#eef5ff;border-radius:999px;overflow:hidden}
+    .month-bar span{display:block;height:100%;background:linear-gradient(90deg,#073f9e,#0b66ff);border-radius:999px}
+    .days-open{font-weight:900;color:#b7791f}
+    .days-open.overdue{color:#b42318}
+    .finance-table-wrap{overflow-x:auto}
+
+
+    /* CARDS FINANCEIROS EM DESTAQUE */
+    .finance-kpis .card{
+      position:relative;
+      overflow:hidden;
+      min-height:170px;
+      padding:22px;
+      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+      box-shadow:0 16px 38px rgba(7,31,77,.09)
+    }
+    .finance-kpis .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 22px 48px rgba(7,31,77,.15)
+    }
+    .finance-kpis .card::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:6px;
+      background:var(--kpi-color,#0b66ff)
+    }
+    .finance-kpis .card::after{
+      content:"";
+      position:absolute;
+      width:92px;
+      height:92px;
+      border-radius:50%;
+      right:-30px;
+      top:-30px;
+      background:var(--kpi-soft,#eef5ff);
+      opacity:.9
+    }
+    .finance-kpis .kpi-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:relative;
+      z-index:1
+    }
+    .finance-kpis .kpi-title{
+      color:#64748b;
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.55px
+    }
+    .finance-kpis .kpi-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-size:21px;
+      color:var(--kpi-color,#0b66ff);
+      background:var(--kpi-soft,#eef5ff);
+      border:1px solid var(--kpi-border,#d7e7ff);
+      box-shadow:0 8px 18px rgba(15,23,42,.07)
+    }
+    .finance-kpis .card strong{
+      position:relative;
+      z-index:1;
+      font-size:34px;
+      line-height:1.08;
+      margin-top:18px;
+      color:var(--kpi-color,#08234f);
+      letter-spacing:-1.2px
+    }
+    .finance-kpis .card span{
+      position:relative;
+      z-index:1;
+      margin-top:14px;
+      color:var(--kpi-color,#073f9e);
+      background:var(--kpi-soft,#eef5ff);
+      border:1px solid var(--kpi-border,#d7e7ff)
+    }
+    .finance-kpis .kpi-purple{
+      --kpi-color:#7c3aed;
+      --kpi-soft:#f4efff;
+      --kpi-border:#ddd0ff
+    }
+    .finance-kpis .kpi-green{
+      --kpi-color:#0d8d4d;
+      --kpi-soft:#e9fff3;
+      --kpi-border:#b9f0d1
+    }
+    .finance-kpis .kpi-yellow{
+      --kpi-color:#b7791f;
+      --kpi-soft:#fff7e6;
+      --kpi-border:#ffe4a3
+    }
+    .finance-kpis .kpi-blue{
+      --kpi-color:#0b66ff;
+      --kpi-soft:#eef5ff;
+      --kpi-border:#d7e7ff
+    }
+    .finance-kpis .kpi-cyan{
+      --kpi-color:#0284c7;
+      --kpi-soft:#ecfeff;
+      --kpi-border:#bae6fd
+    }
+    .finance-kpis .kpi-indigo{
+      --kpi-color:#4f46e5;
+      --kpi-soft:#eef2ff;
+      --kpi-border:#c7d2fe
+    }
+    .finance-kpis .kpi-orange{
+      --kpi-color:#ea580c;
+      --kpi-soft:#fff7ed;
+      --kpi-border:#fed7aa
+    }
+    .finance-kpis .kpi-navy{
+      --kpi-color:#073f9e;
+      --kpi-soft:#eaf3ff;
+      --kpi-border:#cfe0ff
+    }
+
     /* BLACKLIST / NÃO PERTURBE */
     .blacklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
     .blacklist-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -148,7 +305,7 @@
     .btn-blacklist{background:#111827;color:#fff;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
     .btn-blacklist:hover{background:#000}
 
-    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid,.blacklist-grid,.blacklist-form,.finance-grid,.finance-form{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid,.blacklist-grid,.blacklist-form,.finance-grid,.finance-form,.finance-chart-grid,.finance-kpis,.finance-toolbar{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
 </head>
@@ -503,46 +660,148 @@
 
 
     <section id="view-financeiro" class="view">
-      <section class="cards">
-        <div class="card"><small>Comissão Prevista</small><strong id="finPrevista">R$ 0,00</strong><span>Total previsto</span></div>
-        <div class="card"><small>Comissão Recebida</small><strong id="finRecebida">R$ 0,00</strong><span>Já recebida</span></div>
-        <div class="card"><small>A Receber</small><strong id="finPendente">R$ 0,00</strong><span>Pendente</span></div>
-        <div class="card"><small>Operações</small><strong id="finOperacoes">0</strong><span>Contratos</span></div>
-        <div class="card"><small>Comissão Média</small><strong id="finMedia">0,00%</strong><span>Taxa média</span></div>
-      </section>
-
-      <section class="finance-grid">
-        <div class="panel">
-          <div class="panel-head">
-            <div><h3>Operações Financeiras</h3><p style="color:var(--muted);font-weight:700;margin-top:6px">Controle de valores liberados, taxas e recebimento das comissões.</p></div>
-            <button class="btn" onclick="abrirModalOperacaoFinanceira()">Nova Operação</button>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Visão Financeira</h3>
+            <p style="color:var(--muted);font-weight:700;margin-top:6px">Acompanhe conversões, comissões, recebimentos e evolução mensal da franquia.</p>
           </div>
-          <div class="filters" style="grid-template-columns:2fr 1fr 1fr">
-            <input id="finBusca" placeholder="Buscar cliente, banco ou produto..." oninput="renderizarFinanceiro()" />
+          <button class="btn" onclick="abrirModalOperacaoFinanceira()">Nova Operação</button>
+        </div>
+
+        <div class="finance-toolbar">
+          <label>Data inicial
+            <input id="finDataInicio" type="date" onchange="renderizarFinanceiro()" />
+          </label>
+          <label>Data final
+            <input id="finDataFim" type="date" onchange="renderizarFinanceiro()" />
+          </label>
+          <label>Base da data
+            <select id="finTipoData" onchange="renderizarFinanceiro()">
+              <option value="data_conversao">Conversão</option>
+              <option value="data_prevista_pagamento">Previsão</option>
+              <option value="data_recebimento">Recebimento</option>
+            </select>
+          </label>
+          <label>Banco
+            <select id="finFiltroBanco" onchange="renderizarFinanceiro()"><option value="">Todos os bancos</option></select>
+          </label>
+          <label>Status
             <select id="finFiltroStatus" onchange="renderizarFinanceiro()">
               <option value="">Todos os status</option>
               <option value="Aguardando pagamento">Aguardando pagamento</option>
               <option value="Parcial">Parcial</option>
               <option value="Recebida">Recebida</option>
             </select>
-            <select id="finFiltroBanco" onchange="renderizarFinanceiro()"><option value="">Todos os bancos</option></select>
-          </div>
-          <table>
-            <thead><tr><th>Cliente</th><th>Banco</th><th>Produto</th><th>Valor liberado</th><th>Taxa</th><th>Comissão</th><th>Status</th><th>Ação</th></tr></thead>
-            <tbody id="tabelaFinanceiro"></tbody>
-          </table>
+          </label>
+          <button class="btn light" onclick="aplicarMesAtualFinanceiro()">Mês atual</button>
+          <button class="btn gray" onclick="limparFiltrosFinanceiro()">Limpar</button>
+        </div>
+      </section>
+
+      <section class="finance-kpis">
+        <div class="card kpi-purple">
+          <div class="kpi-head"><small class="kpi-title">Comissão Prevista</small><div class="kpi-icon">📈</div></div>
+          <strong id="finPrevista">R$ 0,00</strong>
+          <span>Receita esperada</span>
+        </div>
+        <div class="card kpi-green">
+          <div class="kpi-head"><small class="kpi-title">Comissão Recebida</small><div class="kpi-icon">💰</div></div>
+          <strong id="finRecebida">R$ 0,00</strong>
+          <span>Valor já recebido</span>
+        </div>
+        <div class="card kpi-yellow">
+          <div class="kpi-head"><small class="kpi-title">A Receber</small><div class="kpi-icon">⏳</div></div>
+          <strong id="finPendente">R$ 0,00</strong>
+          <span>Pagamento pendente</span>
+        </div>
+        <div class="card kpi-blue">
+          <div class="kpi-head"><small class="kpi-title">Valor Liberado</small><div class="kpi-icon">🏦</div></div>
+          <strong id="finValorLiberadoCard">R$ 0,00</strong>
+          <span>Operações filtradas</span>
+        </div>
+      </section>
+
+      <section class="finance-kpis secondary">
+        <div class="card kpi-cyan">
+          <div class="kpi-head"><small class="kpi-title">Operações</small><div class="kpi-icon">📄</div></div>
+          <strong id="finOperacoes">0</strong>
+          <span>Contratos registrados</span>
+        </div>
+        <div class="card kpi-indigo">
+          <div class="kpi-head"><small class="kpi-title">Ticket Médio</small><div class="kpi-icon">🎯</div></div>
+          <strong id="finTicketMedio">R$ 0,00</strong>
+          <span>Média por operação</span>
+        </div>
+        <div class="card kpi-orange">
+          <div class="kpi-head"><small class="kpi-title">Comissão Média</small><div class="kpi-icon">%</div></div>
+          <strong id="finMedia">0,00%</strong>
+          <span>Taxa média</span>
+        </div>
+        <div class="card kpi-navy">
+          <div class="kpi-head"><small class="kpi-title">Banco Destaque</small><div class="kpi-icon">🏆</div></div>
+          <strong id="finBancoDestaque" style="font-size:23px">-</strong>
+          <span>Maior comissão prevista</span>
+        </div>
+      </section>
+
+      <section class="finance-chart-grid">
+        <div class="panel">
+          <div class="panel-head"><h3>Evolução Mensal</h3><span class="tag">Comissão prevista</span></div>
+          <div id="finEvolucaoMensal" class="month-summary"></div>
         </div>
 
-        <div>
-          <div class="finance-summary">
-            <small>Receita financeira prevista</small>
-            <strong id="finResumoPrevisto">R$ 0,00</strong>
-            <p style="margin-top:10px;color:#dbeafe;font-weight:700;line-height:1.5">Soma das comissões calculadas nas operações cadastradas.</p>
+        <div class="panel">
+          <div class="panel-head"><h3>Previsto x Recebido</h3><span class="tag">Período filtrado</span></div>
+          <div class="compare-grid">
+            <div class="compare-card"><small>Previsto</small><strong id="finComparativoPrevisto">R$ 0,00</strong></div>
+            <div class="compare-card"><small>Recebido</small><strong id="finComparativoRecebido">R$ 0,00</strong></div>
           </div>
-          <div class="panel" style="margin-top:18px">
-            <div class="panel-head"><h3>Resumo por banco</h3><span class="tag">Comissões</span></div>
-            <table><thead><tr><th>Banco</th><th>Operações</th><th>Comissão</th></tr></thead><tbody id="finPorBanco"></tbody></table>
+          <div style="margin-top:18px" class="chart-bars">
+            <div class="chart-row">
+              <div class="chart-label">Previsto</div>
+              <div class="chart-track"><div id="finBarPrevisto" class="chart-fill" style="width:0%"></div></div>
+              <div id="finBarPrevistoValor" class="chart-value">R$ 0,00</div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-label">Recebido</div>
+              <div class="chart-track"><div id="finBarRecebido" class="chart-fill" style="width:0%"></div></div>
+              <div id="finBarRecebidoValor" class="chart-value">R$ 0,00</div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section class="finance-chart-grid">
+        <div class="panel">
+          <div class="panel-head"><h3>Comissão por Banco</h3><span class="tag">Ranking</span></div>
+          <div id="finRankingBancos" class="chart-bars"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Comissão por Responsável</h3><span class="tag">Equipe</span></div>
+          <div id="finRankingResponsaveis" class="chart-bars"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Operações Financeiras</h3>
+            <p style="color:var(--muted);font-weight:700;margin-top:6px">Detalhamento das operações convertidas e situação das comissões.</p>
+          </div>
+          <input id="finBusca" style="width:320px" placeholder="Buscar cliente, banco ou produto..." oninput="renderizarFinanceiro()" />
+        </div>
+
+        <div class="finance-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th><th>Banco</th><th>Produto</th><th>Valor liberado</th><th>Taxa</th><th>Comissão</th><th>Conversão</th><th>Prevista</th><th>Recebimento</th><th>Dias em aberto</th><th>Status</th><th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaFinanceiro"></tbody>
+          </table>
         </div>
       </section>
     </section>
@@ -2297,21 +2556,56 @@
     return "pendente";
   }
 
-  function renderizarFinanceiro(){
-    const prevista=operacoesFinanceiras.reduce((a,o)=>a+(Number(o.valor_comissao_prevista)||0),0);
-    const recebida=operacoesFinanceiras.reduce((a,o)=>a+(Number(o.valor_comissao_recebida)||0),0);
-    const pendente=Math.max(0,prevista-recebida);
-    const media=operacoesFinanceiras.length ? operacoesFinanceiras.reduce((a,o)=>a+(Number(o.taxa_comissao)||0),0)/operacoesFinanceiras.length : 0;
-    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-    set("finPrevista",formatarMoeda(prevista));
-    set("finRecebida",formatarMoeda(recebida));
-    set("finPendente",formatarMoeda(pendente));
-    set("finOperacoes",operacoesFinanceiras.length);
-    set("finMedia",media.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%");
-    set("finResumoPrevisto",formatarMoeda(prevista));
+  function dataOperacao(op, campo){
+    const valor = op?.[campo];
+    if(!valor) return null;
+    const d = new Date(valor);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
 
-    const bancos=[...new Set(operacoesFinanceiras.map(o=>o.banco).filter(Boolean))].sort();
-    const filtroBanco=document.getElementById("finFiltroBanco");
+  function formatarDataCurta(valor){
+    if(!valor) return "-";
+    const d = new Date(valor);
+    if(Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleDateString("pt-BR");
+  }
+
+  function statusFinanceiroAutomatico(op){
+    const prevista = Number(op.valor_comissao_prevista)||0;
+    const recebida = Number(op.valor_comissao_recebida)||0;
+    if(recebida <= 0) return "Aguardando pagamento";
+    if(recebida < prevista) return "Parcial";
+    return "Recebida";
+  }
+
+  function aplicarMesAtualFinanceiro(){
+    const hoje = new Date();
+    const inicio = new Date(hoje.getFullYear(),hoje.getMonth(),1);
+    const fim = new Date(hoje.getFullYear(),hoje.getMonth()+1,0);
+    const iso = d => d.toISOString().slice(0,10);
+    document.getElementById("finDataInicio").value = iso(inicio);
+    document.getElementById("finDataFim").value = iso(fim);
+    renderizarFinanceiro();
+  }
+
+  function limparFiltrosFinanceiro(){
+    document.getElementById("finDataInicio").value = "";
+    document.getElementById("finDataFim").value = "";
+    document.getElementById("finTipoData").value = "data_conversao";
+    document.getElementById("finFiltroBanco").value = "";
+    document.getElementById("finFiltroStatus").value = "";
+    document.getElementById("finBusca").value = "";
+    renderizarFinanceiro();
+  }
+
+  function renderizarFinanceiro(){
+    operacoesFinanceiras = operacoesFinanceiras.map(o=>({
+      ...o,
+      status_comissao: statusFinanceiroAutomatico(o)
+    }));
+
+    const bancos = [...new Set(operacoesFinanceiras.map(o=>o.banco).filter(Boolean))].sort();
+    const filtroBanco = document.getElementById("finFiltroBanco");
     if(filtroBanco){
       const atual=filtroBanco.value;
       filtroBanco.innerHTML='<option value="">Todos os bancos</option>'+bancos.map(b=>`<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join("");
@@ -2321,18 +2615,72 @@
     const busca=String(document.getElementById("finBusca")?.value||"").toLowerCase();
     const statusFiltro=document.getElementById("finFiltroStatus")?.value||"";
     const bancoFiltro=document.getElementById("finFiltroBanco")?.value||"";
+    const campoData=document.getElementById("finTipoData")?.value||"data_conversao";
+    const inicioValor=document.getElementById("finDataInicio")?.value||"";
+    const fimValor=document.getElementById("finDataFim")?.value||"";
+    const inicio=inicioValor ? new Date(inicioValor+"T00:00:00") : null;
+    const fim=fimValor ? new Date(fimValor+"T23:59:59") : null;
+
     const dados=operacoesFinanceiras.filter(o=>{
       const lead=leadsGlobais.find(l=>String(l.id)===String(o.lead_id));
       const nome=o.nome_cliente || lead?.nome || "";
       const texto=`${nome} ${o.banco||""} ${o.produto||""}`.toLowerCase();
-      return (!busca || texto.includes(busca)) && (!statusFiltro || o.status_comissao===statusFiltro) && (!bancoFiltro || o.banco===bancoFiltro);
+      const data=dataOperacao(o,campoData);
+      const okData=(!inicio && !fim) || (data && (!inicio || data>=inicio) && (!fim || data<=fim));
+      return (!busca || texto.includes(busca)) &&
+             (!statusFiltro || o.status_comissao===statusFiltro) &&
+             (!bancoFiltro || o.banco===bancoFiltro) &&
+             okData;
     });
+
+    const prevista=dados.reduce((a,o)=>a+(Number(o.valor_comissao_prevista)||0),0);
+    const recebida=dados.reduce((a,o)=>a+(Number(o.valor_comissao_recebida)||0),0);
+    const pendente=Math.max(0,prevista-recebida);
+    const valorLiberado=dados.reduce((a,o)=>a+(Number(o.valor_liberado)||0),0);
+    const media=dados.length ? dados.reduce((a,o)=>a+(Number(o.taxa_comissao)||0),0)/dados.length : 0;
+    const ticket=dados.length ? valorLiberado/dados.length : 0;
+
+    const porBanco=dados.reduce((acc,o)=>{
+      const banco=o.banco||"Não informado";
+      if(!acc[banco]) acc[banco]={qtd:0,valor:0};
+      acc[banco].qtd++;
+      acc[banco].valor+=Number(o.valor_comissao_prevista)||0;
+      return acc;
+    },{});
+    const bancoDestaque=Object.entries(porBanco).sort((a,b)=>b[1].valor-a[1].valor)[0]?.[0]||"-";
+
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    set("finPrevista",formatarMoeda(prevista));
+    set("finRecebida",formatarMoeda(recebida));
+    set("finPendente",formatarMoeda(pendente));
+    set("finValorLiberadoCard",formatarMoeda(valorLiberado));
+    set("finOperacoes",dados.length);
+    set("finTicketMedio",formatarMoeda(ticket));
+    set("finMedia",media.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%");
+    set("finBancoDestaque",bancoDestaque);
+    set("finComparativoPrevisto",formatarMoeda(prevista));
+    set("finComparativoRecebido",formatarMoeda(recebida));
+    set("finBarPrevistoValor",formatarMoeda(prevista));
+    set("finBarRecebidoValor",formatarMoeda(recebida));
+
+    const base=Math.max(prevista,recebida,1);
+    document.getElementById("finBarPrevisto").style.width=((prevista/base)*100)+"%";
+    document.getElementById("finBarRecebido").style.width=((recebida/base)*100)+"%";
 
     const tbody=document.getElementById("tabelaFinanceiro");
     if(tbody){
       tbody.innerHTML=dados.length ? dados.map(o=>{
         const lead=leadsGlobais.find(l=>String(l.id)===String(o.lead_id));
         const nome=o.nome_cliente || lead?.nome || "Cliente não localizado";
+        const previstaData=o.data_prevista_pagamento;
+        let diasAberto="-";
+        let clsDias="";
+        if(o.status_comissao!=="Recebida" && previstaData){
+          const d=new Date(previstaData+"T00:00:00");
+          const diff=Math.floor((Date.now()-d.getTime())/(1000*60*60*24));
+          diasAberto=diff>0?`${diff} dia(s)`:"No prazo";
+          if(diff>0) clsDias=diff>=10?"days-open overdue":"days-open";
+        }
         return `<tr>
           <td><b>${escapeHtml(nome)}</b></td>
           <td>${escapeHtml(o.banco||"-")}</td>
@@ -2340,23 +2688,60 @@
           <td>${formatarMoeda(o.valor_liberado)}</td>
           <td>${Number(o.taxa_comissao||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:4})}%</td>
           <td><b>${formatarMoeda(o.valor_comissao_prevista)}</b></td>
-          <td><span class="finance-status ${classeStatusFinanceiro(o.status_comissao)}">${escapeHtml(o.status_comissao||"Aguardando pagamento")}</span></td>
+          <td>${formatarDataCurta(o.data_conversao||o.criado_em)}</td>
+          <td>${formatarDataCurta(o.data_prevista_pagamento)}</td>
+          <td>${formatarDataCurta(o.data_recebimento)}</td>
+          <td class="${clsDias}">${diasAberto}</td>
+          <td><span class="finance-status ${classeStatusFinanceiro(o.status_comissao)}">${escapeHtml(o.status_comissao)}</span></td>
           <td><button class="viewbtn" onclick="editarOperacaoFinanceira('${escapeHtml(o.id)}')">Editar</button></td>
         </tr>`;
-      }).join("") : '<tr><td colspan="8">Nenhuma operação encontrada.</td></tr>';
+      }).join("") : '<tr><td colspan="12">Nenhuma operação encontrada no período.</td></tr>';
     }
 
-    const porBanco=operacoesFinanceiras.reduce((acc,o)=>{
-      const banco=o.banco||"Não informado";
-      if(!acc[banco])acc[banco]={qtd:0,valor:0};
-      acc[banco].qtd++;
-      acc[banco].valor+=Number(o.valor_comissao_prevista)||0;
+    const renderRanking=(id,obj)=>{
+      const alvo=document.getElementById(id);
+      if(!alvo) return;
+      const linhas=Object.entries(obj).sort((a,b)=>b[1].valor-a[1].valor);
+      const max=linhas[0]?.[1]?.valor||1;
+      alvo.innerHTML=linhas.length ? linhas.slice(0,8).map(([nome,d])=>`
+        <div class="chart-row">
+          <div class="chart-label">${escapeHtml(nome)}</div>
+          <div class="chart-track"><div class="chart-fill" style="width:${(d.valor/max)*100}%"></div></div>
+          <div class="chart-value">${formatarMoeda(d.valor)}</div>
+        </div>`).join("") : '<div class="empty">Sem dados.</div>';
+    };
+    renderRanking("finRankingBancos",porBanco);
+
+    const porResp=dados.reduce((acc,o)=>{
+      const nome=o.responsavel||"Sem responsável";
+      if(!acc[nome]) acc[nome]={qtd:0,valor:0};
+      acc[nome].qtd++;
+      acc[nome].valor+=Number(o.valor_comissao_prevista)||0;
       return acc;
     },{});
-    const resumo=document.getElementById("finPorBanco");
-    if(resumo){
-      const linhas=Object.entries(porBanco).sort((a,b)=>b[1].valor-a[1].valor);
-      resumo.innerHTML=linhas.length ? linhas.map(([b,d])=>`<tr><td><b>${escapeHtml(b)}</b></td><td>${d.qtd}</td><td>${formatarMoeda(d.valor)}</td></tr>`).join("") : '<tr><td colspan="3">Sem dados.</td></tr>';
+    renderRanking("finRankingResponsaveis",porResp);
+
+    const porMes=dados.reduce((acc,o)=>{
+      const d=dataOperacao(o,"data_conversao") || dataOperacao(o,"criado_em");
+      if(!d) return acc;
+      const chave=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+      if(!acc[chave]) acc[chave]=0;
+      acc[chave]+=Number(o.valor_comissao_prevista)||0;
+      return acc;
+    },{});
+    const meses=Object.entries(porMes).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12);
+    const maxMes=Math.max(...meses.map(m=>m[1]),1);
+    const alvoMes=document.getElementById("finEvolucaoMensal");
+    if(alvoMes){
+      alvoMes.innerHTML=meses.length?meses.map(([chave,valor])=>{
+        const [ano,mes]=chave.split("-");
+        const nome=new Date(Number(ano),Number(mes)-1,1).toLocaleDateString("pt-BR",{month:"short",year:"numeric"});
+        return `<div class="month-item">
+          <div class="chart-label">${escapeHtml(nome)}</div>
+          <div class="month-bar"><span style="width:${(valor/maxMes)*100}%"></span></div>
+          <div class="chart-value">${formatarMoeda(valor)}</div>
+        </div>`;
+      }).join(""):'<div class="empty">Sem dados mensais.</div>';
     }
   }
 
@@ -2439,6 +2824,10 @@
     if(taxa<=0){alert("Informe a taxa de comissão.");return;}
 
     const lead=leadsGlobais.find(l=>String(l.id)===String(leadId));
+    const previstaCalculada=calcularComissaoTela();
+    const recebidaInformada=valorParaNumero(document.getElementById("finValorRecebido").value);
+    const statusAutomatico=recebidaInformada<=0?"Aguardando pagamento":(recebidaInformada<previstaCalculada?"Parcial":"Recebida");
+    document.getElementById("finStatusComissao").value=statusAutomatico;
     const payload={
       id:operacaoSelecionada?.id||undefined,
       lead_id:Number(leadId),
@@ -2448,10 +2837,11 @@
       valor_solicitado:valorParaNumero(document.getElementById("finValorSolicitado").value),
       valor_liberado:valorLiberado,
       taxa_comissao:taxa,
-      valor_comissao_prevista:calcularComissaoTela(),
-      valor_comissao_recebida:valorParaNumero(document.getElementById("finValorRecebido").value),
+      valor_comissao_prevista:previstaCalculada,
+      valor_comissao_recebida:recebidaInformada,
       status_operacao:"Convertido",
       status_comissao:document.getElementById("finStatusComissao").value,
+      data_conversao:operacaoSelecionada?.data_conversao||new Date().toISOString(),
       data_prevista_pagamento:document.getElementById("finDataPrevista").value||null,
       data_recebimento:document.getElementById("finDataRecebimento").value||null,
       responsavel:lead?.responsavel||sessionStorage.getItem("crm_usuario")||"Sistema",
