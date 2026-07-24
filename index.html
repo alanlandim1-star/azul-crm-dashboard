@@ -113,6 +113,25 @@
     .email-status{display:inline-flex;padding:5px 9px;border-radius:999px;background:#eef5ff;color:#073f9e;font-size:11px;font-weight:900;margin-top:6px}
 
 
+
+    /* FINANCEIRO / COMISSÕES */
+    .finance-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:24px}
+    .finance-form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .finance-form label{font-size:12px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+    .finance-form input,.finance-form select,.finance-form textarea{width:100%;margin-top:7px}
+    .finance-form textarea{grid-column:1/-1}
+    .finance-summary{background:linear-gradient(135deg,#073f9e,#0b66ff);color:#fff;border-radius:20px;padding:20px;box-shadow:0 18px 42px rgba(11,102,255,.22)}
+    .finance-summary small{color:#dbeafe;font-weight:800}
+    .finance-summary strong{display:block;font-size:36px;margin-top:8px}
+    .finance-status{display:inline-flex;padding:6px 10px;border-radius:999px;font-weight:900;font-size:11px}
+    .finance-status.pendente{background:#fff7e6;color:#9a6700;border:1px solid #ffe4a3}
+    .finance-status.recebida{background:#e9fff3;color:#0d8d4d;border:1px solid #b9f0d1}
+    .finance-status.parcial{background:#eef5ff;color:#073f9e;border:1px solid #d7e7ff}
+    .commission-preview{grid-column:1/-1;background:#eef5ff;border:1px solid #d7e7ff;border-radius:16px;padding:16px}
+    .commission-preview small{display:block;color:#64748b;font-weight:900;text-transform:uppercase;font-size:11px}
+    .commission-preview strong{display:block;color:#073f9e;font-size:30px;margin-top:6px}
+    .finance-actions{display:flex;gap:8px;flex-wrap:wrap}
+
     /* BLACKLIST / NÃO PERTURBE */
     .blacklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
     .blacklist-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -129,7 +148,7 @@
     .btn-blacklist{background:#111827;color:#fff;border:0;border-radius:10px;padding:8px 11px;font-weight:900;cursor:pointer}
     .btn-blacklist:hover{background:#000}
 
-    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid,.blacklist-grid,.blacklist-form{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.cards{grid-template-columns:repeat(2,1fr)}.grid,.filters,.config-grid,.kanban,.settings-form,.permission-grid,.integration-grid,.blacklist-grid,.blacklist-form,.finance-grid,.finance-form{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.settings-header{flex-direction:column}}
     @media(max-width:720px){.lead-grid,.modal-form{grid-template-columns:1fr}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
   </style>
 </head>
@@ -162,6 +181,7 @@
       <a id="nav-propostas" onclick="mudarTela('propostas')">💰 Propostas</a>
       <a id="nav-relatorios" onclick="mudarTela('relatorios')">📑 Relatórios</a>
       <a id="nav-automacoes" onclick="mudarTela('automacoes')">⚡ Automações</a>
+      <a id="nav-financeiro" onclick="mudarTela('financeiro')">💰 Financeiro</a>
       <a id="nav-blacklist" onclick="mudarTela('blacklist')">🚫 Blacklist</a>
       <a id="nav-configuracoes" onclick="mudarTela('configuracoes')">⚙️ Configurações</a>
     </nav>
@@ -480,6 +500,52 @@
       </section>
     </section>
 
+
+
+    <section id="view-financeiro" class="view">
+      <section class="cards">
+        <div class="card"><small>Comissão Prevista</small><strong id="finPrevista">R$ 0,00</strong><span>Total previsto</span></div>
+        <div class="card"><small>Comissão Recebida</small><strong id="finRecebida">R$ 0,00</strong><span>Já recebida</span></div>
+        <div class="card"><small>A Receber</small><strong id="finPendente">R$ 0,00</strong><span>Pendente</span></div>
+        <div class="card"><small>Operações</small><strong id="finOperacoes">0</strong><span>Contratos</span></div>
+        <div class="card"><small>Comissão Média</small><strong id="finMedia">0,00%</strong><span>Taxa média</span></div>
+      </section>
+
+      <section class="finance-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Operações Financeiras</h3><p style="color:var(--muted);font-weight:700;margin-top:6px">Controle de valores liberados, taxas e recebimento das comissões.</p></div>
+            <button class="btn" onclick="abrirModalOperacaoFinanceira()">Nova Operação</button>
+          </div>
+          <div class="filters" style="grid-template-columns:2fr 1fr 1fr">
+            <input id="finBusca" placeholder="Buscar cliente, banco ou produto..." oninput="renderizarFinanceiro()" />
+            <select id="finFiltroStatus" onchange="renderizarFinanceiro()">
+              <option value="">Todos os status</option>
+              <option value="Aguardando pagamento">Aguardando pagamento</option>
+              <option value="Parcial">Parcial</option>
+              <option value="Recebida">Recebida</option>
+            </select>
+            <select id="finFiltroBanco" onchange="renderizarFinanceiro()"><option value="">Todos os bancos</option></select>
+          </div>
+          <table>
+            <thead><tr><th>Cliente</th><th>Banco</th><th>Produto</th><th>Valor liberado</th><th>Taxa</th><th>Comissão</th><th>Status</th><th>Ação</th></tr></thead>
+            <tbody id="tabelaFinanceiro"></tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="finance-summary">
+            <small>Receita financeira prevista</small>
+            <strong id="finResumoPrevisto">R$ 0,00</strong>
+            <p style="margin-top:10px;color:#dbeafe;font-weight:700;line-height:1.5">Soma das comissões calculadas nas operações cadastradas.</p>
+          </div>
+          <div class="panel" style="margin-top:18px">
+            <div class="panel-head"><h3>Resumo por banco</h3><span class="tag">Comissões</span></div>
+            <table><thead><tr><th>Banco</th><th>Operações</th><th>Comissão</th></tr></thead><tbody id="finPorBanco"></tbody></table>
+          </div>
+        </div>
+      </section>
+    </section>
 
     <section id="view-blacklist" class="view">
       <section class="cards">
@@ -932,8 +998,45 @@
         <button class="btn light" onclick="abrirWhatsAppLeadSelecionado()">WhatsApp</button>
         <button class="btn light" onclick="abrirModalEmailLead()">Enviar E-mail</button>
         <button class="btn light" onclick="agendarRetornoLeadSelecionado()">Agendar Retorno</button>
+        <button class="btn light" onclick="abrirFinanceiroLeadSelecionado()">💰 Financeiro</button>
         <button class="btn danger" onclick="adicionarLeadSelecionadoBlacklist()">Blacklist</button>
         <button class="btn" onclick="salvarLeadLocal()">Salvar na tela</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="modalFinanceiro" class="modal-backdrop" onclick="if(event.target.id==='modalFinanceiro') fecharModalOperacaoFinanceira()">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>Operação Financeira</h3><p style="color:var(--muted);font-weight:700;margin-top:5px">Registre a operação convertida e acompanhe a comissão.</p></div>
+      <button class="modal-close" onclick="fecharModalOperacaoFinanceira()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="finance-form">
+        <label>Cliente<select id="finLeadId" onchange="preencherDadosLeadFinanceiro()"></select></label>
+        <label>Banco<input id="finBanco" placeholder="Ex: Banco PAN" /></label>
+        <label>Produto<input id="finProduto" placeholder="Ex: Crédito Pessoal" /></label>
+        <label>Valor solicitado<input id="finValorSolicitado" placeholder="Ex: 14000,00" /></label>
+        <label>Valor liberado<input id="finValorLiberado" placeholder="Ex: 14000,00" oninput="calcularComissaoTela()" /></label>
+        <label>Taxa de comissão (%)<input id="finTaxaComissao" placeholder="Ex: 2,5" oninput="calcularComissaoTela()" /></label>
+        <div class="commission-preview"><small>Comissão prevista</small><strong id="finComissaoPreview">R$ 0,00</strong></div>
+        <label>Status da comissão
+          <select id="finStatusComissao">
+            <option value="Aguardando pagamento">Aguardando pagamento</option>
+            <option value="Parcial">Parcial</option>
+            <option value="Recebida">Recebida</option>
+          </select>
+        </label>
+        <label>Valor recebido<input id="finValorRecebido" placeholder="Ex: 350,00" /></label>
+        <label>Data prevista<input id="finDataPrevista" type="date" /></label>
+        <label>Data de recebimento<input id="finDataRecebimento" type="date" /></label>
+        <label style="grid-column:1/-1">Observação<textarea id="finObservacao" placeholder="Informações adicionais sobre a operação ou pagamento."></textarea></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn gray" onclick="fecharModalOperacaoFinanceira()">Cancelar</button>
+        <button class="btn" onclick="salvarOperacaoFinanceira()">Salvar Operação</button>
       </div>
     </div>
   </div>
@@ -995,7 +1098,11 @@
   const EMAIL_SEND_URL = ""; // Endpoint futuro para envio automático pelo Azul Core
   const EMAIL_FROM = "contato@azulemprestimosabc.com.br";
   const BLACKLIST_API_URL = ""; // Futuro endpoint do Azul Core para persistência central
+  const FINANCEIRO_LIST_URL = ""; // Endpoint para listar operacoes_financeiras
+  const FINANCEIRO_SAVE_URL = ""; // Endpoint para inserir/atualizar operacoes_financeiras
   let leadsGlobais = [];
+  let operacoesFinanceiras = [];
+  let operacaoSelecionada = null;
   let leadSelecionado = null;
   const cfgApi = document.getElementById("cfgApi");
   if(cfgApi) cfgApi.textContent = "Azul Core Online";
@@ -1009,6 +1116,7 @@
     propostas:["Propostas","Visão dos produtos solicitados e valores desejados."],
     relatorios:["Relatórios","Análises consolidadas da carteira, origem, produto, status e responsáveis."],
     automacoes:["Automações","Configure regras de disparo por status, canal e template de mensagem."],
+    financeiro:["Financeiro","Controle de operações convertidas, taxas e recebimento das comissões."],
     blacklist:["Blacklist","Controle de clientes que não desejam receber contatos ou comunicações."],
     configuracoes:["Configurações","Central administrativa SaaS: empresa, usuários, permissões, integrações, segurança e plano."]
   };
@@ -1042,6 +1150,7 @@
     if(tela==="propostas") renderizarPropostas();
     if(tela==="relatorios") renderizarRelatorios();
     if(tela==="automacoes") renderizarAutomacoes();
+    if(tela==="financeiro") carregarFinanceiro();
     if(tela==="blacklist") renderizarBlacklist();
     window.scrollTo({top:0,behavior:"smooth"});
   }
@@ -2154,6 +2263,229 @@
 
 
 
+
+  function obterOperacoesFinanceirasLocal(){
+    try{return JSON.parse(localStorage.getItem("azul_crm_financeiro") || "[]");}
+    catch(e){console.error(e);return [];}
+  }
+
+  function salvarOperacoesFinanceirasLocal(lista){
+    localStorage.setItem("azul_crm_financeiro", JSON.stringify(lista));
+  }
+
+  async function carregarFinanceiro(){
+    try{
+      if(FINANCEIRO_LIST_URL){
+        const response=await fetch(FINANCEIRO_LIST_URL,{method:"GET"});
+        if(!response.ok) throw new Error("Falha ao carregar financeiro");
+        const data=await response.json();
+        operacoesFinanceiras=data.operacoes || data || [];
+      }else{
+        operacoesFinanceiras=obterOperacoesFinanceirasLocal();
+      }
+    }catch(error){
+      console.error(error);
+      operacoesFinanceiras=obterOperacoesFinanceirasLocal();
+    }
+    renderizarFinanceiro();
+  }
+
+  function classeStatusFinanceiro(status){
+    const s=String(status||"").toLowerCase();
+    if(s.includes("recebid")) return "recebida";
+    if(s.includes("parcial")) return "parcial";
+    return "pendente";
+  }
+
+  function renderizarFinanceiro(){
+    const prevista=operacoesFinanceiras.reduce((a,o)=>a+(Number(o.valor_comissao_prevista)||0),0);
+    const recebida=operacoesFinanceiras.reduce((a,o)=>a+(Number(o.valor_comissao_recebida)||0),0);
+    const pendente=Math.max(0,prevista-recebida);
+    const media=operacoesFinanceiras.length ? operacoesFinanceiras.reduce((a,o)=>a+(Number(o.taxa_comissao)||0),0)/operacoesFinanceiras.length : 0;
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    set("finPrevista",formatarMoeda(prevista));
+    set("finRecebida",formatarMoeda(recebida));
+    set("finPendente",formatarMoeda(pendente));
+    set("finOperacoes",operacoesFinanceiras.length);
+    set("finMedia",media.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%");
+    set("finResumoPrevisto",formatarMoeda(prevista));
+
+    const bancos=[...new Set(operacoesFinanceiras.map(o=>o.banco).filter(Boolean))].sort();
+    const filtroBanco=document.getElementById("finFiltroBanco");
+    if(filtroBanco){
+      const atual=filtroBanco.value;
+      filtroBanco.innerHTML='<option value="">Todos os bancos</option>'+bancos.map(b=>`<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join("");
+      filtroBanco.value=atual;
+    }
+
+    const busca=String(document.getElementById("finBusca")?.value||"").toLowerCase();
+    const statusFiltro=document.getElementById("finFiltroStatus")?.value||"";
+    const bancoFiltro=document.getElementById("finFiltroBanco")?.value||"";
+    const dados=operacoesFinanceiras.filter(o=>{
+      const lead=leadsGlobais.find(l=>String(l.id)===String(o.lead_id));
+      const nome=o.nome_cliente || lead?.nome || "";
+      const texto=`${nome} ${o.banco||""} ${o.produto||""}`.toLowerCase();
+      return (!busca || texto.includes(busca)) && (!statusFiltro || o.status_comissao===statusFiltro) && (!bancoFiltro || o.banco===bancoFiltro);
+    });
+
+    const tbody=document.getElementById("tabelaFinanceiro");
+    if(tbody){
+      tbody.innerHTML=dados.length ? dados.map(o=>{
+        const lead=leadsGlobais.find(l=>String(l.id)===String(o.lead_id));
+        const nome=o.nome_cliente || lead?.nome || "Cliente não localizado";
+        return `<tr>
+          <td><b>${escapeHtml(nome)}</b></td>
+          <td>${escapeHtml(o.banco||"-")}</td>
+          <td>${escapeHtml(o.produto||"-")}</td>
+          <td>${formatarMoeda(o.valor_liberado)}</td>
+          <td>${Number(o.taxa_comissao||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:4})}%</td>
+          <td><b>${formatarMoeda(o.valor_comissao_prevista)}</b></td>
+          <td><span class="finance-status ${classeStatusFinanceiro(o.status_comissao)}">${escapeHtml(o.status_comissao||"Aguardando pagamento")}</span></td>
+          <td><button class="viewbtn" onclick="editarOperacaoFinanceira('${escapeHtml(o.id)}')">Editar</button></td>
+        </tr>`;
+      }).join("") : '<tr><td colspan="8">Nenhuma operação encontrada.</td></tr>';
+    }
+
+    const porBanco=operacoesFinanceiras.reduce((acc,o)=>{
+      const banco=o.banco||"Não informado";
+      if(!acc[banco])acc[banco]={qtd:0,valor:0};
+      acc[banco].qtd++;
+      acc[banco].valor+=Number(o.valor_comissao_prevista)||0;
+      return acc;
+    },{});
+    const resumo=document.getElementById("finPorBanco");
+    if(resumo){
+      const linhas=Object.entries(porBanco).sort((a,b)=>b[1].valor-a[1].valor);
+      resumo.innerHTML=linhas.length ? linhas.map(([b,d])=>`<tr><td><b>${escapeHtml(b)}</b></td><td>${d.qtd}</td><td>${formatarMoeda(d.valor)}</td></tr>`).join("") : '<tr><td colspan="3">Sem dados.</td></tr>';
+    }
+  }
+
+  function preencherSelectLeadsFinanceiro(){
+    const select=document.getElementById("finLeadId");
+    if(!select)return;
+    const convertidos=leadsGlobais.filter(l=>normalizarStatus(l.status,l.convertido)==="Convertido");
+    select.innerHTML='<option value="">Selecione o cliente</option>'+convertidos.map(l=>`<option value="${escapeHtml(l.id)}">${escapeHtml(l.nome||"Sem nome")} • ID ${escapeHtml(l.id)}</option>`).join("");
+  }
+
+  function abrirModalOperacaoFinanceira(leadId=null){
+    operacaoSelecionada=null;
+    preencherSelectLeadsFinanceiro();
+    ["finBanco","finProduto","finValorSolicitado","finValorLiberado","finTaxaComissao","finValorRecebido","finDataPrevista","finDataRecebimento","finObservacao"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("finStatusComissao").value="Aguardando pagamento";
+    if(leadId)document.getElementById("finLeadId").value=String(leadId);
+    preencherDadosLeadFinanceiro();
+    calcularComissaoTela();
+    document.getElementById("modalFinanceiro").style.display="flex";
+  }
+
+  function fecharModalOperacaoFinanceira(){
+    document.getElementById("modalFinanceiro").style.display="none";
+    operacaoSelecionada=null;
+  }
+
+  function preencherDadosLeadFinanceiro(){
+    const id=document.getElementById("finLeadId").value;
+    const lead=leadsGlobais.find(l=>String(l.id)===String(id));
+    if(!lead)return;
+    if(!document.getElementById("finProduto").value)document.getElementById("finProduto").value=lead.produto||lead.produto_interesse||"";
+    if(!document.getElementById("finValorSolicitado").value)document.getElementById("finValorSolicitado").value=Number(lead.valor_desejado||0).toLocaleString("pt-BR",{minimumFractionDigits:2});
+    if(!document.getElementById("finValorLiberado").value)document.getElementById("finValorLiberado").value=Number(lead.valor_desejado||0).toLocaleString("pt-BR",{minimumFractionDigits:2});
+    calcularComissaoTela();
+  }
+
+  function calcularComissaoTela(){
+    const valor=valorParaNumero(document.getElementById("finValorLiberado")?.value||0);
+    const taxa=valorParaNumero(document.getElementById("finTaxaComissao")?.value||0);
+    const comissao=valor*taxa/100;
+    const el=document.getElementById("finComissaoPreview");
+    if(el)el.textContent=formatarMoeda(comissao);
+    return comissao;
+  }
+
+  function abrirFinanceiroLeadSelecionado(){
+    if(!leadSelecionado)return;
+    const id=leadSelecionado.id;
+    fecharModalLead();
+    mudarTela("financeiro");
+    abrirModalOperacaoFinanceira(id);
+  }
+
+  function editarOperacaoFinanceira(id){
+    const op=operacoesFinanceiras.find(o=>String(o.id)===String(id));
+    if(!op)return;
+    operacaoSelecionada=op;
+    preencherSelectLeadsFinanceiro();
+    document.getElementById("finLeadId").value=String(op.lead_id||"");
+    document.getElementById("finBanco").value=op.banco||"";
+    document.getElementById("finProduto").value=op.produto||"";
+    document.getElementById("finValorSolicitado").value=Number(op.valor_solicitado||0).toLocaleString("pt-BR",{minimumFractionDigits:2});
+    document.getElementById("finValorLiberado").value=Number(op.valor_liberado||0).toLocaleString("pt-BR",{minimumFractionDigits:2});
+    document.getElementById("finTaxaComissao").value=Number(op.taxa_comissao||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:4});
+    document.getElementById("finStatusComissao").value=op.status_comissao||"Aguardando pagamento";
+    document.getElementById("finValorRecebido").value=Number(op.valor_comissao_recebida||0).toLocaleString("pt-BR",{minimumFractionDigits:2});
+    document.getElementById("finDataPrevista").value=op.data_prevista_pagamento||"";
+    document.getElementById("finDataRecebimento").value=op.data_recebimento||"";
+    document.getElementById("finObservacao").value=op.observacao||"";
+    calcularComissaoTela();
+    document.getElementById("modalFinanceiro").style.display="flex";
+  }
+
+  async function salvarOperacaoFinanceira(){
+    const leadId=document.getElementById("finLeadId").value;
+    if(!leadId){alert("Selecione o cliente convertido.");return;}
+    const valorLiberado=valorParaNumero(document.getElementById("finValorLiberado").value);
+    const taxa=valorParaNumero(document.getElementById("finTaxaComissao").value);
+    if(valorLiberado<=0){alert("Informe o valor liberado.");return;}
+    if(taxa<=0){alert("Informe a taxa de comissão.");return;}
+
+    const lead=leadsGlobais.find(l=>String(l.id)===String(leadId));
+    const payload={
+      id:operacaoSelecionada?.id||undefined,
+      lead_id:Number(leadId),
+      nome_cliente:lead?.nome||"",
+      produto:document.getElementById("finProduto").value.trim(),
+      banco:document.getElementById("finBanco").value.trim(),
+      valor_solicitado:valorParaNumero(document.getElementById("finValorSolicitado").value),
+      valor_liberado:valorLiberado,
+      taxa_comissao:taxa,
+      valor_comissao_prevista:calcularComissaoTela(),
+      valor_comissao_recebida:valorParaNumero(document.getElementById("finValorRecebido").value),
+      status_operacao:"Convertido",
+      status_comissao:document.getElementById("finStatusComissao").value,
+      data_prevista_pagamento:document.getElementById("finDataPrevista").value||null,
+      data_recebimento:document.getElementById("finDataRecebimento").value||null,
+      responsavel:lead?.responsavel||sessionStorage.getItem("crm_usuario")||"Sistema",
+      observacao:document.getElementById("finObservacao").value.trim(),
+      criado_por:sessionStorage.getItem("crm_usuario")||"Sistema",
+      criado_em:operacaoSelecionada?.criado_em||new Date().toISOString(),
+      atualizado_em:new Date().toISOString()
+    };
+
+    try{
+      if(FINANCEIRO_SAVE_URL){
+        const response=await fetch(FINANCEIRO_SAVE_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+        if(!response.ok)throw new Error("Falha ao salvar operação financeira");
+        const retorno=await response.json().catch(()=>null);
+        if(retorno?.operacao)Object.assign(payload,retorno.operacao);
+        else if(retorno?.id)payload.id=retorno.id;
+      }else if(!payload.id){
+        payload.id="local_"+Date.now();
+      }
+
+      const indice=operacoesFinanceiras.findIndex(o=>String(o.id)===String(payload.id));
+      if(indice>=0)operacoesFinanceiras[indice]=payload;
+      else operacoesFinanceiras.unshift(payload);
+      salvarOperacoesFinanceirasLocal(operacoesFinanceiras);
+      renderizarFinanceiro();
+      fecharModalOperacaoFinanceira();
+      alert(FINANCEIRO_SAVE_URL ? "Operação financeira salva com sucesso." : "Operação registrada na tela. Configure o endpoint financeiro para gravar no Supabase.");
+    }catch(error){
+      console.error(error);
+      alert("Não foi possível salvar a operação financeira.");
+    }
+  }
+
+
   function normalizarBlacklistValor(valor, tipo){
     const t = String(tipo || "").toLowerCase();
     if(t === "e-mail" || t === "email") return String(valor || "").trim().toLowerCase();
@@ -2388,6 +2720,7 @@
       atualizarDashboard(data);
       renderizarTabela();
       renderizarBlacklist();
+      await carregarFinanceiro();
     }catch(e){
       console.error(e);
       error.style.display="block";
